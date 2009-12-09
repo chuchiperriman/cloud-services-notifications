@@ -67,40 +67,36 @@ class GreaderAtom:
 		return self.opener.open(self.reader_url)
 
 	def parseDocument (self, data):
+		self.feeds=list()
+
 		def processObject (ob):
 			for c in ob.getElementsByTagName ("string"):
 				if c.getAttribute("name") == "id":
-					print c.childNodes[0].nodeValue
+					ftype, s, feed = c.childNodes[0].nodeValue.partition("/")
+					self.feeds.append({"type" : ftype,
+							   "feed" : feed})
 					break
 			
 			for c in ob.getElementsByTagName ("number"):
 				if c.getAttribute("name") == "count":
-					print c.childNodes[0].nodeValue
+					self.feeds[-1]["count"] = c.childNodes[0].nodeValue
 					break
 		
 		doc = xml.dom.minidom.parseString(data)
-		for e in doc.childNodes[0].childNodes:
-			if e.nodeType == e.ELEMENT_NODE:
-				print e.localName
-				for e2 in e.getElementsByTagName("object"):
-					if e2.nodeType == e2.ELEMENT_NODE:
-						processObject (e2)
-						
+		elist = doc.childNodes[0].getElementsByTagName("list")[0]
+		for e2 in elist.getElementsByTagName("object"):
+			processObject (e2)
 
 	def refreshInfo(self):
 		self.parseDocument (self.sendRequest().read())
 
-	def getUnreadMsgCount(self):
-		return self.m.getUnreadMsgCount()
+	def getTotalUnread(self):
+		count = 0
+		for feed in self.feeds:
+			if feed["type"] == "user":
+				name = feed["feed"]
+				name = name[name.rfind ("/") + 1:]
+				if name == "reading-list":
+					count = feed["count"]
 
-	def getMsgTitle(self, index):
-		return self.m.entries[index].title
-
-	def getMsgSummary(self, index):
-		return self.m.entries[index].summary
-
-	def getMsgAuthorName(self, index):
-		return self.m.entries[index].author_name
-
-	def getMsgAuthorEmail(self, index):
-		return self.m.entries[index].author_email
+		return count

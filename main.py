@@ -26,8 +26,9 @@ def notificar (title, message):
 def check_reader ():
 
 	g = GreaderAtom (config.get ('gmail', 'username'), config.get ('gmail', 'password'))
-	print g.sendRequest ().read()
 	g.refreshInfo()
+	if g.getTotalUnread() > 0:
+		notificar ("Google Reader", "Unread feeds: " + str(g.getTotalUnread ()))
 	return
 
 def check_gmail ():
@@ -35,15 +36,11 @@ def check_gmail ():
 	g.refreshInfo()
 	
 	if g.getUnreadMsgCount () > 0:
-		#notificar ("GMail", 'Hay mensajes sin leer: ' + str (g.getUnreadMsgCount ()))
 		message = ""
 		for i in range (g.getUnreadMsgCount ()):
-			message += "<b>Correo " + str(i+1) + "</b>: " + g.getMsgTitle (i) + "\n - \n"
+			message += "- \n" + g.getMsgTitle (i) + "\n"
 		
-		#notificar (g.getMsgTitle (i), g.getMsgSummary (i))
-		notificar ("Cloud notifications", message)
-	
-	#print g.sendRequest().read()
+		notificar ("GMail (" + str(g.getUnreadMsgCount ()) + ")", message)
 
 def main ():
 	global config

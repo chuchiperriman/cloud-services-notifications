@@ -4,6 +4,7 @@ import urllib
 import urllib2
 import re
 from gmailatom import GmailAtom
+from greaderatom import GreaderAtom
 import xdg.BaseDirectory as bd
 import ConfigParser
 
@@ -24,26 +25,10 @@ def notificar (title, message):
 
 def check_reader ():
 
-	_cproc = urllib2.HTTPCookieProcessor()
-	opener = urllib2.build_opener(_cproc)
-	urllib2.install_opener(opener)
-	login_url = "https://www.google.com/accounts/ServiceLogin"
-	auth_url = "https://www.google.com/accounts/ServiceLoginAuth"
-	
-	f = urllib2.urlopen(login_url)
-	data = f.read()
-	galx_match_obj = re.search(r'name="GALX"\s*value="([^"]+)"', data, re.IGNORECASE)
-	galx_value = galx_match_obj.group(1) if galx_match_obj.group(1) is not None else ''
-	params = urllib.urlencode({'Email':config.get ('gmail', 'username'),
-				'Passwd':config.get ('gmail', 'password'),
-				'GALX':galx_value})
-		   
-        f = urllib2.urlopen(auth_url, params)
-
-	f = opener.open('https://www.google.com/reader/api/0/unread-count')
-
-	data = f.read()
-	print data
+	g = GreaderAtom (config.get ('gmail', 'username'), config.get ('gmail', 'password'))
+	print g.sendRequest ().read()
+	g.refreshInfo()
+	return
 
 def check_gmail ():
 	g = GmailAtom (config.get ('gmail', 'username'), config.get ('gmail', 'password'))
@@ -51,8 +36,14 @@ def check_gmail ():
 	
 	if g.getUnreadMsgCount () > 0:
 		#notificar ("GMail", 'Hay mensajes sin leer: ' + str (g.getUnreadMsgCount ()))
+		message = ""
 		for i in range (g.getUnreadMsgCount ()):
-			notificar (g.getMsgTitle (i), g.getMsgSummary (i))
+			message += "<b>Correo " + str(i+1) + "</b>: " + g.getMsgTitle (i) + "\n - \n"
+		
+		#notificar (g.getMsgTitle (i), g.getMsgSummary (i))
+		notificar ("Cloud notifications", message)
+	
+	#print g.sendRequest().read()
 
 def main ():
 	global config
@@ -69,20 +60,6 @@ def main ():
 
 	check_reader ()
 	check_gmail ()
-
-"""
-g = GmailAtom (cparser.get ('gmail', 'username'), cparser.get ('gmail', 'password'))
-
-g.refreshInfo()
-
-if g.getUnreadMsgCount () > 0:
-	#notificar ("GMail", 'Hay mensajes sin leer: ' + str (g.getUnreadMsgCount ()))
-	for i in range (g.getUnreadMsgCount ()):
-		notificar (g.getMsgTitle (i), g.getMsgSummary (i))
-		pass;
-
-#print g.sendRequest().read()
-"""
 
 if __name__ == "__main__":
 	main()

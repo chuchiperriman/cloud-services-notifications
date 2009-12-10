@@ -54,7 +54,7 @@ def timeout_cb(indicator):
 	global test_count
 	test_count +=1
 	print "Modifying properties"
-	#indicator.set_property_time("time", time())
+	indicator.set_property_time("time", time())
 	indicator.set_property_int("count", test_count)
 	#indicator.set_property_icon("icon", pixbuf)
 	
@@ -75,12 +75,18 @@ def install_indicator():
 	server.set_desktop_file("/home/perriman/dev/cloud-services-notifications/cloudsn.desktop")
 	server.connect("server-display", server_display)
 
+	indicator1 = indicate.Indicator()
+	indicator1.set_property("name", "Test Static Account")
+	indicator1.set_property_time("time", time())
+	indicator1.set_property_int("count", test_count)
+	indicator1.show()
+	indicator1.connect("user-display", display)
+	
 	indicator = indicate.Indicator()
 	indicator.set_property("name", "Test Account")
 	indicator.set_property_time("time", time())
 	indicator.set_property_int("count", test_count)
 	indicator.show()
-
 	indicator.connect("user-display", display)
 
 	gobject.timeout_add_seconds(5, timeout_cb, indicator)

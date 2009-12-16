@@ -9,9 +9,10 @@ from greaderatom import GreaderAtom
 import xdg.BaseDirectory as bd
 import ConfigParser
 import indicate
-from time import time
 import gobject
 import gtk
+import sched, time
+
 
 CONFIG_HOME = bd.xdg_config_home + '/cloud-services-notifications'
 CONFIG_FILE = CONFIG_HOME + '/configuration'
@@ -89,14 +90,8 @@ def install_indicator():
 	indicator.show()
 	indicator.connect("user-display", display)
 
-	gobject.timeout_add_seconds(5, timeout_cb, indicator)
-	
-	#Sin el gtk.main() no funciona
-	gtk.main()
-
-def main ():
+def timer_func(objeto):
 	global config
-	
 	if not os.path.exists (CONFIG_HOME):
 		os.makedirs (CONFIG_HOME)
 
@@ -107,9 +102,18 @@ def main ():
 	config = ConfigParser.ConfigParser()
 	config.read (CONFIG_FILE)
 
-	install_indicator ()
+	#install_indicator ()
 	check_reader ()
 	check_gmail ()
+	
+	return True
+
+def main ():
+	timer_func (None)
+	gobject.timeout_add_seconds(30, timer_func, None)
+	
+	#Sin el gtk.main() no funciona
+	gtk.main()
 
 if __name__ == "__main__":
 	main()

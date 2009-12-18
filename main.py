@@ -39,6 +39,16 @@ def check_reader ():
 
 
 def check_gmail ():
+    from gmailprovider import GMailProvider
+
+    provider = GMailProvider ()
+
+    accounts = provider.get_accounts()
+    for account in accounts:
+        provider.update_account (account)
+        
+        notificar ("GMail: " + account.get_name(), "Unread items: " + str(account.get_unread()))
+    """
 	g = GmailAtom (config.get ('gmail', 'username'), config.get ('gmail', 'password'))
 	g.refreshInfo()
 	
@@ -48,6 +58,8 @@ def check_gmail ():
 			message += "- \n" + g.getMsgTitle (i) + "\n"
 		
 		notificar ("GMail (" + str(g.getUnreadMsgCount ()) + ")", message)
+
+    """
 
 
 test_count = 0
@@ -103,7 +115,7 @@ def timer_func(objeto):
 	config.read (CONFIG_FILE)
 
 	#install_indicator ()
-	check_reader ()
+	#check_reader ()
 	check_gmail ()
 	
 	return True

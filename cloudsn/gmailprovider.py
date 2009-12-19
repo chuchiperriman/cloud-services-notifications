@@ -1,12 +1,16 @@
 from account import AccountData
 from gmailatom import GmailAtom
+from provider import Provider
 import config
 
 _provider = None
 
-class GMailProvider:
+class GMailProvider(Provider):
     __provider_name__ = 'GMail'
     __provider_description = 'Check GMail accounts'
+
+    def __init__(self):
+        Provider.__init__(self, "GMail")
 
     def get_accounts (self):
         accounts = []

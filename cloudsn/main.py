@@ -12,6 +12,7 @@ import indicate
 import gobject
 import gtk
 import sched, time
+import provider
 
 
 CONFIG_HOME = bd.xdg_config_home + '/cloud-services-notifications'
@@ -103,16 +104,16 @@ def install_indicator():
 	indicator.connect("user-display", display)
 
 def timer_func(objeto):
-	global config
-	if not os.path.exists (CONFIG_HOME):
-		os.makedirs (CONFIG_HOME)
+	#global config
+	#if not os.path.exists (CONFIG_HOME):
+	#	os.makedirs (CONFIG_HOME)
 
-	if not os.path.exists (CONFIG_FILE):
-		print 'El fichero de configuracion no existe: ' , CONFIG_FILE
-		sys.exit (1)
+	#if not os.path.exists (CONFIG_FILE):
+	#	print 'El fichero de configuracion no existe: ' , CONFIG_FILE
+	#	sys.exit (1)
 
-	config = ConfigParser.ConfigParser()
-	config.read (CONFIG_FILE)
+	#config = ConfigParser.ConfigParser()
+	#config.read (CONFIG_FILE)
 
 	#install_indicator ()
 	#check_reader ()
@@ -120,14 +121,43 @@ def timer_func(objeto):
 	
 	return True
 
+def load_providers ():
+    from gmailprovider import GMailProvider
+    
+    prov_manager = provider.GetProviderManager()
+    prov_manager.add_provider (GMailProvider())
+
+    for prov in prov_manager.get_providers():
+        print prov.get_name()
+
+def create_indicators():
+    prov_manager = provider.GetProviderManager()
+    for prov in prov_manager.get_providers():
+        if prov.has_indicator() == False:
+            continue
+
+        server = indicate.indicate_server_ref_default()
+        server.set_type("message.im")
+        server.connect("server-display", server_display)
+        server.set_desktop_file("/home/perriman/dev/cloud-services-notifications/data/cloudsn.desktop")
+
+        indicator = indicate.Indicator()
+        indicator.set_property("name", "Test Account")
+        #indicator.set_property_time("time", time())
+        indicator.set_property_int("count", 1)
+        indicator.show()
+        indicator.connect("user-display", display)
+
 def main ():
-	timer_func (None)
-	gobject.timeout_add_seconds(30, timer_func, None)
+    load_providers()
+    create_indicators()
+    timer_func (None)
+    gobject.timeout_add_seconds(60, timer_func, None)
 	
-	#Sin el gtk.main() no funciona
-	gtk.main()
+    #Sin el gtk.main() no funciona
+    gtk.main()
 
 if __name__ == "__main__":
-	main()
+    main()
 
 

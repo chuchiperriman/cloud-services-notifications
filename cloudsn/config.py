@@ -11,7 +11,7 @@ class SettingsController:
         self.config.read (self.CONFIG_FILE)
 
     def get_account_list (self):
-        return ["Chuchiperriman","Tatina"]
+        return ["Chuchiperriman"]
         
     def get_account_items (self, account):
         return self.config.items (account)

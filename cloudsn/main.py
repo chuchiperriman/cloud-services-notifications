@@ -1,4 +1,6 @@
 #!/usr/bin/python
+
+import controller
 import os
 import sys
 import urllib
@@ -86,19 +88,19 @@ def server_display(server):
 def install_indicator():
 	server = indicate.indicate_server_ref_default()
 	server.set_type("message.im")
-	server.set_desktop_file("/home/perriman/dev/cloud-services-notifications/cloudsn.desktop")
+	server.set_desktop_file("/home/perriman/dev/cloud-services-notifications/data/cloudsn.desktop")
 	server.connect("server-display", server_display)
 
 	indicator1 = indicate.Indicator()
 	indicator1.set_property("name", "Test Static Account")
-	indicator1.set_property_time("time", time())
-	indicator1.set_property_int("count", test_count)
+	indicator1.set_property_time("time", time.time())
+	indicator1.set_property_int("count", 0)
 	indicator1.show()
 	indicator1.connect("user-display", display)
 	
 	indicator = indicate.Indicator()
 	indicator.set_property("name", "Test Account")
-	indicator.set_property_time("time", time())
+	indicator.set_property_time("time", time.time())
 	indicator.set_property_int("count", test_count)
 	indicator.show()
 	indicator.connect("user-display", display)
@@ -131,30 +133,37 @@ def load_providers ():
         print prov.get_name()
 
 def create_indicators():
+    server = indicate.indicate_server_ref_default()
+    server.set_type("message.im")
+    server.connect("server-display", server_display)
+    server.set_desktop_file("/home/perriman/dev/cloud-services-notifications/data/cloudsn.desktop")
+    server.show()
+    
     prov_manager = provider.GetProviderManager()
     for prov in prov_manager.get_providers():
         if prov.has_indicator() == False:
             continue
+        print 'creamos server'
 
-        server = indicate.indicate_server_ref_default()
-        server.set_type("message.im")
-        server.connect("server-display", server_display)
-        server.set_desktop_file("/home/perriman/dev/cloud-services-notifications/data/cloudsn.desktop")
-
-        indicator = indicate.Indicator()
-        indicator.set_property("name", "Test Account")
-        #indicator.set_property_time("time", time())
-        indicator.set_property_int("count", 1)
-        indicator.show()
-        indicator.connect("user-display", display)
+        for account in prov.get_accounts():
+            indicator = indicate.Indicator()
+            indicator.set_property("name", account.get_name())
+            indicator.set_property_time("time", time.time())
+            indicator.set_property_int("count", 2)
+            indicator.show()
+            indicator.connect("user-display", display)
+            print 'end: ' , account.get_name()
 
 def main ():
-    load_providers()
-    create_indicators()
-    timer_func (None)
-    gobject.timeout_add_seconds(60, timer_func, None)
+    cr = controller.GetController()
+    cr.start()
+    
+    #load_providers()
+    #create_indicators()
+    #install_indicator()
+    #timer_func (None)
+    #gobject.timeout_add_seconds(60, timer_func, None)
 	
-    #Sin el gtk.main() no funciona
     gtk.main()
 
 if __name__ == "__main__":

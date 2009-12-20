@@ -18,3 +18,6 @@ class AccountData:
 
     def get_new_unread (self):
         return self.new_unread
+
+    def update (self):
+        self.provider.update_account (self)

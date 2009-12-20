@@ -6,21 +6,21 @@ import config
 _provider = None
 
 class GMailProvider(Provider):
-    __provider_name__ = 'GMail'
-    __provider_description = 'Check GMail accounts'
-
+    accounts = None
     def __init__(self):
         Provider.__init__(self, "GMail")
 
     def get_accounts (self):
-        accounts = []
-        sc = config.GetSettingsController()
-        for account_name in sc.get_account_list():
-            account = GMailAccount (account_name)
-            account.username = sc.get_account_value (account_name, "username")
-            account.password = sc.get_account_value (account_name, "password")
-            accounts.append (account)
-        return accounts
+        if self.accounts is None:
+            sc = config.GetSettingsController()
+            self.accounts = []
+            for account_name in sc.get_account_list():
+                account = GMailAccount (account_name)
+                account.username = sc.get_account_value (account_name, "username")
+                account.password = sc.get_account_value (account_name, "password")
+                self.accounts.append (account)
+                
+        return self.accounts
 
     def update_account (self, account):
         g = GmailAtom (account.username, account.password)

@@ -1,4 +1,7 @@
 class Provider:
+
+    icon = None
+    
     def __init__ (self, name):
         self.name = name
     def get_accounts (self):
@@ -9,6 +12,8 @@ class Provider:
         return True
     def get_name (self):
         return self.name
+    def get_icon (self):
+        return self.icon
 
 class ProviderManager:
 

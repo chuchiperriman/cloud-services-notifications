@@ -26,6 +26,8 @@ class Controller:
         indicator.set_property("name", account.get_name())
         indicator.set_property_time("time", time())
         indicator.set_property_int("count", account.get_unread())
+        if account.get_provider().get_icon() is not None:
+            indicator.set_property_icon("icon", account.get_provider().get_icon())
         indicator.show()
         #indicator.connect("user-display", display)
         account.indicator = indicator

@@ -2,6 +2,9 @@ from account import AccountData
 from gmailatom import GmailAtom
 from provider import Provider
 import config
+import gtk
+
+ICON = "/home/perriman/dev/cloud-services-notifications/data/gmail.png"
 
 _provider = None
 
@@ -9,6 +12,7 @@ class GMailProvider(Provider):
     accounts = None
     def __init__(self):
         Provider.__init__(self, "GMail")
+        self.icon = gtk.gdk.pixbuf_new_from_file(ICON)
 
     def get_accounts (self):
         if self.accounts is None:

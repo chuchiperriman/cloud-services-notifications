@@ -11,7 +11,9 @@ class Controller:
         
     def load_providers (self):
         from gmailprovider import GMailProvider
+        from greaderprovider import GReaderProvider
         self.prov_manager.add_provider (GMailProvider())
+        self.prov_manager.add_provider (GReaderProvider())
 
     def init_indicator_server(self):
         self.server = indicate.indicate_server_ref_default()

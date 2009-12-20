@@ -97,6 +97,6 @@ class GreaderAtom:
 				name = feed["feed"]
 				name = name[name.rfind ("/") + 1:]
 				if name == "reading-list":
-					count = feed["count"]
+					count = int(feed["count"])
 
 		return count

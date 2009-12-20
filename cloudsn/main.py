@@ -164,7 +164,7 @@ def main ():
     #timer_func (None)
     #gobject.timeout_add_seconds(60, timer_func, None)
 	
-    gtk.main()
+    #gtk.main()
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,8 @@
 import provider
 import indicate
 from time import time
+import gtk
+import gobject
 
 class Controller:
 
@@ -23,6 +25,9 @@ class Controller:
         self.server.set_desktop_file("/home/perriman/dev/cloud-services-notifications/data/cloudsn.desktop")
         self.server.show()
 
+    def on_indicator_display_cb(self, indicator):
+        print "click " , indicator.account.get_name()
+
     def create_indicator(self, account):
         indicator = indicate.Indicator()
         indicator.set_property("name", account.get_name())
@@ -31,16 +36,28 @@ class Controller:
         if account.get_provider().get_icon() is not None:
             indicator.set_property_icon("icon", account.get_provider().get_icon())
         indicator.show()
-        #indicator.connect("user-display", display)
+        indicator.connect("user-display", self.on_indicator_display_cb)
         account.indicator = indicator
-    
+        indicator.account = account
+
+    def update_accounts(self, other):
+        for provider in self.prov_manager.get_providers():
+            for account in provider.get_accounts():
+                account.update()
+                account.indicator.set_property_int("count", account.get_unread())
+        #account.indicator.set_property('draw-attention', 'true');
+        return True
+        
     def start(self):
         self.load_providers()
         self.init_indicator_server()
         for provider in self.prov_manager.get_providers():
             for account in provider.get_accounts():
-                account.update()
                 self.create_indicator(account)
+        
+        gobject.timeout_add_seconds(30, self.update_accounts, None)
+        
+        gtk.main()
 
 _controller = None
 

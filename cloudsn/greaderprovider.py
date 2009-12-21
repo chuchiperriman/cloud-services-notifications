@@ -3,6 +3,7 @@ from greaderatom import GreaderAtom
 from provider import Provider
 import config
 import gtk
+import utils
 
 ICON = "/home/perriman/dev/cloud-services-notifications/data/greader.png"
 
@@ -42,4 +43,5 @@ def GetGReaderProvider ():
 class GReaderAccount (AccountData):
     def __init__(self, name):
         AccountData.__init__(self, name, GetGReaderProvider())
-        
+    def activate (self):
+        utils.show_url ("http://reader.google.com")  

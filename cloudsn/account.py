@@ -21,3 +21,6 @@ class AccountData:
 
     def update (self):
         self.provider.update_account (self)
+    
+    def activate (self):
+        print "Activated " , self.get_name()

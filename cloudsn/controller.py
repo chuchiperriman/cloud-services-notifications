@@ -26,7 +26,7 @@ class Controller:
         self.server.show()
 
     def on_indicator_display_cb(self, indicator):
-        print "click " , indicator.account.get_name()
+        indicator.account.activate ()
 
     def create_indicator(self, account):
         indicator = indicate.Indicator()
@@ -55,6 +55,7 @@ class Controller:
             for account in provider.get_accounts():
                 self.create_indicator(account)
         
+        self.update_accounts(None)
         gobject.timeout_add_seconds(30, self.update_accounts, None)
         
         gtk.main()

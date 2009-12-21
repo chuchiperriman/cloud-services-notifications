@@ -3,6 +3,7 @@ from gmailatom import GmailAtom
 from provider import Provider
 import config
 import gtk
+import utils
 
 ICON = "/home/perriman/dev/cloud-services-notifications/data/gmail.png"
 
@@ -48,4 +49,6 @@ def GetGMailProvider ():
 class GMailAccount (AccountData):
     def __init__(self, name):
         AccountData.__init__(self, name, GetGMailProvider())
-        
+    
+    def activate (self):
+        utils.show_url ("http://gmail.google.com")

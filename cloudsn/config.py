@@ -1,5 +1,6 @@
 import ConfigParser
 import xdg.BaseDirectory as bd
+import os
 
 class SettingsController:
 
@@ -8,10 +9,21 @@ class SettingsController:
     CONFIG_ACCOUNTS = CONFIG_HOME + '/accounts'
     
     def __init__(self):
+        self.ensure_config()
         self.config_pref = ConfigParser.ConfigParser()
         self.config_pref.read (self.CONFIG_PREFERENCES)
         self.config_acc = ConfigParser.ConfigParser()
         self.config_acc.read (self.CONFIG_ACCOUNTS)
+    
+    def ensure_config (self):
+        if not os.path.exists (self.CONFIG_HOME):
+            os.makedirs (self.CONFIG_HOME)
+
+        if not os.path.exists (self.CONFIG_ACCOUNTS):
+            f = open(self.CONFIG_ACCOUNTS, "w")
+            
+        if not os.path.exists (self.CONFIG_PREFERENCES):
+            f = open(self.CONFIG_PREFERENCES, "w")
 
     def get_account_list (self):
         return self.config_acc.sections ()

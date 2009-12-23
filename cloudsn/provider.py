@@ -10,6 +10,8 @@ class Provider:
         pass;
     def has_indicator(self):
         return True
+    def has_notifications (self):
+        return True
     def get_name (self):
         return self.name
     def get_icon (self):

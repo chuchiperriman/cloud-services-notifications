@@ -39,12 +39,26 @@ class Controller:
         indicator.connect("user-display", self.on_indicator_display_cb)
         account.indicator = indicator
         indicator.account = account
-
+    def notify (self, title, message):
+        try:
+            import pynotify
+            if pynotify.init("Cloud Services Notifications"):
+                n = pynotify.Notification(title, message)
+                n.set_urgency(pynotify.URGENCY_LOW)
+                n.show()
+            else:
+                print "there was a problem initializing the pynotify module"
+        except:
+            print "you don't seem to have pynotify installed"
+        
     def update_accounts(self, other):
         for provider in self.prov_manager.get_providers():
             for account in provider.get_accounts():
                 account.update()
                 account.indicator.set_property_int("count", account.get_unread())
+                if account.get_provider().has_notifications() and account.get_new_unread() > 0:
+                    self.notify(account.get_name(), "New messages: " + str(account.get_new_unread()))
+                
         #account.indicator.set_property('draw-attention', 'true');
         return True
         

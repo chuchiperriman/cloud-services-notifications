@@ -41,6 +41,13 @@ class GMailProvider(Provider):
                 message += "- \n" + g.getMsgTitle (i) + "\n"
         """
         account.unread = g.getUnreadMsgCount ()
+        news = []
+        for mail in g.get_mails():
+            if mail.mail_id not in account.mails:
+                account.mails[mail.mail_id] = mail
+                news.append (mail)
+
+        account.new_unread = len (news);
 
 def GetGMailProvider ():
     global _provider
@@ -49,6 +56,7 @@ def GetGMailProvider ():
     return _provider
 
 class GMailAccount (AccountData):
+    mails = {}
     def __init__(self, name):
         AccountData.__init__(self, name, GetGMailProvider())
     
@@ -58,119 +66,118 @@ class GMailAccount (AccountData):
 
 # Auxiliar structure
 class Mail:
-	title=""
-	summary=""
-	author_name=""
-	author_addr=""
+    mail_id=""
+    title=""
+    summary=""
+    author_name=""
+    author_addr=""
 
 # Sax XML Handler
 class MailHandler(ContentHandler):
 	
 	# Tags
-	TAG_FEED = "feed"
-	TAG_FULLCOUNT = "fullcount"
-	TAG_ENTRY = "entry"
-	TAG_TITLE = "title"
-	TAG_SUMMARY = "summary"
-	TAG_AUTHOR = "author"
-	TAG_NAME = "name"
-	TAG_EMAIL = "email"
-	
-	# Path the information
-	PATH_FULLCOUNT = [ TAG_FEED, TAG_FULLCOUNT ]
-	PATH_TITLE = [ TAG_FEED, TAG_ENTRY, TAG_TITLE ]
-	PATH_SUMMARY = [ TAG_FEED, TAG_ENTRY, TAG_SUMMARY ]
-	PATH_AUTHOR_NAME = [ TAG_FEED, TAG_ENTRY, TAG_AUTHOR, TAG_NAME ]
-	PATH_AUTHOR_EMAIL = [ TAG_FEED, TAG_ENTRY, TAG_AUTHOR, TAG_EMAIL ]
+    TAG_FEED = "feed"
+    TAG_FULLCOUNT = "fullcount"
+    TAG_ENTRY = "entry"
+    TAG_TITLE = "title"
+    TAG_SUMMARY = "summary"
+    TAG_AUTHOR = "author"
+    TAG_NAME = "name"
+    TAG_EMAIL = "email"
+    TAG_ID = "id"
 
-	def __init__(self):
-		self.startDocument()
+    # Path the information
+    PATH_FULLCOUNT = [ TAG_FEED, TAG_FULLCOUNT ]
+    PATH_TITLE = [ TAG_FEED, TAG_ENTRY, TAG_TITLE ]
+    PATH_ID = [ TAG_FEED, TAG_ENTRY, TAG_ID ]
+    PATH_SUMMARY = [ TAG_FEED, TAG_ENTRY, TAG_SUMMARY ]
+    PATH_AUTHOR_NAME = [ TAG_FEED, TAG_ENTRY, TAG_AUTHOR, TAG_NAME ]
+    PATH_AUTHOR_EMAIL = [ TAG_FEED, TAG_ENTRY, TAG_AUTHOR, TAG_EMAIL ]
 
-	def startDocument(self):
-		self.entries=list()
-		self.actual=list()
-		self.mail_count="0"
+    def __init__(self):
+        self.startDocument()
 
-	def startElement( self, name, attrs):
-		# update actual path
-		self.actual.append(name)
+    def startDocument(self):
+        self.entries=list()
+        self.actual=list()
+        self.mail_count="0"
 
-		# add a new email to the list
-		if name=="entry":
-			m = Mail()
-			self.entries.append(m)
+    def startElement( self, name, attrs):
+        # update actual path
+        self.actual.append(name)
 
-	def endElement( self, name):
-		# update actual path
-		self.actual.pop()
+        # add a new email to the list
+        if name=="entry":
+            m = Mail()
+            self.entries.append(m)
 
-	def characters( self, content):
-		# New messages count
-		if (self.actual==self.PATH_FULLCOUNT):
-			self.mail_count = self.mail_count+content
+    def endElement( self, name):
+        # update actual path
+        self.actual.pop()
 
-		# Message title
-		if (self.actual==self.PATH_TITLE):
-			temp_mail=self.entries.pop()
-			temp_mail.title=temp_mail.title+content
-			self.entries.append(temp_mail)
+    def characters( self, content):
+        # New messages count
+        if (self.actual==self.PATH_FULLCOUNT):
+            self.mail_count = self.mail_count+content
 
-		# Message summary
-		if (self.actual==self.PATH_SUMMARY):
-			temp_mail=self.entries.pop()
-			temp_mail.summary=temp_mail.summary+content
-			self.entries.append(temp_mail)
+        # Message title
+        if (self.actual==self.PATH_TITLE):
+            temp_mail=self.entries.pop()
+            temp_mail.title=temp_mail.title+content
+            self.entries.append(temp_mail)
+		
+        if (self.actual==self.PATH_ID):
+            temp_mail=self.entries.pop()
+            temp_mail.mail_id=temp_mail.mail_id+content
+            self.entries.append(temp_mail)
 
-		# Message author name
-		if (self.actual==self.PATH_AUTHOR_NAME):
-			temp_mail=self.entries.pop()
-			temp_mail.author_name=temp_mail.author_name+content
-			self.entries.append(temp_mail)
+        # Message summary
+        if (self.actual==self.PATH_SUMMARY):
+            temp_mail=self.entries.pop()
+            temp_mail.summary=temp_mail.summary+content
+            self.entries.append(temp_mail)
 
-		# Message author email
-		if (self.actual==self.PATH_AUTHOR_EMAIL):
-			temp_mail=self.entries.pop()
-			temp_mail.author_addr=temp_mail.author_addr+content
-			self.entries.append(temp_mail)
+        # Message author name
+        if (self.actual==self.PATH_AUTHOR_NAME):
+            temp_mail=self.entries.pop()
+            temp_mail.author_name=temp_mail.author_name+content
+            self.entries.append(temp_mail)
 
-	def getUnreadMsgCount(self):
-		return int(self.mail_count)
+        # Message author email
+        if (self.actual==self.PATH_AUTHOR_EMAIL):
+            temp_mail=self.entries.pop()
+            temp_mail.author_addr=temp_mail.author_addr+content
+            self.entries.append(temp_mail)
+
+    def getUnreadMsgCount(self):
+        return int(self.mail_count)
 
 # The mail class
 class GmailAtom:
 
-	realm = "New mail feed"
-	host = "https://mail.google.com"
-	url = host + "/mail/feed/atom"
+    realm = "New mail feed" 
+    host = "https://mail.google.com"
+    url = host + "/mail/feed/atom"
 
-	def __init__(self, user, pswd):
-		self.m = MailHandler()
-		# initialize authorization handler
-		auth_handler = urllib2.HTTPBasicAuthHandler()
-		auth_handler.add_password( self.realm, self.host, user, pswd)
-		opener = urllib2.build_opener(auth_handler)
-		urllib2.install_opener(opener)
+    def __init__(self, user, pswd):
+        self.m = MailHandler()
+        # initialize authorization handler
+        auth_handler = urllib2.HTTPBasicAuthHandler()
+        auth_handler.add_password( self.realm, self.host, user, pswd)
+        opener = urllib2.build_opener(auth_handler)
+        urllib2.install_opener(opener)
 
-	def sendRequest(self):
-		return urllib2.urlopen(self.url)
+    def sendRequest(self):
+        return urllib2.urlopen(self.url)
 
-	def refreshInfo(self):
-		# get the page and parse it
-		p = sax.parseString( self.sendRequest().read(), self.m)
+    def refreshInfo(self):
+        # get the page and parse it
+        p = sax.parseString( self.sendRequest().read(), self.m)
 
-	def getUnreadMsgCount(self):
-		return self.m.getUnreadMsgCount()
+    def getUnreadMsgCount(self):
+        return self.m.getUnreadMsgCount()
 
-	def getMsgTitle(self, index):
-		return self.m.entries[index].title
+    def get_mails (self):
+        return self.m.entries
 
-	def getMsgSummary(self, index):
-		return self.m.entries[index].summary
 
-	def getMsgAuthorName(self, index):
-		return self.m.entries[index].author_name
-
-	def getMsgAuthorEmail(self, index):
-		return self.m.entries[index].author_email
-
-		

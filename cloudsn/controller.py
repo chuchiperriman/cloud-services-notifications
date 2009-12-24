@@ -3,6 +3,7 @@ import indicate
 from time import time
 import gtk
 import gobject
+import config
 
 class Controller:
 
@@ -17,12 +18,14 @@ class Controller:
         self.prov_manager.add_provider (GMailProvider())
         self.prov_manager.add_provider (GReaderProvider())
 
+    def on_server_display_cb(self, server):
+        print 'server click'
+        
     def init_indicator_server(self):
         self.server = indicate.indicate_server_ref_default()
         self.server.set_type("message.im")
-        #To connect the click in the server name
-        #server.connect("server-display", server_display)
-        self.server.set_desktop_file("/home/perriman/dev/cloud-services-notifications/data/cloudsn.desktop")
+        self.server.connect("server-display", self.on_server_display_cb)
+        self.server.set_desktop_file(config.get_data_dir() + "/cloudsn.desktop")
         self.server.show()
 
     def on_indicator_display_cb(self, indicator):

@@ -14,7 +14,7 @@ class SettingsController:
         self.config_pref.read (self.CONFIG_PREFERENCES)
         self.config_acc = ConfigParser.ConfigParser()
         self.config_acc.read (self.CONFIG_ACCOUNTS)
-    
+
     def ensure_config (self):
         if not os.path.exists (self.CONFIG_HOME):
             os.makedirs (self.CONFIG_HOME)
@@ -41,3 +41,9 @@ def GetSettingsController():
         if _settings_controller is None:
                 _settings_controller = SettingsController()
         return _settings_controller
+
+
+def get_data_dir ():
+    return "/home/perriman/dev/cloud-services-notifications/data"
+
+

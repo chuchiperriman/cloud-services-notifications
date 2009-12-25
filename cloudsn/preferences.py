@@ -3,15 +3,25 @@ import config
 
 class Preferences:
 
+    window = None
+    quit_on_destroy = False
+    
     def __init__ (self):
-        builder=gtk.Builder()
-        builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.get_data_dir() + "/preferences.ui")
-        #builder.connect_signal(self)
-        self.ventana=builder.get_object("dialog")
+        pass
+        
+    def on_close_button_clicked (self, widget, data=None):
+        self.window.response(True)
+        
+    def run(self):
+        if self.window is None:
+            builder=gtk.Builder()
+            builder.set_translation_domain("cloudsn")
+            builder.add_from_file(config.get_data_dir() + "/preferences.ui")
+            builder.connect_signals(self)
+            self.window=builder.get_object("dialog")
 
-    def show(self):
-        self.ventana.show()
+        result = self.window.run()
+        self.window.destroy()
 
 _preferences = None
 
@@ -23,9 +33,8 @@ def GetPreferences ():
 
 def main ():
     prefs = GetPreferences()
-    prefs.show()
-
-    gtk.main()
+    prefs.quit_on_destroy = True
+    prefs.run()
 
 if __name__ == "__main__":
     main()

@@ -8,9 +8,27 @@ import config
 class Controller:
 
     accounts = []
+    timeout_id = -1
+    interval = 60
     
     def __init__(self):
+        self.config = config.GetSettingsController()
+        self.config.connect("value-changed", self._settings_changed)
         self.prov_manager = provider.GetProviderManager()
+
+    def _settings_changed(self, config, section, key, value):
+        if section == "preferences" and key == "minutes":
+            self._update_interval()
+
+    def _update_interval(self):
+        old = self.interval
+        self.interval = int(float(self.config.get_prefs()["minutes"]) * 60)
+        if self.timeout_id < 0:
+            self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
+        elif self.interval != old:
+            gobject.source_remove(self.timeout_id)
+            self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
+        print "update interval: ", self.interval
         
     def load_providers (self):
         from gmailprovider import GMailProvider
@@ -19,7 +37,10 @@ class Controller:
         self.prov_manager.add_provider (GReaderProvider())
 
     def on_server_display_cb(self, server):
-        print 'server click'
+        import preferences
+        prefs = preferences.GetPreferences()
+        prefs.quit_on_destroy = True
+        prefs.run()
         
     def init_indicator_server(self):
         self.server = indicate.indicate_server_ref_default()
@@ -42,6 +63,7 @@ class Controller:
         indicator.connect("user-display", self.on_indicator_display_cb)
         account.indicator = indicator
         indicator.account = account
+        
     def notify (self, title, message):
         try:
             import pynotify
@@ -73,7 +95,7 @@ class Controller:
                 self.create_indicator(account)
         
         self.update_accounts(None)
-        gobject.timeout_add_seconds(30, self.update_accounts, None)
+        self._update_interval()
         
         gtk.main()
 

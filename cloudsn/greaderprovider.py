@@ -1,5 +1,4 @@
 from account import AccountData
-from greaderatom import GreaderAtom
 from provider import Provider
 import urllib2
 import re
@@ -23,12 +22,11 @@ class GReaderProvider(Provider):
         if self.accounts is None:
             sc = config.GetSettingsController()
             self.accounts = []
-            for account_name in sc.get_account_list():
-                if sc.get_account_value (account_name, "type") != "greader":
-                    continue
+            for account_name in sc.get_account_list_by_type("greader"):
+                acc_config = sc.get_account_config(account_name)
                 account = GReaderAccount (account_name)
-                account.username = sc.get_account_value (account_name, "username")
-                account.password = sc.get_account_value (account_name, "password")
+                account.username = acc_config["username"]
+                account.password = acc_config["password"]
                 self.accounts.append (account)
                 
         return self.accounts

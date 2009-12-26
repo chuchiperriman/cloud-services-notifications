@@ -21,12 +21,11 @@ class GMailProvider(Provider):
         if self.accounts is None:
             sc = config.GetSettingsController()
             self.accounts = []
-            for account_name in sc.get_account_list():
-                if sc.get_account_value (account_name, "type") != "gmail":
-                    continue
+            for account_name in sc.get_account_list_by_type("gmail"):
+                acc_config = sc.get_account_config(account_name)
                 account = GMailAccount (account_name)
-                account.username = sc.get_account_value (account_name, "username")
-                account.password = sc.get_account_value (account_name, "password")
+                account.username = acc_config["username"]
+                account.password = acc_config["password"]
                 self.accounts.append (account)
                 
         return self.accounts

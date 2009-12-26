@@ -22,8 +22,8 @@ class Preferences:
             #tests
             store = builder.get_object("account_store");
             icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/gmail.png')
-            store.append(["uno"])
-            store.append(["dos"])
+            store.append([icon, "uno"])
+            store.append([icon, "dos"])
 
         result = self.window.run()
         self.window.destroy()

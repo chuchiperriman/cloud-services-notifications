@@ -24,14 +24,14 @@ class GMailProvider(Provider):
             for account_name in sc.get_account_list_by_type("gmail"):
                 acc_config = sc.get_account_config(account_name)
                 account = GMailAccount (account_name)
-                account.username = acc_config["username"]
-                account.password = acc_config["password"]
+                account["username"] = acc_config["username"]
+                account["password"] = acc_config["password"]
                 self.accounts.append (account)
-                
+
         return self.accounts
 
     def update_account (self, account):
-        g = GmailAtom (account.username, account.password)
+        g = GmailAtom (account["username"], account["password"])
         g.refreshInfo()
         """
         if g.getUnreadMsgCount () > 0:

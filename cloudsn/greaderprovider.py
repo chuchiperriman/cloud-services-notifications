@@ -25,14 +25,14 @@ class GReaderProvider(Provider):
             for account_name in sc.get_account_list_by_type("greader"):
                 acc_config = sc.get_account_config(account_name)
                 account = GReaderAccount (account_name)
-                account.username = acc_config["username"]
-                account.password = acc_config["password"]
+                account["username"] = acc_config["username"]
+                account["password"] = acc_config["password"]
                 self.accounts.append (account)
                 
         return self.accounts
 
     def update_account (self, account):
-        g = GreaderAtom (account.username, account.password)
+        g = GreaderAtom (account["username"], account["password"])
         g.refreshInfo()
         account.unread = g.getTotalUnread()
 

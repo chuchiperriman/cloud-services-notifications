@@ -56,9 +56,12 @@ class SettingsController(gobject.GObject):
                 res.append (sec)
         return res
         
-    def get_account_config (self, account):
-        return self.accounts[account]
+    def get_account_config (self, account_name):
+        return self.accounts[account_name]
 
+    def save_account_config(self, account):
+        pass
+        
     def get_prefs (self):
         return self.prefs["preferences"]
         

@@ -1,14 +1,23 @@
 class AccountData:
-
-    unread = 0
-    new_unread = 0
-    
     def __init__ (self, name, provider):
-        self.name = name
+        self.unread = 0
+        self.new_unread = 0
+        self.properties = {}
+        self.properties["name"] = name
+        self.properties["provider_name"] = provider.get_name()
         self.provider = provider
+        
+    def __getitem__(self, key):
+        return self.properties[key]
 
+    def __setitem__(self, key, value):
+        self.properties[key] = value
+
+    def get_properties(self):
+        return self.properties
+    
     def get_name (self):
-        return self.name
+        return self.properties["name"]
 
     def get_provider (self):
         return self.provider

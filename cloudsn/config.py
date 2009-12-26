@@ -34,7 +34,6 @@ class SettingsController(gobject.GObject):
             res[sec] = {}
             for key in config.options(sec):
                 res[sec][key] = config.get(sec, key)
-        print res
         return res
     
     def ensure_config (self):

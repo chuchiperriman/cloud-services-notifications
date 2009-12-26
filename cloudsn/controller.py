@@ -28,7 +28,6 @@ class Controller:
         elif self.interval != old:
             gobject.source_remove(self.timeout_id)
             self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
-        print "update interval: ", self.interval
         
     def load_providers (self):
         from gmailprovider import GMailProvider
@@ -77,6 +76,7 @@ class Controller:
             print "you don't seem to have pynotify installed"
         
     def update_accounts(self, other):
+        #First create indicators
         for provider in self.prov_manager.get_providers():
             for account in provider.get_accounts():
                 account.update()
@@ -86,6 +86,10 @@ class Controller:
                 
         #account.indicator.set_property('draw-attention', 'true');
         return True
+
+    def _start_idle(self):
+        self.update_accounts(None)
+        self._update_interval()
         
     def start(self):
         self.load_providers()
@@ -93,10 +97,11 @@ class Controller:
         for provider in self.prov_manager.get_providers():
             for account in provider.get_accounts():
                 self.create_indicator(account)
-        
-        self.update_accounts(None)
-        self._update_interval()
-        
+                
+        while gtk.events_pending():
+            gtk.main_iteration(False)
+            
+        gobject.idle_add(self._start_idle)
         gtk.main()
 
 _controller = None

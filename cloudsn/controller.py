@@ -29,12 +29,6 @@ class Controller:
             gobject.source_remove(self.timeout_id)
             self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
         
-    def load_providers (self):
-        from gmailprovider import GMailProvider
-        from greaderprovider import GReaderProvider
-        self.prov_manager.add_provider (GMailProvider())
-        self.prov_manager.add_provider (GReaderProvider())
-
     def on_server_display_cb(self, server):
         import preferences
         prefs = preferences.GetPreferences()
@@ -90,9 +84,9 @@ class Controller:
     def _start_idle(self):
         self.update_accounts(None)
         self._update_interval()
+        return False
         
     def start(self):
-        self.load_providers()
         self.init_indicator_server()
         for provider in self.prov_manager.get_providers():
             for account in provider.get_accounts():

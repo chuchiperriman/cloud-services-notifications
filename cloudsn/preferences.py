@@ -1,5 +1,6 @@
 import gtk
 import config
+import provider
 
 class Preferences:
 
@@ -23,9 +24,10 @@ class Preferences:
         self.minutes=builder.get_object("minutes_spin")
         #tests
         store = builder.get_object("account_store");
-        icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/gmail.png')
-        store.append([icon, "uno"])
-        store.append([icon, "dos"])
+        pm = provider.GetProviderManager()
+        for prov in pm.get_providers():
+            for acc in prov.get_accounts():
+                store.append([prov.get_icon(), acc.get_name()])
         
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))
         

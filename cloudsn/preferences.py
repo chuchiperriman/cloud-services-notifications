@@ -19,9 +19,15 @@ class Preferences:
             builder.add_from_file(config.get_data_dir() + "/preferences.ui")
             builder.connect_signals(self)
             self.window=builder.get_object("dialog")
+            #tests
+            store = builder.get_object("account_store");
+            icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/gmail.png')
+            store.append(["uno"])
+            store.append(["dos"])
 
         result = self.window.run()
         self.window.destroy()
+        self.window = None
 
 _preferences = None
 

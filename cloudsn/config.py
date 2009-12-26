@@ -59,8 +59,9 @@ class SettingsController(gobject.GObject):
     def get_account_config (self, account_name):
         return self.accounts[account_name]
 
-    def save_account_config(self, account):
-        pass
+    def set_account(self, account):
+        del self.accounts[account.get_name()]
+        self.accounts[account.get_name()] = account.get_properties()
         
     def get_prefs (self):
         return self.prefs["preferences"]

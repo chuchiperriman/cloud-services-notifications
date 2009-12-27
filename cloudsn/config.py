@@ -59,9 +59,12 @@ class SettingsController(gobject.GObject):
     def get_account_config (self, account_name):
         return self.accounts[account_name]
 
-    def set_account(self, account):
+    def set_account_config(self, account):
         del self.accounts[account.get_name()]
         self.accounts[account.get_name()] = account.get_properties()
+        
+    def del_account_config (self, account_name):
+        del self.accounts[account_name]
         
     def get_prefs (self):
         return self.prefs["preferences"]
@@ -74,6 +77,12 @@ class SettingsController(gobject.GObject):
         self.dict_to_config(self.config_prefs, self.prefs)
         with open(self.CONFIG_PREFERENCES, 'wb') as configfile:
             self.config_prefs.write(configfile)
+
+    def save_accounts (self):
+        self.config_accs = ConfigParser.ConfigParser()
+        self.dict_to_config(self.config_accs, self.accounts)
+        with open(self.CONFIG_ACCOUNTS, 'wb') as configfile:
+            self.config_accs.write(configfile)
 
 # Section, Key, Value
 gobject.signal_new("value-changed", SettingsController, gobject.SIGNAL_RUN_LAST,

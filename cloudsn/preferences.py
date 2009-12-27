@@ -11,10 +11,29 @@ class Preferences:
     def __init__ (self):
         self.config = config.GetSettingsController()
         pass
-        
+
     def on_close_button_clicked (self, widget, data=None):
         self.window.response(True)
 
+    def on_account_add_button_clicked (self, widget, data=None):
+        response = self.dialog_new.run()
+        self.dialog_new.hide()
+        if response == 0:
+            print 'aceptado'
+
+    def on_account_del_button_clicked (self, widget, data=None):
+        selection = self.account_tree.get_selection()
+        model, paths = selection.get_selected_rows()
+        for path in paths:
+            citer = self.store.get_iter(path)
+            account_name = self.store.get_value(citer, 1)
+            for prov in self.pm.get_providers():
+                for acc in prov.get_accounts():
+                    if acc.get_name() == account_name:
+                        self.config.del_account_config(acc.get_name())
+                        self.config.save_accounts()
+            self.store.remove(citer)
+    
     def load_window(self):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
@@ -23,12 +42,18 @@ class Preferences:
         self.window=builder.get_object("dialog")
         self.minutes=builder.get_object("minutes_spin")
         #tests
-        store = builder.get_object("account_store");
-        pm = provider.GetProviderManager()
-        for prov in pm.get_providers():
+        self.store = builder.get_object("account_store");
+        self.account_tree = builder.get_object("account_treeview");
+        self.dialog_new = builder.get_object("account_new_dialog");
+        self.providers_combo = builder.get_object("providers_combo");
+        self.providers_store = builder.get_object("providers_store");
+        self.pm = provider.GetProviderManager()
+        for prov in self.pm.get_providers():
+            self.providers_store.append([prov.get_icon(), prov.get_name()])
             for acc in prov.get_accounts():
-                store.append([prov.get_icon(), acc.get_name()])
-        
+                self.store.append([prov.get_icon(), acc.get_name()])
+
+        self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))
         
     def run(self):

@@ -3,7 +3,7 @@ class Provider:
     def __init__ (self, name):
         self.name = name
         self.icon = None
-    def get_accounts (self):
+    def register_accounts(self):
         pass
     def update_account (self, account_data):
         pass

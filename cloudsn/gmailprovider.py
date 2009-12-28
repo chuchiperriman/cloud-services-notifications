@@ -1,3 +1,4 @@
+import account
 from account import AccountData
 from provider import Provider
 from xml.sax.handler import ContentHandler
@@ -12,21 +13,17 @@ ICON = "/home/perriman/dev/cloud-services-notifications/data/gmail.png"
 _provider = None
 
 class GMailProvider(Provider):
-    accounts = None
     def __init__(self):
         Provider.__init__(self, "GMail")
         self.icon = gtk.gdk.pixbuf_new_from_file(ICON)
 
-    def get_accounts (self):
-        if self.accounts is None:
-            sc = config.GetSettingsController()
-            self.accounts = []
-            for account_name in sc.get_account_list_by_provider(self):
-                acc_config = sc.get_account_config(account_name)
-                account = GMailAccount (account_name, acc_config["username"], acc_config["password"])
-                self.accounts.append (account)
-
-        return self.accounts
+    def register_accounts (self):
+        sc = config.GetSettingsController()
+        am = account.GetAccountManager()
+        for account_name in sc.get_account_list_by_provider(self):
+            acc_config = sc.get_account_config(account_name)
+            acc = GMailAccount (account_name, acc_config["username"], acc_config["password"])
+            am.add_account (acc)
 
     def update_account (self, account):
         g = GmailAtom (account["username"], account["password"])

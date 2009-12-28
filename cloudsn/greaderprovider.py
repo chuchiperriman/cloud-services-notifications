@@ -1,3 +1,4 @@
+import account
 from account import AccountData
 from provider import Provider
 import urllib2
@@ -13,23 +14,17 @@ ICON = "/home/perriman/dev/cloud-services-notifications/data/greader.png"
 _provider = None
 
 class GReaderProvider(Provider):
-    accounts = None
     def __init__(self):
         Provider.__init__(self, "Google Reader")
         self.icon = gtk.gdk.pixbuf_new_from_file(ICON)
 
-    def get_accounts (self):
-        if self.accounts is None:
-            sc = config.GetSettingsController()
-            self.accounts = []
-            for account_name in sc.get_account_list_by_provider(self):
-                acc_config = sc.get_account_config(account_name)
-                account = GReaderAccount (account_name)
-                account["username"] = acc_config["username"]
-                account["password"] = acc_config["password"]
-                self.accounts.append (account)
-                
-        return self.accounts
+    def register_accounts (self):
+        sc = config.GetSettingsController()
+        am = account.GetAccountManager()
+        for account_name in sc.get_account_list_by_provider(self):
+            acc_config = sc.get_account_config(account_name)
+            acc = GReaderAccount (account_name, acc_config["username"], acc_config["password"])
+            am.add_account (acc)
 
     def update_account (self, account):
         g = GreaderAtom (account["username"], account["password"])
@@ -43,8 +38,10 @@ def GetGReaderProvider ():
     return _provider
 
 class GReaderAccount (AccountData):
-    def __init__(self, name):
+    def __init__(self, name, username, password):
         AccountData.__init__(self, name, GetGReaderProvider())
+        self["username"] = username
+        self["password"] = password
     def activate (self):
         utils.show_url ("http://reader.google.com")
 

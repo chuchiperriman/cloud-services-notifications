@@ -34,12 +34,18 @@ class AccountData:
 class AccountManager:
     def __init__(self):
         self.accounts = {}
-        
+    
     def add_account(self, account):
         self.accounts[account.get_name()] = account
 
     def get_account(self, account_name):
         return self.accounts[account_name]
+
+    def get_accounts(self):
+        return self.accounts.values()
+
+    def remove_account(self, account_name):
+        del self.accounts[account_name]
 
 _account_manager = None
 

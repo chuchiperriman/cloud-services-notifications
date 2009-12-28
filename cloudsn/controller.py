@@ -1,4 +1,5 @@
 import provider
+import account
 import indicate
 from time import time
 import gtk
@@ -15,6 +16,7 @@ class Controller:
         self.config = config.GetSettingsController()
         self.config.connect("value-changed", self._settings_changed)
         self.prov_manager = provider.GetProviderManager()
+        self.am = account.GetAccountManager()
 
     def _settings_changed(self, config, section, key, value):
         if section == "preferences" and key == "minutes":
@@ -68,15 +70,14 @@ class Controller:
                 print "there was a problem initializing the pynotify module"
         except:
             print "you don't seem to have pynotify installed"
-        
+
     def update_accounts(self, other):
         #First create indicators
-        for provider in self.prov_manager.get_providers():
-            for account in provider.get_accounts():
-                account.update()
-                account.indicator.set_property_int("count", account.get_unread())
-                if account.get_provider().has_notifications() and account.get_new_unread() > 0:
-                    self.notify(account.get_name(), "New messages: " + str(account.get_new_unread()))
+        for acc in self.am.get_accounts():
+            acc.update()
+            acc.indicator.set_property_int("count", acc.get_unread())
+            if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
+                self.notify(acc.get_name(), "New messages: " + str(acc.get_new_unread()))
                 
         #account.indicator.set_property('draw-attention', 'true');
         return True
@@ -89,8 +90,10 @@ class Controller:
     def start(self):
         self.init_indicator_server()
         for provider in self.prov_manager.get_providers():
-            for account in provider.get_accounts():
-                self.create_indicator(account)
+            provider.register_accounts()
+            
+        for acc in self.am.get_accounts():
+            self.create_indicator(acc)
                 
         while gtk.events_pending():
             gtk.main_iteration(False)

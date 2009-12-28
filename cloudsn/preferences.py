@@ -26,6 +26,9 @@ class Preferences:
                 if account is not None:
                     self.store.append([account.get_provider().get_icon(), account.get_name()])
 
+    def on_account_edit_button_clicked(self, widget, data=None):
+        print 'edit'
+        
     def on_account_del_button_clicked (self, widget, data=None):
         selection = self.account_tree.get_selection()
         model, paths = selection.get_selected_rows()

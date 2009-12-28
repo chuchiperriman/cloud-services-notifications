@@ -1,13 +1,12 @@
 class Provider:
-
-    icon = None
     
     def __init__ (self, name):
         self.name = name
+        self.icon = None
     def get_accounts (self):
-        pass;
+        pass
     def update_account (self, account_data):
-        pass;
+        pass
     def has_indicator(self):
         return True
     def has_notifications (self):
@@ -16,6 +15,9 @@ class Provider:
         return self.name
     def get_icon (self):
         return self.icon
+    def new_account_cb(self):
+        """ Returns the new created account"""
+        return None
 
 class ProviderManager:
 

@@ -4,13 +4,11 @@ import provider
 
 class Preferences:
 
-    window = None
-    quit_on_destroy = False
-    config = None
-    
     def __init__ (self):
+        self.window = None
+        self.quit_on_destroy = False
         self.config = config.GetSettingsController()
-        pass
+        self.pm = provider.GetProviderManager()
 
     def on_close_button_clicked (self, widget, data=None):
         self.window.response(True)
@@ -19,7 +17,11 @@ class Preferences:
         response = self.dialog_new.run()
         self.dialog_new.hide()
         if response == 0:
-            print 'aceptado'
+            citer = self.providers_combo.get_active_iter()
+            provider_name = self.providers_store.get_value (citer, 1)
+            provider = self.pm.get_provider(provider_name)
+            account = provider.create_account_dialog()
+            print account
 
     def on_account_del_button_clicked (self, widget, data=None):
         selection = self.account_tree.get_selection()
@@ -47,7 +49,6 @@ class Preferences:
         self.dialog_new = builder.get_object("account_new_dialog");
         self.providers_combo = builder.get_object("providers_combo");
         self.providers_store = builder.get_object("providers_store");
-        self.pm = provider.GetProviderManager()
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
             for acc in prov.get_accounts():

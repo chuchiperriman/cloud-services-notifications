@@ -48,6 +48,15 @@ class GMailProvider(Provider):
 
         account.new_unread = len (news);
 
+    def create_account_dialog(self):
+        builder=gtk.Builder()
+        builder.set_translation_domain("cloudsn")
+        builder.add_from_file(config.get_data_dir() + "/gmail-account.ui")
+        dialog = builder.get_object("gmail_dialog")
+        #builder.connect_signals(self)
+        result = dialog.run()
+        dialog.destroy()
+
 def GetGMailProvider ():
     global _provider
     if _provider is None:

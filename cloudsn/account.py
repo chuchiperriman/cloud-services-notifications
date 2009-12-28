@@ -30,7 +30,22 @@ class AccountData:
 
     def update (self):
         self.provider.update_account (self)
-    
-    def activate (self):
-        print "Activated " , self.get_name()
 
+class AccountManager:
+    def __init__(self):
+        self.accounts = {}
+        
+    def add_account(self, account):
+        self.accounts[account.get_name()] = account
+
+    def get_account(self, account_name):
+        return self.accounts[account_name]
+
+_account_manager = None
+
+def GetAccountManager():
+    global _account_manager
+    if _account_manager is None:
+        _account_manager = AccountManager()
+    return _account_manager
+    

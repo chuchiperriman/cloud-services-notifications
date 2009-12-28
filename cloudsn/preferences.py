@@ -1,6 +1,7 @@
 import gtk
 import config
 import provider
+import account
 
 class Preferences:
 
@@ -9,6 +10,7 @@ class Preferences:
         self.quit_on_destroy = False
         self.config = config.GetSettingsController()
         self.pm = provider.GetProviderManager()
+        self.am = account.GetAccountManager()
 
     def on_close_button_clicked (self, widget, data=None):
         self.window.response(True)
@@ -35,11 +37,10 @@ class Preferences:
         for path in paths:
             citer = self.store.get_iter(path)
             account_name = self.store.get_value(citer, 1)
-            for prov in self.pm.get_providers():
-                for acc in prov.get_accounts():
-                    if acc.get_name() == account_name:
-                        self.config.del_account_config(acc.get_name())
-                        self.config.save_accounts()
+            for acc in self.am.get_accounts():
+                if acc.get_name() == account_name:
+                    self.config.del_account_config(acc.get_name())
+                    self.config.save_accounts()
             self.store.remove(citer)
     
     def load_window(self):
@@ -58,8 +59,8 @@ class Preferences:
         self.account_name_entry = builder.get_object("account_name_entry");
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
-            for acc in prov.get_accounts():
-                self.store.append([prov.get_icon(), acc.get_name()])
+        for acc in self.am.get_accounts():
+            self.store.append([acc.get_provider().get_icon(), acc.get_name()])
 
         self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))
@@ -84,6 +85,8 @@ def GetPreferences ():
     return _preferences
 
 def main ():
+    for prov in provider.GetProviderManager().get_providers():
+        prov.register_accounts()
     prefs = GetPreferences()
     prefs.quit_on_destroy = True
     prefs.run()

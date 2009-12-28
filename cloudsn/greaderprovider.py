@@ -22,7 +22,7 @@ class GReaderProvider(Provider):
         if self.accounts is None:
             sc = config.GetSettingsController()
             self.accounts = []
-            for account_name in sc.get_account_list_by_type("greader"):
+            for account_name in sc.get_account_list_by_provider(self):
                 acc_config = sc.get_account_config(account_name)
                 account = GReaderAccount (account_name)
                 account["username"] = acc_config["username"]

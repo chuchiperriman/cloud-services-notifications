@@ -128,7 +128,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button2</action-widget>
+      <action-widget response="-2">button2</action-widget>
       <action-widget response="0">button1</action-widget>
     </action-widgets>
   </object>

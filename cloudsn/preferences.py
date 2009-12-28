@@ -20,8 +20,11 @@ class Preferences:
             citer = self.providers_combo.get_active_iter()
             provider_name = self.providers_store.get_value (citer, 1)
             provider = self.pm.get_provider(provider_name)
-            account = provider.create_account_dialog()
-            print account
+            account_name = self.account_name_entry.get_text()
+            if account_name != "":
+                account = provider.create_account_dialog(account_name)
+                if account is not None:
+                    self.store.append([account.get_provider().get_icon(), account.get_name()])
 
     def on_account_del_button_clicked (self, widget, data=None):
         selection = self.account_tree.get_selection()
@@ -49,6 +52,7 @@ class Preferences:
         self.dialog_new = builder.get_object("account_new_dialog");
         self.providers_combo = builder.get_object("providers_combo");
         self.providers_store = builder.get_object("providers_store");
+        self.account_name_entry = builder.get_object("account_name_entry");
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
             for acc in prov.get_accounts():

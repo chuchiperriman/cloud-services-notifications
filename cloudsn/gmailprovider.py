@@ -21,11 +21,9 @@ class GMailProvider(Provider):
         if self.accounts is None:
             sc = config.GetSettingsController()
             self.accounts = []
-            for account_name in sc.get_account_list_by_type("gmail"):
+            for account_name in sc.get_account_list_by_provider(self):
                 acc_config = sc.get_account_config(account_name)
-                account = GMailAccount (account_name)
-                account["username"] = acc_config["username"]
-                account["password"] = acc_config["password"]
+                account = GMailAccount (account_name, acc_config["username"], acc_config["password"])
                 self.accounts.append (account)
 
         return self.accounts
@@ -48,14 +46,22 @@ class GMailProvider(Provider):
 
         account.new_unread = len (news);
 
-    def create_account_dialog(self):
+    def create_account_dialog(self, account_name):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
         builder.add_from_file(config.get_data_dir() + "/gmail-account.ui")
         dialog = builder.get_object("gmail_dialog")
         #builder.connect_signals(self)
-        result = dialog.run()
+        account = None
+        if dialog.run() == 0:
+            username = builder.get_object("username_entry").get_text()
+            password = builder.get_object("password_entry").get_text()
+            account = GMailAccount(account_name, username, password)
+            sc = config.GetSettingsController()
+            sc.set_account_config (account)
+            sc.save_accounts()
         dialog.destroy()
+        return account
 
 def GetGMailProvider ():
     global _provider
@@ -64,9 +70,12 @@ def GetGMailProvider ():
     return _provider
 
 class GMailAccount (AccountData):
-    mails = {}
-    def __init__(self, name):
+
+    def __init__(self, name, username, password):
         AccountData.__init__(self, name, GetGMailProvider())
+        self["username"] = username
+        self["password"] = password
+        self.mails = {}
     
     def activate (self):
         utils.show_url ("http://gmail.google.com")

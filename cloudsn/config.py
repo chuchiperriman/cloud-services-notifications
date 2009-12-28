@@ -49,10 +49,10 @@ class SettingsController(gobject.GObject):
     def get_account_list (self):
         return self.accounts.keys ()
 
-    def get_account_list_by_type (self, acc_type):
+    def get_account_list_by_provider (self, provider):
         res = []
         for sec in self.accounts.keys():
-            if self.accounts[sec]["type"] == acc_type:
+            if self.accounts[sec]["provider_name"] == provider.get_name():
                 res.append (sec)
         return res
         
@@ -60,7 +60,8 @@ class SettingsController(gobject.GObject):
         return self.accounts[account_name]
 
     def set_account_config(self, account):
-        del self.accounts[account.get_name()]
+        if account.get_name() in self.accounts:
+            del self.accounts[account.get_name()]
         self.accounts[account.get_name()] = account.get_properties()
         
     def del_account_config (self, account_name):

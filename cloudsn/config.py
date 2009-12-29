@@ -7,6 +7,10 @@ class SettingsController(gobject.GObject):
 
     __gtype_name__ = "SettingsController"
 
+    # Section, Key, Value
+    __gsignals__ = { "value-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_BOOLEAN, 
+                                        (gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_PYOBJECT))}
+
     CONFIG_HOME = bd.xdg_config_home + '/cloud-services-notifications'
     CONFIG_PREFERENCES = CONFIG_HOME + '/preferences'
     CONFIG_ACCOUNTS = CONFIG_HOME + '/accounts'
@@ -84,12 +88,6 @@ class SettingsController(gobject.GObject):
         self.dict_to_config(self.config_accs, self.accounts)
         with open(self.CONFIG_ACCOUNTS, 'wb') as configfile:
             self.config_accs.write(configfile)
-
-# Section, Key, Value
-gobject.signal_new("value-changed", SettingsController, gobject.SIGNAL_RUN_LAST,
-    gobject.TYPE_BOOLEAN, (gobject.TYPE_STRING, gobject.TYPE_STRING,
-        gobject.TYPE_PYOBJECT))
-
 
 _settings_controller = None
 

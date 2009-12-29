@@ -17,7 +17,16 @@ class Controller:
         self.config.connect("value-changed", self._settings_changed)
         self.prov_manager = provider.GetProviderManager()
         self.am = account.GetAccountManager()
+        self.am.connect("account-added", self._account_added_cb)
+        self.am.connect("account-deleted", self._account_deleted_cb)
 
+    def _account_added_cb(self, am, account):
+        self.create_indicator(account)
+        print 'account added: ', account.get_name()
+
+    def _account_deleted_cb(self, am, account):
+        print 'account deleted: ', account.get_name()
+    
     def _settings_changed(self, config, section, key, value):
         if section == "preferences" and key == "minutes":
             self._update_interval()
@@ -92,9 +101,6 @@ class Controller:
         for provider in self.prov_manager.get_providers():
             provider.register_accounts()
             
-        for acc in self.am.get_accounts():
-            self.create_indicator(acc)
-                
         while gtk.events_pending():
             gtk.main_iteration(False)
             

@@ -1,4 +1,5 @@
 import config
+import gobject
 
 class AccountData:
     def __init__ (self, name, provider):
@@ -43,14 +44,23 @@ class AccountData:
         sc.del_account_config(self.get_name())
         sc.save_accounts()
 
-class AccountManager:
+class AccountManager (gobject.GObject):
+
+    __gtype_name__ = "AccountManager"
+
+    __gsignals__ = { "account-added" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+                     "account-deleted" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_BOOLEAN, (gobject.TYPE_PYOBJECT,))}
+    
     def __init__(self):
+        gobject.GObject.__init__(self)
         self.accounts = {}
     
     def add_account(self, account, store=False):
         self.accounts[account.get_name()] = account
         if store:
             account.save_conf()
+
+        self.emit("account-added", account)
 
     def get_account(self, account_name):
         return self.accounts[account_name]
@@ -62,6 +72,7 @@ class AccountManager:
         del self.accounts[account.get_name()]
         if complete:
             account.del_conf()
+        self.emit("account-deleted", account)
 
 _account_manager = None
 

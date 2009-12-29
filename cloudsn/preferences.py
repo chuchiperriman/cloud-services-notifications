@@ -26,6 +26,7 @@ class Preferences:
             if account_name != "":
                 account = provider.create_account_dialog(account_name)
                 if account is not None:
+                    self.am.add_account(account, True)
                     self.store.append([account.get_provider().get_icon(), account.get_name()])
 
     def on_account_edit_button_clicked(self, widget, data=None):
@@ -37,10 +38,8 @@ class Preferences:
         for path in paths:
             citer = self.store.get_iter(path)
             account_name = self.store.get_value(citer, 1)
-            for acc in self.am.get_accounts():
-                if acc.get_name() == account_name:
-                    self.config.del_account_config(acc.get_name())
-                    self.config.save_accounts()
+            acc = self.am.get_account(account_name)
+            self.am.del_account(acc, True)
             self.store.remove(citer)
     
     def load_window(self):

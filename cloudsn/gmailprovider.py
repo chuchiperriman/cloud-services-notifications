@@ -54,9 +54,6 @@ class GMailProvider(Provider):
             username = builder.get_object("username_entry").get_text()
             password = builder.get_object("password_entry").get_text()
             account = GMailAccount(account_name, username, password)
-            sc = config.GetSettingsController()
-            sc.set_account_config (account)
-            sc.save_accounts()
         dialog.destroy()
         return account
 

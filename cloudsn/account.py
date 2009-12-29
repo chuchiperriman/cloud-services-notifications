@@ -1,3 +1,5 @@
+import config
+
 class AccountData:
     def __init__ (self, name, provider):
         self.unread = 0
@@ -31,12 +33,24 @@ class AccountData:
     def update (self):
         self.provider.update_account (self)
 
+    def save_conf(self):
+        sc = config.GetSettingsController()
+        sc.set_account_config (self)
+        sc.save_accounts()
+
+    def del_conf(self):
+        sc = config.GetSettingsController()
+        sc.del_account_config(self.get_name())
+        sc.save_accounts()
+
 class AccountManager:
     def __init__(self):
         self.accounts = {}
     
-    def add_account(self, account):
+    def add_account(self, account, store=False):
         self.accounts[account.get_name()] = account
+        if store:
+            account.save_conf()
 
     def get_account(self, account_name):
         return self.accounts[account_name]
@@ -44,8 +58,10 @@ class AccountManager:
     def get_accounts(self):
         return self.accounts.values()
 
-    def remove_account(self, account_name):
-        del self.accounts[account_name]
+    def del_account(self, account, complete=True):
+        del self.accounts[account.get_name()]
+        if complete:
+            account.del_conf()
 
 _account_manager = None
 

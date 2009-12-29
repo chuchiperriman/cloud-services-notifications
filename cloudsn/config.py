@@ -2,6 +2,7 @@ import ConfigParser
 import xdg.BaseDirectory as bd
 import os
 import gobject
+import os
 
 class SettingsController(gobject.GObject):
 
@@ -56,8 +57,12 @@ class SettingsController(gobject.GObject):
     def get_account_list_by_provider (self, provider):
         res = []
         for sec in self.accounts.keys():
-            if self.accounts[sec]["provider_name"] == provider.get_name():
-                res.append (sec)
+            if "provider_name" in self.accounts[sec]:
+                if self.accounts[sec]["provider_name"] == provider.get_name():
+                    res.append (sec)
+            else:
+                print "The account " + sec + " has not a provider_name property"
+                
         return res
         
     def get_account_config (self, account_name):
@@ -99,6 +104,6 @@ def GetSettingsController():
 
 
 def get_data_dir ():
-    return "/home/perriman/dev/cloud-services-notifications/data"
+    return os.path.abspath ("./data")
 
 

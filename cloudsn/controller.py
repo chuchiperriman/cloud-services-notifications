@@ -8,7 +8,6 @@ import config
 
 class Controller:
 
-    accounts = []
     timeout_id = -1
     interval = 60
     
@@ -25,6 +24,7 @@ class Controller:
         print 'account added: ', account.get_name()
 
     def _account_deleted_cb(self, am, account):
+        account.indicator = None
         print 'account deleted: ', account.get_name()
     
     def _settings_changed(self, config, section, key, value):

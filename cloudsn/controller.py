@@ -81,12 +81,14 @@ class Controller:
             print "you don't seem to have pynotify installed"
 
     def update_accounts(self, other):
-        #First create indicators
         for acc in self.am.get_accounts():
-            acc.update()
-            acc.indicator.set_property_int("count", acc.get_unread())
-            if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
-                self.notify(acc.get_name(), "New messages: " + str(acc.get_new_unread()))
+            try:
+                acc.update()
+                acc.indicator.set_property_int("count", acc.get_unread())
+                if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
+                    self.notify(acc.get_name(), "New messages: " + str(acc.get_new_unread()))
+            except Exception as e:
+                print "Error trying to update the account " , acc.get_name() , ": " , e
                 
         #account.indicator.set_property('draw-attention', 'true');
         return True

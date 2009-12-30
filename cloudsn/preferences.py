@@ -31,6 +31,15 @@ class Preferences:
 
     def on_account_edit_button_clicked(self, widget, data=None):
         print 'edit'
+        selection = self.account_tree.get_selection()
+        model, paths = selection.get_selected_rows()
+        for path in paths:
+            citer = self.store.get_iter(path)
+            account_name = self.store.get_value(citer, 1)
+            acc = self.am.get_account(account_name)
+            provider = acc.get_provider()
+            if provider.edit_account_dialog(acc):
+                self.am.edit_account(acc)
         
     def on_account_del_button_clicked (self, widget, data=None):
         selection = self.account_tree.get_selection()

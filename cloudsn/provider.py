@@ -18,6 +18,9 @@ class Provider:
     def create_account_dialog(self, account_name):
         """ Returns the new created account"""
         return None
+    def edit_account_dialog(self, acc):
+        """ Returns True if the account has been changed"""
+        return False
 
 class ProviderManager:
 

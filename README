@@ -1,0 +1,24 @@
+======================================
+Cloud Services Notifications (Cloudsn)
+======================================
+
+This application is a daemon checking the configured accounts for
+new messages. It uses the indicator-applet to show the accounts and
+the current unreaded items. It uses libnotify to show notifications
+when new messages are detected.
+
+Currently the application has these providers implemented:
+
+* Gmail: Check for new e-mails in the inbox
+* Google Reader: Check for unread feeds
+
+The application has (or will have) an MVC model to support new providers
+like pop3, imap, tweeter, facebook, etc. The application will have
+support for multiple notifications (use libnotify, e-mail, popup, etc). By 
+the moment it use libnotify only.
+
+Cloudsn has a centralized preferences manager. The user will have an unique 
+preferences dialog for global preferences and new/edit/delete accounts for
+all providers.
+
+

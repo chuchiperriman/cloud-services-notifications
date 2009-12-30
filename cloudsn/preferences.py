@@ -30,7 +30,6 @@ class Preferences:
                     self.store.append([account.get_provider().get_icon(), account.get_name()])
 
     def on_account_edit_button_clicked(self, widget, data=None):
-        print 'edit'
         selection = self.account_tree.get_selection()
         model, paths = selection.get_selected_rows()
         for path in paths:

@@ -31,6 +31,36 @@ class GReaderProvider(Provider):
         g.refreshInfo()
         account.unread = g.getTotalUnread()
 
+    def _create_dialog(self):
+        builder=gtk.Builder()
+        builder.set_translation_domain("cloudsn")
+        builder.add_from_file(config.get_data_dir() + "/greader-account.ui")
+        dialog = builder.get_object("dialog")
+        return (builder, dialog)
+        
+    def create_account_dialog(self, account_name):
+        builder, dialog = self._create_dialog()
+        account = None
+        if dialog.run() == 0:
+            username = builder.get_object("username_entry").get_text()
+            password = builder.get_object("password_entry").get_text()
+            account = GReaderAccount(account_name, username, password)
+        dialog.destroy()
+        return account
+        
+    def edit_account_dialog(self, acc):
+        res = False
+        builder, dialog = self._create_dialog()
+        builder.get_object("username_entry").set_text(acc["username"])
+        builder.get_object("password_entry").set_text(acc["password"])
+        account = None
+        if dialog.run() == 0:
+            acc["username"] = builder.get_object("username_entry").get_text()
+            acc["password"] = builder.get_object("password_entry").get_text()
+            res = True
+        dialog.destroy()
+        return res
+
 def GetGReaderProvider ():
     global _provider
     if _provider is None:

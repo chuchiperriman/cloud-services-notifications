@@ -9,16 +9,25 @@ import config
 import gtk
 import utils
 
-_provider = None
-
 class GReaderProvider(Provider):
+
+    __default = None
+
     def __init__(self):
+        if GReaderProvider.__default:
+           raise GReaderProvider.__default
         Provider.__init__(self, "Google Reader")
         self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/greader.png')
 
+    @staticmethod
+    def get_instance():
+        if not GReaderProvider.__default:
+            GReaderProvider.__default = GReaderProvider()
+        return GReaderProvider.__default
+        
     def register_accounts (self):
-        sc = config.GetSettingsController()
-        am = account.GetAccountManager()
+        sc = config.SettingsController.get_instance()
+        am = account.AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
             acc = GReaderAccount (account_name, acc_config["username"], acc_config["password"])
@@ -60,15 +69,9 @@ class GReaderProvider(Provider):
         dialog.destroy()
         return res
 
-def GetGReaderProvider ():
-    global _provider
-    if _provider is None:
-        _provider = GReaderProvider()
-    return _provider
-
 class GReaderAccount (AccountData):
     def __init__(self, name, username, password):
-        AccountData.__init__(self, name, GetGReaderProvider())
+        AccountData.__init__(self, name, GReaderProvider.get_instance())
         self["username"] = username
         self["password"] = password
     def activate (self):

@@ -9,16 +9,26 @@ import config
 
 class Controller:
 
+    __default = None
+
     timeout_id = -1
     interval = 60
     
     def __init__(self):
-        self.config = config.GetSettingsController()
+        if Controller.__default:
+           raise Controller.__default 
+        self.config = config.SettingsController.get_instance()
         self.config.connect("value-changed", self._settings_changed)
-        self.prov_manager = provider.GetProviderManager()
-        self.am = account.GetAccountManager()
+        self.prov_manager = provider.ProviderManager.get_instance()
+        self.am = account.AccountManager.get_instance()
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
+
+    @staticmethod
+    def get_instance():
+        if not Controller.__default:
+            Controller.__default = Controller()
+        return Controller.__default
 
     def _account_added_cb(self, am, account):
         self.create_indicator(account)
@@ -42,7 +52,7 @@ class Controller:
             self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
         
     def on_server_display_cb(self, server):
-        prefs = preferences.GetPreferences()
+        prefs = preferences.Preferences.get_instance()
         prefs.run()
         
     def init_indicator_server(self):
@@ -115,12 +125,4 @@ class Controller:
             gtk.main()
         except KeyboardInterrupt:
             pass
-
-_controller = None
-
-def GetController():
-    global _controller
-    if _controller is None:
-        _controller = Controller()
-    return _controller
 

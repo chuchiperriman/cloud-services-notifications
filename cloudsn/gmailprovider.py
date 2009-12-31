@@ -8,16 +8,25 @@ import gtk
 import utils
 import urllib2
 
-_provider = None
-
 class GMailProvider(Provider):
+
+    __default = None
+
     def __init__(self):
+        if GMailProvider.__default:
+           raise GMailProvider.__default
         Provider.__init__(self, "GMail")
         self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/gmail.png')
 
+    @staticmethod
+    def get_instance():
+        if not GMailProvider.__default:
+            GMailProvider.__default = GMailProvider()
+        return GMailProvider.__default
+
     def register_accounts (self):
-        sc = config.GetSettingsController()
-        am = account.GetAccountManager()
+        sc = config.SettingsController.get_instance()
+        am = account.AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
             acc = GMailAccount (account_name, acc_config["username"], acc_config["password"])
@@ -72,16 +81,10 @@ class GMailProvider(Provider):
         dialog.destroy()
         return res
 
-def GetGMailProvider ():
-    global _provider
-    if _provider is None:
-        _provider = GMailProvider()
-    return _provider
-
 class GMailAccount (AccountData):
 
     def __init__(self, name, username, password):
-        AccountData.__init__(self, name, GetGMailProvider())
+        AccountData.__init__(self, name, GMailProvider.get_instance())
         self["username"] = username
         self["password"] = password
         self.mails = {}

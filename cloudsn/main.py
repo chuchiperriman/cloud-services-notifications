@@ -4,7 +4,7 @@ import controller
 
 
 def main ():
-    cr = controller.GetController()
+    cr = controller.Controller.get_instance()
     cr.start()
 
 if __name__ == "__main__":

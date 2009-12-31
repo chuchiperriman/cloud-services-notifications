@@ -19,6 +19,8 @@ class Pop3Provider(provider.Provider):
     __default = None
 
     def __init__(self):
+        if Pop3Provider.__default:
+           raise Pop3Provider.__default
         provider.Provider.__init__(self, "Pop3")
         self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/pop3.png')
 
@@ -29,8 +31,8 @@ class Pop3Provider(provider.Provider):
         return Pop3Provider.__default
         
     def register_accounts (self):
-        sc = config.GetSettingsController()
-        am = account.GetAccountManager()
+        sc = config.SettingsController.get_instance()
+        am = account.AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
             acc = Pop3Account (account_name, acc_config["host"], acc_config["username"], acc_config["password"])

@@ -24,7 +24,26 @@ class Provider:
 
 class ProviderManager:
 
+    __default = None
+
     providers = []
+
+    def __init__(self):
+        if ProviderManager.__default:
+           raise ProviderManager.__default
+           
+    @staticmethod
+    def get_instance():
+        if not ProviderManager.__default:
+            ProviderManager.__default = ProviderManager()
+            #Default providers
+            from gmailprovider import GMailProvider
+            from greaderprovider import GReaderProvider
+            from pop3provider import Pop3Provider
+            ProviderManager.__default.add_provider (GMailProvider.get_instance())
+            ProviderManager.__default.add_provider (GReaderProvider.get_instance())
+            ProviderManager.__default.add_provider (Pop3Provider.get_instance())
+        return ProviderManager.__default
 
     def add_provider (self, provider):
         self.providers.append (provider)
@@ -36,22 +55,3 @@ class ProviderManager:
                 return prov
         return None
         
-
-_provider_manager = None
-
-def GetProviderManager ():
-    global _provider_manager
-    if _provider_manager is None:
-        _provider_manager = ProviderManager()
-        #Default providers
-        from gmailprovider import GMailProvider
-        from greaderprovider import GReaderProvider
-        from pop3provider import Pop3Provider
-        _provider_manager.add_provider (GMailProvider())
-        _provider_manager.add_provider (GReaderProvider())
-        _provider_manager.add_provider (Pop3Provider.get_instance())
-        
-    return _provider_manager
-
-
-

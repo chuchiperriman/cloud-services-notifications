@@ -7,12 +7,22 @@ STOP_RESPONSE = 1
 
 class Preferences:
 
+    __default = None
+
     def __init__ (self):
+        if Preferences.__default:
+           raise Preferences.__default
         self.window = None
         self.dialog_only = False
-        self.config = config.GetSettingsController()
-        self.pm = provider.GetProviderManager()
-        self.am = account.GetAccountManager()
+        self.config = config.SettingsController.get_instance()
+        self.pm = provider.ProviderManager.get_instance()
+        self.am = account.AccountManager.get_instance()
+
+    @staticmethod
+    def get_instance():
+        if not Preferences.__default:
+            Preferences.__default = Preferences()
+        return Preferences.__default
 
     def on_close_button_clicked (self, widget, data=None):
         self.window.response(-1)
@@ -89,20 +99,11 @@ class Preferences:
         if self.dialog_only == False and result == STOP_RESPONSE:
             gtk.main_quit()
         return result
-        
-
-_preferences = None
-
-def GetPreferences ():
-    global _preferences
-    if _preferences is None:
-        _preferences = Preferences()
-    return _preferences
 
 def main ():
-    for prov in provider.GetProviderManager().get_providers():
+    for prov in provider.ProviderManager.get_instance().get_providers():
         prov.register_accounts()
-    prefs = GetPreferences()
+    prefs = Preferences.get_instance()
     prefs.dialog_only = True
     prefs.run()
 

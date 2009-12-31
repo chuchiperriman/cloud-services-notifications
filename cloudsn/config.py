@@ -6,6 +6,8 @@ import os
 
 class SettingsController(gobject.GObject):
 
+    __default = None
+
     __gtype_name__ = "SettingsController"
 
     # Section, Key, Value
@@ -17,6 +19,8 @@ class SettingsController(gobject.GObject):
     CONFIG_ACCOUNTS = CONFIG_HOME + '/accounts'
 
     def __init__(self):
+        if SettingsController.__default:
+           raise SettingsController.__default
         gobject.GObject.__init__(self)
         self.ensure_config()
         self.config_prefs = ConfigParser.ConfigParser()
@@ -25,6 +29,12 @@ class SettingsController(gobject.GObject):
         self.config_accs.read (self.CONFIG_ACCOUNTS)
         self.prefs = self.config_to_dict(self.config_prefs)
         self.accounts = self.config_to_dict(self.config_accs)
+
+    @staticmethod
+    def get_instance():
+        if not SettingsController.__default:
+            SettingsController.__default = SettingsController()
+        return SettingsController.__default
 
     def dict_to_config (self, config, dic):
         for sec, data in dic.iteritems():
@@ -93,15 +103,6 @@ class SettingsController(gobject.GObject):
         self.dict_to_config(self.config_accs, self.accounts)
         with open(self.CONFIG_ACCOUNTS, 'wb') as configfile:
             self.config_accs.write(configfile)
-
-_settings_controller = None
-
-def GetSettingsController():
-        global _settings_controller
-        if _settings_controller is None:
-                _settings_controller = SettingsController()
-        return _settings_controller
-
 
 def get_data_dir ():
     return os.path.abspath ("./data")

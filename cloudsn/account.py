@@ -35,18 +35,20 @@ class AccountData:
         self.provider.update_account (self)
 
     def save_conf(self):
-        sc = config.GetSettingsController()
+        sc = config.SettingsController.get_instance()
         sc.set_account_config (self)
         sc.save_accounts()
 
     def del_conf(self):
-        sc = config.GetSettingsController()
+        sc = config.SettingsController.get_instance()
         sc.del_account_config(self.get_name())
         sc.save_accounts()
     def activate(self):
         print 'This account type has not an activate action'
 
 class AccountManager (gobject.GObject):
+
+    __default = None
 
     __gtype_name__ = "AccountManager"
 
@@ -55,8 +57,16 @@ class AccountManager (gobject.GObject):
                      "account-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))}
     
     def __init__(self):
+        if AccountManager.__default:
+           raise AccountManager.__default
         gobject.GObject.__init__(self)
         self.accounts = {}
+
+    @staticmethod
+    def get_instance():
+        if not AccountManager.__default:
+            AccountManager.__default = AccountManager()
+        return AccountManager.__default
     
     def add_account(self, account, store=False):
         self.accounts[account.get_name()] = account
@@ -80,12 +90,4 @@ class AccountManager (gobject.GObject):
         if complete:
             account.del_conf()
         self.emit("account-deleted", account)
-
-_account_manager = None
-
-def GetAccountManager():
-    global _account_manager
-    if _account_manager is None:
-        _account_manager = AccountManager()
-    return _account_manager
-    
+        

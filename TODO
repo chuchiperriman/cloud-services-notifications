@@ -2,4 +2,5 @@
 [ ] Set icons to the dialogs
 [X] See how we can stop the service
 [ ] Create the preferences file with default values
-[ ] Check when a new account is added
+[ ] Update account when a new one is added
+[ ] Set provider icon to the notifications

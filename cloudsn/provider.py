@@ -46,8 +46,10 @@ def GetProviderManager ():
         #Default providers
         from gmailprovider import GMailProvider
         from greaderprovider import GReaderProvider
+        from pop3provider import Pop3Provider
         _provider_manager.add_provider (GMailProvider())
         _provider_manager.add_provider (GReaderProvider())
+        _provider_manager.add_provider (Pop3Provider.get_instance())
         
     return _provider_manager
 

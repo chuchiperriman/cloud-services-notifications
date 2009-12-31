@@ -15,7 +15,7 @@ class Preferences:
         self.am = account.GetAccountManager()
 
     def on_close_button_clicked (self, widget, data=None):
-        self.window.response(True)
+        self.window.response(-1)
 
     def on_account_add_button_clicked (self, widget, data=None):
         response = self.dialog_new.run()

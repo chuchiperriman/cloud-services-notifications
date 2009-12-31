@@ -8,14 +8,12 @@ import gtk
 import utils
 import urllib2
 
-ICON = "/home/perriman/dev/cloud-services-notifications/data/gmail.png"
-
 _provider = None
 
 class GMailProvider(Provider):
     def __init__(self):
         Provider.__init__(self, "GMail")
-        self.icon = gtk.gdk.pixbuf_new_from_file(ICON)
+        self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/gmail.png')
 
     def register_accounts (self):
         sc = config.GetSettingsController()

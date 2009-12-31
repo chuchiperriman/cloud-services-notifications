@@ -9,14 +9,12 @@ import config
 import gtk
 import utils
 
-ICON = "/home/perriman/dev/cloud-services-notifications/data/greader.png"
-
 _provider = None
 
 class GReaderProvider(Provider):
     def __init__(self):
         Provider.__init__(self, "Google Reader")
-        self.icon = gtk.gdk.pixbuf_new_from_file(ICON)
+        self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/greader.png')
 
     def register_accounts (self):
         sc = config.GetSettingsController()

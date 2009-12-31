@@ -312,7 +312,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">close_button</action-widget>
+      <action-widget response="-1">close_button</action-widget>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="account_new_dialog">

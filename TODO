@@ -1,3 +1,5 @@
 [X] Remove the indicator when an account is deleted
 [ ] Set icons to the dialogs
 [X] See how we can stop the service
+[ ] Create the preferences file with default values
+[ ] Check when a new account is added

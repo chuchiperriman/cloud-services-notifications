@@ -1,3 +1,4 @@
+import preferences
 import provider
 import account
 import indicate
@@ -41,9 +42,7 @@ class Controller:
             self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
         
     def on_server_display_cb(self, server):
-        import preferences
         prefs = preferences.GetPreferences()
-        prefs.quit_on_destroy = True
         prefs.run()
         
     def init_indicator_server(self):
@@ -94,11 +93,6 @@ class Controller:
         return True
 
     def _start_idle(self):
-        self.update_accounts(None)
-        self._update_interval()
-        return False
-        
-    def start(self):
         self.init_indicator_server()
         for provider in self.prov_manager.get_providers():
             provider.register_accounts()
@@ -106,8 +100,16 @@ class Controller:
         while gtk.events_pending():
             gtk.main_iteration(False)
             
-        gobject.idle_add(self._start_idle)
-        gtk.main()
+        self.update_accounts(None)
+        self._update_interval()
+        return False
+        
+    def start(self):
+        try:
+            gobject.idle_add(self._start_idle)
+            gtk.main()
+        except KeyboardInterrupt:
+            pass
 
 _controller = None
 

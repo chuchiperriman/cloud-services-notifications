@@ -3,11 +3,13 @@ import config
 import provider
 import account
 
+STOP_RESPONSE = 1
+
 class Preferences:
 
     def __init__ (self):
         self.window = None
-        self.quit_on_destroy = False
+        self.dialog_only = False
         self.config = config.GetSettingsController()
         self.pm = provider.GetProviderManager()
         self.am = account.GetAccountManager()
@@ -49,6 +51,9 @@ class Preferences:
             acc = self.am.get_account(account_name)
             self.am.del_account(acc, True)
             self.store.remove(citer)
+
+    def on_stop_button_clicked (self, widget, data=None):
+        self.window.response(STOP_RESPONSE)
     
     def load_window(self):
         builder=gtk.Builder()
@@ -81,6 +86,9 @@ class Preferences:
         self.config.save_prefs()
         self.window.destroy()
         self.window = None
+        if self.dialog_only == False and result == STOP_RESPONSE:
+            gtk.main_quit()
+        return result
         
 
 _preferences = None
@@ -95,7 +103,7 @@ def main ():
     for prov in provider.GetProviderManager().get_providers():
         prov.register_accounts()
     prefs = GetPreferences()
-    prefs.quit_on_destroy = True
+    prefs.dialog_only = True
     prefs.run()
 
 if __name__ == "__main__":

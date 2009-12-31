@@ -1,6 +1,8 @@
 [X] Remove the indicator when an account is deleted
-[ ] Set icons to the dialogs
+[X] Set icons to the dialogs
 [X] See how we can stop the service
 [ ] Create the preferences file with default values
 [ ] Update account when a new one is added
-[ ] Set provider icon to the notifications
+[X] Set provider icon to the notifications
+[ ] Add a button to "check account now" and "check all accounts now"
+[ ] Create and set the cloudsn icon to the dialogs, application etc.

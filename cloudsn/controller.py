@@ -67,12 +67,15 @@ class Controller:
         account.indicator = indicator
         indicator.account = account
         
-    def notify (self, title, message):
+    def notify (self, title, message, icon = None):
         try:
             import pynotify
             if pynotify.init("Cloud Services Notifications"):
                 n = pynotify.Notification(title, message)
                 n.set_urgency(pynotify.URGENCY_LOW)
+                n.set_timeout(4000)
+                if icon:
+                    n.set_icon_from_pixbuf(icon)
                 n.show()
             else:
                 print "there was a problem initializing the pynotify module"
@@ -85,7 +88,9 @@ class Controller:
                 acc.update()
                 acc.indicator.set_property_int("count", acc.get_unread())
                 if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
-                    self.notify(acc.get_name(), "New messages: " + str(acc.get_new_unread()))
+                    self.notify(acc.get_name(), 
+                        "New messages: " + str(acc.get_new_unread()),
+                        acc.get_provider().get_icon())
             except Exception as e:
                 print "Error trying to update the account " , acc.get_name() , ": " , e
                 

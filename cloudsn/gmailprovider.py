@@ -46,6 +46,7 @@ class GMailProvider(Provider):
         builder.set_translation_domain("cloudsn")
         builder.add_from_file(config.get_data_dir() + "/gmail-account.ui")
         dialog = builder.get_object("gmail_dialog")
+        dialog.set_icon(self.get_icon())
         return (builder, dialog)
         
     def create_account_dialog(self, account_name):

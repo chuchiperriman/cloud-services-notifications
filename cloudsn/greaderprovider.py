@@ -34,6 +34,7 @@ class GReaderProvider(Provider):
         builder.set_translation_domain("cloudsn")
         builder.add_from_file(config.get_data_dir() + "/greader-account.ui")
         dialog = builder.get_object("dialog")
+        dialog.set_icon(self.get_icon())
         return (builder, dialog)
         
     def create_account_dialog(self, account_name):

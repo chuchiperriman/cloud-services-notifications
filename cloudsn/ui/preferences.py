@@ -1,7 +1,7 @@
 import gtk
-import config
-import provider
-import account
+from core import config
+from core import provider
+from core import account
 
 STOP_RESPONSE = 1
 

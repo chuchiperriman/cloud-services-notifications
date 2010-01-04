@@ -37,9 +37,9 @@ class ProviderManager:
         if not ProviderManager.__default:
             ProviderManager.__default = ProviderManager()
             #Default providers
-            from gmailprovider import GMailProvider
-            from greaderprovider import GReaderProvider
-            from pop3provider import Pop3Provider
+            from providers.gmailprovider import GMailProvider
+            from providers.greaderprovider import GReaderProvider
+            from providers.pop3provider import Pop3Provider
             ProviderManager.__default.add_provider (GMailProvider.get_instance())
             ProviderManager.__default.add_provider (GReaderProvider.get_instance())
             ProviderManager.__default.add_provider (Pop3Provider.get_instance())

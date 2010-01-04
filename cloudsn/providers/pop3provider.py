@@ -5,23 +5,23 @@ Based on pop3.py:
     https://code.launchpad.net/cgmail
     
 """
+from core.provider import Provider
+from core.account import Account, AccountManager
+from core import config
+
 import poplib
 from email.Parser import Parser as EmailParser
 from email.header import decode_header
-
-import provider
-import account
-import config
 import gtk
 
-class Pop3Provider(provider.Provider):
+class Pop3Provider(Provider):
 
     __default = None
 
     def __init__(self):
         if Pop3Provider.__default:
            raise Pop3Provider.__default
-        provider.Provider.__init__(self, "Pop3")
+        Provider.__init__(self, "Pop3")
         self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/pop3.png')
 
     @staticmethod
@@ -32,7 +32,7 @@ class Pop3Provider(provider.Provider):
         
     def register_accounts (self):
         sc = config.SettingsController.get_instance()
-        am = account.AccountManager.get_instance()
+        am = AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
             acc = Pop3Account (account_name, acc_config["host"], acc_config["username"], acc_config["password"])
@@ -51,10 +51,10 @@ class Pop3Provider(provider.Provider):
 
         account.new_unread = len (news);
 
-class Pop3Account (account.AccountData):
+class Pop3Account (Account):
 
     def __init__(self, name, host, username, password):
-        account.AccountData.__init__(self, name, Pop3Provider.get_instance())
+        Account.__init__(self, name, Pop3Provider.get_instance())
         #TODO Add port, ssl etc
         self["host"] = host
         self["username"] = username

@@ -1,11 +1,11 @@
-import preferences
-import provider
-import account
+from core.provider import Provider, ProviderManager
+from core import account
+from core import config
+from ui import preferences
 import indicate
 from time import time
 import gtk
 import gobject
-import config
 
 class Controller:
 
@@ -19,7 +19,7 @@ class Controller:
            raise Controller.__default 
         self.config = config.SettingsController.get_instance()
         self.config.connect("value-changed", self._settings_changed)
-        self.prov_manager = provider.ProviderManager.get_instance()
+        self.prov_manager = ProviderManager.get_instance()
         self.am = account.AccountManager.get_instance()
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)

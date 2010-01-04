@@ -1,10 +1,10 @@
 #!/usr/bin/python
 
-import controller
+from core.controller import Controller
 
 
 def main ():
-    cr = controller.Controller.get_instance()
+    cr = Controller.get_instance()
     cr.start()
 
 if __name__ == "__main__":

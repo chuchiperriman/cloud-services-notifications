@@ -1,13 +1,12 @@
-import account
-from account import AccountData
-from provider import Provider
+from core.account import Account, AccountManager
+from core.provider import Provider
+from core import utils
+from core import config
 import urllib2
 import re
 import urllib
 import xml.dom.minidom
-import config
 import gtk
-import utils
 
 class GReaderProvider(Provider):
 
@@ -27,7 +26,7 @@ class GReaderProvider(Provider):
         
     def register_accounts (self):
         sc = config.SettingsController.get_instance()
-        am = account.AccountManager.get_instance()
+        am = AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
             acc = GReaderAccount (account_name, acc_config["username"], acc_config["password"])
@@ -69,9 +68,9 @@ class GReaderProvider(Provider):
         dialog.destroy()
         return res
 
-class GReaderAccount (AccountData):
+class GReaderAccount (Account):
     def __init__(self, name, username, password):
-        AccountData.__init__(self, name, GReaderProvider.get_instance())
+        Account.__init__(self, name, GReaderProvider.get_instance())
         self["username"] = username
         self["password"] = password
     def activate (self):

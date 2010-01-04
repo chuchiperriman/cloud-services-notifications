@@ -1,11 +1,10 @@
-import account
-from account import AccountData
-from provider import Provider
+from core.account import Account, AccountManager
+from core.provider import Provider
+from core import utils
+from core import config
 from xml.sax.handler import ContentHandler
 from xml import sax
-import config
 import gtk
-import utils
 import urllib2
 
 class GMailProvider(Provider):
@@ -26,7 +25,7 @@ class GMailProvider(Provider):
 
     def register_accounts (self):
         sc = config.SettingsController.get_instance()
-        am = account.AccountManager.get_instance()
+        am = AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
             acc = GMailAccount (account_name, acc_config["username"], acc_config["password"])
@@ -81,10 +80,10 @@ class GMailProvider(Provider):
         dialog.destroy()
         return res
 
-class GMailAccount (AccountData):
+class GMailAccount (Account):
 
     def __init__(self, name, username, password):
-        AccountData.__init__(self, name, GMailProvider.get_instance())
+        Account.__init__(self, name, GMailProvider.get_instance())
         self["username"] = username
         self["password"] = password
         self.mails = {}

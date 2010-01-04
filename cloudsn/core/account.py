@@ -1,7 +1,7 @@
-import config
+from core import config
 import gobject
 
-class AccountData:
+class Account:
     def __init__ (self, name, provider):
         self.unread = 0
         self.new_unread = 0
@@ -35,7 +35,7 @@ class AccountData:
         self.provider.update_account (self)
 
     def save_conf(self):
-        sc = config.SettingsController.get_instance()
+        sc = SettingsController.get_instance()
         sc.set_account_config (self)
         sc.save_accounts()
 

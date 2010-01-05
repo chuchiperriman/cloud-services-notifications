@@ -110,7 +110,7 @@ class Controller:
                 
         #account.indicator.set_property('draw-attention', 'true');
         
-    def update_accounts(self, other):
+    def update_accounts(self, data=None):
         for acc in self.am.get_accounts():
             self.update_account(acc)
 
@@ -124,7 +124,7 @@ class Controller:
         while gtk.events_pending():
             gtk.main_iteration(False)
             
-        self.update_accounts(None)
+        self.update_accounts()
         self._update_interval()
         self.started = True
         return False

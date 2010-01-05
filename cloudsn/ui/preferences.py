@@ -24,6 +24,15 @@ class Preferences:
             Preferences.__default = Preferences()
         return Preferences.__default
 
+    def get_selected_account (self):
+        selection = self.account_tree.get_selection()
+        model, paths = selection.get_selected_rows()
+        for path in paths:
+            citer = self.store.get_iter(path)
+            account_name = self.store.get_value(citer, 1)
+            acc = self.am.get_account(account_name)
+            return acc
+
     def on_close_button_clicked (self, widget, data=None):
         self.window.response(-1)
 
@@ -42,28 +51,47 @@ class Preferences:
                     self.store.append([account.get_provider().get_icon(), account.get_name(),''])
 
     def on_account_edit_button_clicked(self, widget, data=None):
-        selection = self.account_tree.get_selection()
-        model, paths = selection.get_selected_rows()
-        for path in paths:
-            citer = self.store.get_iter(path)
-            account_name = self.store.get_value(citer, 1)
-            acc = self.am.get_account(account_name)
-            provider = acc.get_provider()
-            if provider.edit_account_dialog(acc):
-                self.am.edit_account(acc)
+        acc = self.get_selected_account()
+        provider = acc.get_provider()
+        if provider.edit_account_dialog(acc):
+            self.am.edit_account(acc)
         
     def on_account_del_button_clicked (self, widget, data=None):
-        selection = self.account_tree.get_selection()
-        model, paths = selection.get_selected_rows()
-        for path in paths:
-            citer = self.store.get_iter(path)
-            account_name = self.store.get_value(citer, 1)
-            acc = self.am.get_account(account_name)
-            self.am.del_account(acc, True)
-            self.store.remove(citer)
+        acc = self.get_selected_account()
+        self.am.del_account(acc, True)
+        self.store.remove(citer)
 
     def on_stop_button_clicked (self, widget, data=None):
         self.window.response(STOP_RESPONSE)
+
+    def on_update_button_clicked(self, widget, data=None):
+        from core.controller import Controller
+
+        selection = self.account_tree.get_selection()
+        model, paths = selection.get_selected_rows()
+        for path in paths:
+            citer = self.store.get_iter(path)
+            account_name = self.store.get_value(citer, 1)
+            acc = self.am.get_account(account_name)
+
+        Controller.get_instance().update_account(acc)
+        self.store.set_value(citer, 2, self.__get_account_date(acc))
+        
+
+    def on_update_all_button_clicked(self, widget, data=None):
+        from core.controller import Controller
+        Controller.get_instance().update_accounts()
+        for row in self.store:
+            acc = self.am.get_account(row[1])
+            row[2] = self.__get_account_date(acc)
+
+    def __get_account_date(self, acc):
+        last_update = ''
+        dt = acc.get_last_update()
+        if dt:
+            last_update = dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        return last_update
     
     def load_window(self):
         builder=gtk.Builder()
@@ -82,11 +110,7 @@ class Preferences:
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         for acc in self.am.get_accounts():
-            last_update = ''
-            dt = acc.get_last_update()
-            if dt:
-                last_update = dt.strftime("%Y-%m-%d %H:%M:%S")
-            self.store.append([acc.get_provider().get_icon(), acc.get_name(), last_update])
+            self.store.append([acc.get_provider().get_icon(), acc.get_name(), self.__get_account_date(acc)])
 
         self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))

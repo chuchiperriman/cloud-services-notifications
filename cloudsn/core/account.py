@@ -35,7 +35,7 @@ class Account:
         self.provider.update_account (self)
 
     def save_conf(self):
-        sc = SettingsController.get_instance()
+        sc = config.SettingsController.get_instance()
         sc.set_account_config (self)
         sc.save_accounts()
 

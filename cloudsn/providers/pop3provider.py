@@ -50,6 +50,41 @@ class Pop3Provider(Provider):
                 news.append (mail_id)
 
         account.new_unread = len (news);
+        
+    def _create_dialog(self):
+        builder=gtk.Builder()
+        builder.set_translation_domain("cloudsn")
+        builder.add_from_file(config.get_data_dir() + "/pop3-account.ui")
+        dialog = builder.get_object("dialog")
+        dialog.set_icon(self.get_icon())
+        return (builder, dialog)
+        
+    def create_account_dialog(self, account_name):
+        builder, dialog = self._create_dialog()
+        account = None
+        if dialog.run() == 0:
+            host = builder.get_object("host_entry").get_text()
+            username = builder.get_object("username_entry").get_text()
+            password = builder.get_object("password_entry").get_text()
+            account = Pop3Account(account_name, host, username, password)
+        dialog.destroy()
+        return account
+        
+    def edit_account_dialog(self, acc):
+        res = False
+        builder, dialog = self._create_dialog()
+        builder.get_object("host_entry").set_text(acc["host"])
+        builder.get_object("username_entry").set_text(acc["username"])
+        builder.get_object("password_entry").set_text(acc["password"])
+        account = None
+        if dialog.run() == 0:
+            acc["host"] = builder.get_object("host_entry").get_text()
+            acc["username"] = builder.get_object("username_entry").get_text()
+            acc["password"] = builder.get_object("password_entry").get_text()
+            res = True
+        dialog.destroy()
+        return res
+
 
 class Pop3Account (Account):
 

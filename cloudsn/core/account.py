@@ -1,5 +1,6 @@
 from core import config
 import gobject
+from datetime import datetime
 
 class Account:
     def __init__ (self, name, provider):
@@ -9,6 +10,7 @@ class Account:
         self.properties["name"] = name
         self.properties["provider_name"] = provider.get_name()
         self.provider = provider
+        self.last_update = None
         
     def __getitem__(self, key):
         return self.properties[key]
@@ -25,6 +27,9 @@ class Account:
     def get_provider (self):
         return self.provider
 
+    def get_last_update (self):
+        return self.last_update
+        
     def get_unread (self):
         return self.unread
 
@@ -33,6 +38,7 @@ class Account:
 
     def update (self):
         self.provider.update_account (self)
+        self.last_update = datetime.now()
 
     def save_conf(self):
         sc = config.SettingsController.get_instance()

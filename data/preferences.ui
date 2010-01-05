@@ -13,19 +13,21 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="providers_store">
+    <columns>
+      <!-- column-name icon -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name text -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkListStore" id="account_store">
     <columns>
       <!-- column-name icon -->
       <column type="GdkPixbuf"/>
       <!-- column-name name -->
       <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="providers_store">
-    <columns>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name text -->
+      <!-- column-name last_update -->
       <column type="gchararray"/>
     </columns>
   </object>
@@ -202,6 +204,17 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="last_update_column">
+                        <property name="title">Last Update</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="last_update_cell"/>
+                          <attributes>
+                            <attribute name="text">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                   <packing>
                     <property name="position">0</property>
@@ -317,8 +330,8 @@
   </object>
   <object class="GtkDialog" id="account_new_dialog">
     <property name="border_width">5</property>
-    <property name="resizable">False</property>
     <property name="title" translatable="yes">New Account</property>
+    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>

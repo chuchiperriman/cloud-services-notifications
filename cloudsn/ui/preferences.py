@@ -39,7 +39,7 @@ class Preferences:
                 account = provider.create_account_dialog(account_name)
                 if account is not None:
                     self.am.add_account(account, True)
-                    self.store.append([account.get_provider().get_icon(), account.get_name()])
+                    self.store.append([account.get_provider().get_icon(), account.get_name(),''])
 
     def on_account_edit_button_clicked(self, widget, data=None):
         selection = self.account_tree.get_selection()
@@ -82,7 +82,11 @@ class Preferences:
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         for acc in self.am.get_accounts():
-            self.store.append([acc.get_provider().get_icon(), acc.get_name()])
+            last_update = ''
+            dt = acc.get_last_update()
+            if dt:
+                last_update = dt.strftime("%Y-%m-%d %H:%M:%S")
+            self.store.append([acc.get_provider().get_icon(), acc.get_name(), last_update])
 
         self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))

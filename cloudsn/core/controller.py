@@ -42,7 +42,6 @@ class Controller:
 
     def _account_deleted_cb(self, am, account):
         account.indicator = None
-        print 'account deleted: ', account.get_name()
     
     def _settings_changed(self, config, section, key, value):
         if section == "preferences" and key == "minutes":

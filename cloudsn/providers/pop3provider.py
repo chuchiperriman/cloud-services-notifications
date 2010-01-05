@@ -39,7 +39,6 @@ class Pop3Provider(Provider):
             am.add_account (acc)
 
     def update_account (self, account):
-        print 'updating'
         g = PopBox (account["username"], account["password"], account["host"])
         news = []
         mails = g.get_mails()

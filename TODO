@@ -1,7 +1,7 @@
 [X] Remove the indicator when an account is deleted
 [X] Set icons to the dialogs
 [X] See how we can stop the service
-[ ] Create the preferences file with default values
+[X] Create the preferences file with default values
 [X] Update account when a new one is added
 [X] Set provider icon to the notifications
 [ ] Add a button to "check account now" and "check all accounts now"

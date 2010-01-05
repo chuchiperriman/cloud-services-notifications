@@ -18,15 +18,15 @@ class SettingsController(gobject.GObject):
     CONFIG_PREFERENCES = CONFIG_HOME + '/preferences'
     CONFIG_ACCOUNTS = CONFIG_HOME + '/accounts'
 
+    __default_prefs = {
+        "preferences" : {"minutes" : 10}
+    }
+
     def __init__(self):
         if SettingsController.__default:
            raise SettingsController.__default
         gobject.GObject.__init__(self)
         self.ensure_config()
-        self.config_prefs = ConfigParser.ConfigParser()
-        self.config_prefs.read (self.CONFIG_PREFERENCES)
-        self.config_accs = ConfigParser.ConfigParser()
-        self.config_accs.read (self.CONFIG_ACCOUNTS)
         self.prefs = self.config_to_dict(self.config_prefs)
         self.accounts = self.config_to_dict(self.config_accs)
 
@@ -57,9 +57,27 @@ class SettingsController(gobject.GObject):
 
         if not os.path.exists (self.CONFIG_ACCOUNTS):
             f = open(self.CONFIG_ACCOUNTS, "w")
+            f.close()
             
         if not os.path.exists (self.CONFIG_PREFERENCES):
             f = open(self.CONFIG_PREFERENCES, "w")
+            f.close()
+            
+        self.config_prefs = ConfigParser.ConfigParser()
+        self.config_prefs.read (self.CONFIG_PREFERENCES)
+        self.config_accs = ConfigParser.ConfigParser()
+        self.config_accs.read (self.CONFIG_ACCOUNTS)
+        
+        def fill_parser(parser, defaults):
+            for secname, section in defaults.iteritems():
+                if not parser.has_section(secname):
+                    parser.add_section(secname)
+                for key, default in section.iteritems():
+                    if isinstance(default, int):
+                        default = str(default)
+                    parser.set(secname, key, default)
+                    
+        fill_parser(self.config_prefs, self.__default_prefs)
 
     def get_account_list (self):
         return self.accounts.keys ()

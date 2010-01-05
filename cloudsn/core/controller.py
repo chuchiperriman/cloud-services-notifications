@@ -17,6 +17,7 @@ class Controller:
     def __init__(self):
         if Controller.__default:
            raise Controller.__default 
+        self.started = False
         self.config = config.SettingsController.get_instance()
         self.config.connect("value-changed", self._settings_changed)
         self.prov_manager = ProviderManager.get_instance()
@@ -32,7 +33,12 @@ class Controller:
 
     def _account_added_cb(self, am, account):
         self.create_indicator(account)
-        print 'account added: ', account.get_name()
+
+        while gtk.events_pending():
+            gtk.main_iteration(False)
+            
+        if self.started:
+            self.update_account(account)
 
     def _account_deleted_cb(self, am, account):
         account.indicator = None
@@ -92,19 +98,23 @@ class Controller:
         except:
             print "you don't seem to have pynotify installed"
 
-    def update_accounts(self, other):
-        for acc in self.am.get_accounts():
-            try:
-                acc.update()
-                acc.indicator.set_property_int("count", acc.get_unread())
-                if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
-                    self.notify(acc.get_name(), 
-                        "New messages: " + str(acc.get_new_unread()),
-                        acc.get_provider().get_icon())
-            except Exception as e:
-                print "Error trying to update the account " , acc.get_name() , ": " , e
+    def update_account(self, acc):
+        try:
+            acc.update()
+            acc.indicator.set_property_int("count", acc.get_unread())
+            if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
+                self.notify(acc.get_name(), 
+                    "New messages: " + str(acc.get_new_unread()),
+                    acc.get_provider().get_icon())
+        except Exception as e:
+            print "Error trying to update the account " , acc.get_name() , ": " , e
                 
         #account.indicator.set_property('draw-attention', 'true');
+        
+    def update_accounts(self, other):
+        for acc in self.am.get_accounts():
+            self.update_account(acc)
+
         return True
 
     def _start_idle(self):
@@ -117,6 +127,7 @@ class Controller:
             
         self.update_accounts(None)
         self._update_interval()
+        self.started = True
         return False
         
     def start(self):

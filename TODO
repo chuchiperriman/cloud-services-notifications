@@ -2,7 +2,7 @@
 [X] Set icons to the dialogs
 [X] See how we can stop the service
 [ ] Create the preferences file with default values
-[ ] Update account when a new one is added
+[X] Update account when a new one is added
 [X] Set provider icon to the notifications
 [ ] Add a button to "check account now" and "check all accounts now"
 [X] Create and set the cloudsn icon to the dialogs, application etc.

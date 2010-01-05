@@ -8,6 +8,7 @@ Based on pop3.py:
 from core.provider import Provider
 from core.account import Account, AccountManager
 from core import config
+from core import utils
 
 import poplib
 from email.Parser import Parser as EmailParser
@@ -94,6 +95,8 @@ class Pop3Account (Account):
         self["username"] = username
         self["password"] = password
         self.mails = {}
+    def activate(self):
+        utils.open_mail_reader()
     
 def mime_decode(str):
     strn, encoding = decode_header(str)[0]

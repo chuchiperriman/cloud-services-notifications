@@ -2,7 +2,7 @@ import ConfigParser
 import xdg.BaseDirectory as bd
 import os
 import gobject
-import os
+import gtk
 
 class SettingsController(gobject.GObject):
 
@@ -106,5 +106,12 @@ class SettingsController(gobject.GObject):
 
 def get_data_dir ():
     return os.path.abspath ("./data")
+
+__cloudsn_icon = None
+def get_cloudsn_icon():
+    global __cloudsn_icon
+    if not __cloudsn_icon:
+        __cloudsn_icon = gtk.gdk.pixbuf_new_from_file(get_data_dir() + '/cloudsn.png')
+    return __cloudsn_icon
 
 

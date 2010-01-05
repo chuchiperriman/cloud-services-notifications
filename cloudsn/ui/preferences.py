@@ -86,6 +86,9 @@ class Preferences:
 
         self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))
+
+        self.window.set_icon(config.get_cloudsn_icon())
+        self.dialog_new.set_icon(config.get_cloudsn_icon())
         
     def run(self):
         if self.window is None:

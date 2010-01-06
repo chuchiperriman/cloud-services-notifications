@@ -123,7 +123,7 @@ class SettingsController(gobject.GObject):
             self.config_accs.write(configfile)
 
 def get_data_dir ():
-    return os.path.abspath ("./data")
+    return os.path.abspath ("../data")
 
 __cloudsn_icon = None
 def get_cloudsn_icon():

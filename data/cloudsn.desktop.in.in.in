@@ -1,0 +1,8 @@
+[Desktop Entry]
+_Name=Cloud services notifications
+_Comment=Check when we have a new mail/feed/etc notification
+Exec=@BINDIR@/cloudsn
+Icon=@RESOURCEDIR@/cloudsn.png
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Utility;FileTools;

@@ -5,10 +5,10 @@ Based on pop3.py:
     https://code.launchpad.net/cgmail
     
 """
-from core.provider import Provider
-from core.account import Account, AccountManager
-from core import config
-from core import utils
+from cloudsn.core.provider import Provider
+from cloudsn.core.account import Account, AccountManager
+from cloudsn.core import config
+from cloudsn.core import utils
 
 import poplib
 from email.Parser import Parser as EmailParser
@@ -23,7 +23,7 @@ class Pop3Provider(Provider):
         if Pop3Provider.__default:
            raise Pop3Provider.__default
         Provider.__init__(self, "Pop3")
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/pop3.png')
+        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('pop3.png'))
 
     @staticmethod
     def get_instance():
@@ -54,7 +54,7 @@ class Pop3Provider(Provider):
     def _create_dialog(self):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.get_data_dir() + "/pop3-account.ui")
+        builder.add_from_file(config.add_data_prefix("pop3-account.ui"))
         dialog = builder.get_object("dialog")
         dialog.set_icon(self.get_icon())
         return (builder, dialog)

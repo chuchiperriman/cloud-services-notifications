@@ -1,7 +1,7 @@
-from core.account import Account, AccountManager
-from core.provider import Provider
-from core import utils
-from core import config
+from cloudsn.core.account import Account, AccountManager
+from cloudsn.core.provider import Provider
+from cloudsn.core import utils
+from cloudsn.core import config
 from xml.sax.handler import ContentHandler
 from xml import sax
 import gtk
@@ -15,7 +15,7 @@ class GMailProvider(Provider):
         if GMailProvider.__default:
            raise GMailProvider.__default
         Provider.__init__(self, "GMail")
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/gmail.png')
+        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('gmail.png'))
 
     @staticmethod
     def get_instance():
@@ -52,7 +52,7 @@ class GMailProvider(Provider):
     def _create_dialog(self):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.get_data_dir() + "/gmail-account.ui")
+        builder.add_from_file(config.add_data_prefix("gmail-account.ui"))
         dialog = builder.get_object("gmail_dialog")
         dialog.set_icon(self.get_icon())
         return (builder, dialog)

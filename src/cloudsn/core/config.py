@@ -1,8 +1,44 @@
 import ConfigParser
 import xdg.BaseDirectory as bd
 import os
+import sys
+from os import mkdir
+from os.path import isdir, join, dirname, abspath
 import gobject
 import gtk
+
+# Test if we are installed on the system, or are being run from tar/svn
+if "site-packages" in __file__ or "dist-packages" in __file__:
+    for sub in ("share", "local/share"):
+        _prefix = join (sys.prefix, sub, "cloudsn")
+        _base_prefix = join (sys.prefix, sub)
+        if isdir(_prefix):
+            _installed = True
+            break
+    else:
+        raise Exception("can't find the cloudsn data directory")
+else:
+    _prefix = abspath (join (dirname (__file__), "../../../data"))
+    _installed = False
+
+
+def get_data_prefix ():
+    return abspath (_prefix)
+
+def add_data_prefix (subpath):
+    return abspath (join (_prefix, subpath))
+
+def is_installed ():
+    return _installed
+
+def get_apps_prefix():
+    if is_installed():
+        return abspath (join (_base_prefix, "applications"))
+    else:
+        return get_data_prefix()
+
+def add_apps_prefix(subpath):
+    return join (get_apps_prefix(), subpath)
 
 class SettingsController(gobject.GObject):
 
@@ -122,14 +158,11 @@ class SettingsController(gobject.GObject):
         with open(self.CONFIG_ACCOUNTS, 'wb') as configfile:
             self.config_accs.write(configfile)
 
-def get_data_dir ():
-    return os.path.abspath ("../data")
-
 __cloudsn_icon = None
 def get_cloudsn_icon():
     global __cloudsn_icon
     if not __cloudsn_icon:
-        __cloudsn_icon = gtk.gdk.pixbuf_new_from_file(get_data_dir() + '/cloudsn.png')
+        __cloudsn_icon = gtk.gdk.pixbuf_new_from_file(add_data_prefix('cloudsn.png'))
     return __cloudsn_icon
 
 

@@ -1,7 +1,7 @@
-from core.account import Account, AccountManager
-from core.provider import Provider
-from core import utils
-from core import config
+from cloudsn.core.account import Account, AccountManager
+from cloudsn.core.provider import Provider
+from cloudsn.core import utils
+from cloudsn.core import config
 import urllib2
 import re
 import urllib
@@ -16,7 +16,7 @@ class GReaderProvider(Provider):
         if GReaderProvider.__default:
            raise GReaderProvider.__default
         Provider.__init__(self, "Google Reader")
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.get_data_dir() + '/greader.png')
+        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('greader.png'))
 
     @staticmethod
     def get_instance():
@@ -40,7 +40,7 @@ class GReaderProvider(Provider):
     def _create_dialog(self):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.get_data_dir() + "/greader-account.ui")
+        builder.add_from_file(config.add_data_prefix("greader-account.ui"))
         dialog = builder.get_object("dialog")
         dialog.set_icon(self.get_icon())
         return (builder, dialog)

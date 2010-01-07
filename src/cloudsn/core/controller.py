@@ -1,7 +1,7 @@
-from core.provider import Provider, ProviderManager
-from core import account
-from core import config
-from ui import preferences
+from cloudsn.core.provider import Provider, ProviderManager
+from cloudsn.core import account
+from cloudsn.core import config
+from cloudsn.ui import preferences
 import indicate
 from time import time
 import gtk
@@ -64,7 +64,7 @@ class Controller:
         self.server = indicate.indicate_server_ref_default()
         self.server.set_type("message.im")
         self.server.connect("server-display", self.on_server_display_cb)
-        self.server.set_desktop_file(config.get_data_dir() + "/cloudsn.desktop")
+        self.server.set_desktop_file(config.add_apps_prefix("cloudsn.desktop"))
         self.server.show()
 
     def on_indicator_display_cb(self, indicator):

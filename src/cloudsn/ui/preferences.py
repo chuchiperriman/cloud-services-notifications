@@ -1,7 +1,7 @@
 import gtk
-from core import config
-from core import provider
-from core import account
+from cloudsn.core import config
+from cloudsn.core import provider
+from cloudsn.core import account
 
 STOP_RESPONSE = 1
 
@@ -65,7 +65,7 @@ class Preferences:
         self.window.response(STOP_RESPONSE)
 
     def on_update_button_clicked(self, widget, data=None):
-        from core.controller import Controller
+        from cloudsn.core.controller import Controller
 
         selection = self.account_tree.get_selection()
         model, paths = selection.get_selected_rows()
@@ -79,7 +79,7 @@ class Preferences:
         
 
     def on_update_all_button_clicked(self, widget, data=None):
-        from core.controller import Controller
+        from cloudsn.core.controller import Controller
         Controller.get_instance().update_accounts()
         for row in self.store:
             acc = self.am.get_account(row[1])
@@ -96,7 +96,7 @@ class Preferences:
     def load_window(self):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.get_data_dir() + "/preferences.ui")
+        builder.add_from_file(config.add_data_prefix("preferences.ui"))
         builder.connect_signals(self)
         self.window=builder.get_object("dialog")
         self.minutes=builder.get_object("minutes_spin")

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from core.controller import Controller
+from cloudsn.core.controller import Controller
 
 
 def main ():
@@ -9,4 +9,5 @@ def main ():
 
 if __name__ == "__main__":
     main()
+
 

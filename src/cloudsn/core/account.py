@@ -1,4 +1,4 @@
-from core import config
+from cloudsn.core import config
 import gobject
 from datetime import datetime
 

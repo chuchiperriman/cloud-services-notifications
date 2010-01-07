@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Name=Cloud Services
+GenericName=Cloud Services
+X-GNOME-FullName=Cloud Services Notifications
+Comment=Check when we have a new mail/feed/etc notification
+Exec=cloudsn
+Icon=cloudsn
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Network;InstantMessaging;

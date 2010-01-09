@@ -7,20 +7,24 @@ from os.path import isdir, join, dirname, abspath
 import gobject
 import gtk
 
-# Test if we are installed on the system, or are being run from tar/svn
-if "site-packages" in __file__ or "dist-packages" in __file__:
-    for sub in ("share", "local/share"):
-        _prefix = join (sys.prefix, sub, "cloudsn")
-        _base_prefix = join (sys.prefix, sub)
-        if isdir(_prefix):
-            _installed = True
-            break
-    else:
-        raise Exception("can't find the cloudsn data directory")
-else:
+
+#Test if it is the tar/git
+if os.path.exists(join (dirname (__file__), "../../../setup.py")):
     _prefix = abspath (join (dirname (__file__), "../../../data"))
     _installed = False
+else:
+    for pre in ("site-packages", "dist-packages", sys.prefix):
+        # Test if we are installed on the system
+        for sub in ("share", "local/share"):
+            _prefix = join (sys.prefix, sub, "cloudsn")
+            _base_prefix = join (sys.prefix, sub)
+            if isdir(_prefix):
+                _installed = True
+                break
+        else:
+            raise Exception("can't find the cloudsn data directory")
 
+print _prefix
 
 def get_data_prefix ():
     return abspath (_prefix)

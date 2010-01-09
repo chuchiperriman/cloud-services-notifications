@@ -23,7 +23,7 @@ DATA_FILES += [('share/pixmaps', ['data/cloudsn.svg'])]
 DATA_FILES += [('share/icons/hicolor/24x24/apps', ['data/cloudsn.png'])]
 
 setup(name='cloudsn',
-      version='0.1.0',
+      version='0.1.1',
       description='Python Distribution Utilities',
       author=r'Jesús Barbero Rodríguez',
       author_email='chuchiperriman@gmail.com',

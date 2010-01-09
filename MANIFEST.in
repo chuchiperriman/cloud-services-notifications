@@ -1,3 +1,5 @@
 include README
 include INSTALL
+include MANIFEST.in
+include cloudsn-local.sh
 recursive-include data *

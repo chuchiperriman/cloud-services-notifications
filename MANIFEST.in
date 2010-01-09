@@ -1,5 +1,8 @@
 include README
 include INSTALL
+include AUTHORS
+include COPYING
+include NEWS
 include MANIFEST.in
 include cloudsn-local.sh
 recursive-include data *

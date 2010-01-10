@@ -10,6 +10,7 @@ import gtk
 
 #Test if it is the tar/git
 if os.path.exists(join (dirname (__file__), "../../../setup.py")):
+    _base_prefix = abspath(join (dirname (__file__), "../../.."))
     _prefix = abspath (join (dirname (__file__), "../../../data"))
     _installed = False
 else:
@@ -24,7 +25,8 @@ else:
         else:
             raise Exception("can't find the cloudsn data directory")
 
-print _prefix
+def get_base_data_prefix ():
+    return abspath (_base_prefix)
 
 def get_data_prefix ():
     return abspath (_prefix)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-10 16:30+0100\n"
+"POT-Creation-Date: 2010-01-10 21:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,45 +44,57 @@ msgid "Pop3 Server: "
 msgstr ""
 
 #: ../data/preferences.ui.h:1
-msgid "Account name: "
+msgid "Account Name"
 msgstr ""
 
 #: ../data/preferences.ui.h:2
-msgid "Accounts"
+msgid "Account name: "
 msgstr ""
 
 #: ../data/preferences.ui.h:3
-msgid "Check interval"
+msgid "Accounts"
 msgstr ""
 
 #: ../data/preferences.ui.h:4
-msgid "General"
+msgid "Check interval"
 msgstr ""
 
 #: ../data/preferences.ui.h:5
-msgid "Minutes: "
+msgid "General"
 msgstr ""
 
 #: ../data/preferences.ui.h:6
-msgid "New Account"
+msgid "Icon"
 msgstr ""
 
 #: ../data/preferences.ui.h:7
-msgid "Preferences"
+msgid "Last Update"
 msgstr ""
 
 #: ../data/preferences.ui.h:8
-msgid "Press to stop the service: "
+msgid "Minutes: "
 msgstr ""
 
 #: ../data/preferences.ui.h:9
-msgid "Provider: "
+msgid "New Account"
 msgstr ""
 
 #: ../data/preferences.ui.h:10
-msgid "Run application on startup"
+msgid "Preferences"
 msgstr ""
 
 #: ../data/preferences.ui.h:11
+msgid "Press to stop the service: "
+msgstr ""
+
+#: ../data/preferences.ui.h:12
+msgid "Provider: "
+msgstr ""
+
+#: ../data/preferences.ui.h:13
+msgid "Run application on startup"
+msgstr ""
+
+#: ../data/preferences.ui.h:14
 msgid "Update all accounts:  "
 msgstr ""

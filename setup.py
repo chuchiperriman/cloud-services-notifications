@@ -4,6 +4,7 @@
 
 from distutils.core import setup
 from glob import glob
+from distutils.command.install_data import install_data
 from distutils.command.build import build
 from distutils.dep_util import newer
 from distutils.log import warn, info, error, fatal
@@ -64,6 +65,32 @@ class BuildData(build):
         #           "/po/.intltool-merge-cache " + TOP_BUILDDIR + "/po " +
         #           desktop_in + " " + desktop_data)
 
+class InstallData(install_data):
+    def run (self):
+        self.data_files.extend (self._find_mo_files ())
+        install_data.run (self)
+        #if not self.distribution.without_icon_cache:
+        #    self._update_icon_cache ()
+
+    # We should do this on uninstall too
+    def _update_icon_cache(self):
+        info("running gtk-update-icon-cache")
+        try:
+            subprocess.call(["gtk-update-icon-cache", "-q", "-f", "-t", os.path.join(self.install_dir, "share/icons/hicolor")])
+        except Exception, e:
+            warn("updating the GTK icon cache failed: %s" % str(e))
+
+    def _find_mo_files (self):
+        data_files = []
+
+        if True: #if not self.distribution.without_gettext:
+            for mo in glob (os.path.join (MO_DIR, '*', 'cloudsn.mo')):
+                lang = os.path.basename(os.path.dirname(mo))
+                dest = os.path.join('share', 'locale', lang, 'LC_MESSAGES')
+                data_files.append((dest, [mo]))
+
+        return data_files
+
 setup(name='cloudsn',
       version='0.1.1',
       description='Python Distribution Utilities',
@@ -74,5 +101,5 @@ setup(name='cloudsn',
       packages=['cloudsn', 'cloudsn.core', 'cloudsn.ui', 'cloudsn.providers'],
       data_files = DATA_FILES,
       scripts=['cloudsn'],
-      cmdclass={'build': BuildData},
+      cmdclass={'build': BuildData, 'install_data': InstallData},
      )

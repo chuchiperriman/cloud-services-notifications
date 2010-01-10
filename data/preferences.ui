@@ -232,7 +232,7 @@
                     <property name="enable_search">False</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="icon_column">
-                        <property name="title">Icon</property>
+                        <property name="title" translatable="yes">Icon</property>
                         <child>
                           <object class="GtkCellRendererPixbuf" id="icon_cell"/>
                           <attributes>
@@ -243,7 +243,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="name_column">
-                        <property name="title">Account Name</property>
+                        <property name="title" translatable="yes">Account Name</property>
                         <child>
                           <object class="GtkCellRendererText" id="name_cell"/>
                           <attributes>
@@ -254,7 +254,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="last_update_column">
-                        <property name="title">Last Update</property>
+                        <property name="title" translatable="yes">Last Update</property>
                         <child>
                           <object class="GtkCellRendererText" id="last_update_cell"/>
                           <attributes>

@@ -1,9 +1,14 @@
 #!/usr/bin/python
 
 from cloudsn.core.controller import Controller
+import gettext
 
+def setup_locale_and_gettext():
+    gettext.install("cloudsn")
+    print 'installed gettext'
 
 def main ():
+    setup_locale_and_gettext()
     cr = Controller.get_instance()
     cr.start()
 

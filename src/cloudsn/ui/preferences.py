@@ -33,7 +33,7 @@ class Preferences:
             citer = self.store.get_iter(path)
             account_name = self.store.get_value(citer, 1)
             acc = self.am.get_account(account_name)
-            return acc
+            return acc, citer
 
     def on_close_button_clicked (self, widget, data=None):
         self.window.response(-1)
@@ -53,13 +53,13 @@ class Preferences:
                     self.store.append([account.get_provider().get_icon(), account.get_name(),''])
 
     def on_account_edit_button_clicked(self, widget, data=None):
-        acc = self.get_selected_account()
+        acc, citer = self.get_selected_account()
         provider = acc.get_provider()
         if provider.edit_account_dialog(acc):
             self.am.edit_account(acc)
         
     def on_account_del_button_clicked (self, widget, data=None):
-        acc = self.get_selected_account()
+        acc, citer = self.get_selected_account()
         self.am.del_account(acc, True)
         self.store.remove(citer)
 

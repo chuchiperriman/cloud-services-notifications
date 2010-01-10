@@ -1,4 +1,6 @@
 import gtk
+import os
+import shutil
 from cloudsn.core import config
 from cloudsn.core import provider
 from cloudsn.core import account
@@ -76,7 +78,13 @@ class Preferences:
 
         Controller.get_instance().update_account(acc)
         self.store.set_value(citer, 2, self.__get_account_date(acc))
-        
+
+    def on_startup_check_toggled(self, widget, data=None):
+        if widget.get_active():
+            if not os.path.exists(config.get_startup_file_path()):
+                shutil.copyfile(config.add_data_prefix("cloudsn.desktop"),config.get_startup_file_path())
+        else:
+            os.remove (config.get_startup_file_path())
 
     def on_update_all_button_clicked(self, widget, data=None):
         from cloudsn.core.controller import Controller
@@ -107,6 +115,7 @@ class Preferences:
         self.providers_combo = builder.get_object("providers_combo");
         self.providers_store = builder.get_object("providers_store");
         self.account_name_entry = builder.get_object("account_name_entry");
+        self.startup_check = builder.get_object("startup_check")
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         for acc in self.am.get_accounts():
@@ -117,6 +126,11 @@ class Preferences:
 
         self.window.set_icon(config.get_cloudsn_icon())
         self.dialog_new.set_icon(config.get_cloudsn_icon())
+
+        if os.path.exists(config.get_startup_file_path()):
+            self.startup_check.set_active(True)
+        else:
+            self.startup_check.set_active(False)
         
     def run(self):
         if self.window is None:

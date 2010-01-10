@@ -1,3 +1,15 @@
+Milestone 2
+===========
+[ ] Add option to start the application with the session
+[ ] Add i18n support
+[ ] Add facebook notifications of:
+	[ ] Photo tags
+	[ ] New friends request
+	[ ] New event request
+	[ ] A friend posting in your wall
+	[ ] A friend comment a photo where you appear
+[ ] Check the correct dependencies in setup.py and debian files
+
 Milestone 1
 ===========
 

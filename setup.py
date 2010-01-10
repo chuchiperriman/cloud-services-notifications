@@ -10,7 +10,7 @@ os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 #TODO Add license, authors etc 
 DATA_FILES = [("share/cloudsn",
-    ["README", "INSTALL", "AUTHORS", "COPYING", "NEWS"])]
+    ["README", "INSTALL", "AUTHORS", "COPYING", "NEWS", "data/cloudsn.desktop"])]
 
 #Icons and UI
 DATA_FILES += [("share/cloudsn", glob('data/*.png'))]

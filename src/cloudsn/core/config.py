@@ -169,4 +169,7 @@ def get_cloudsn_icon():
         __cloudsn_icon = gtk.gdk.pixbuf_new_from_file(add_data_prefix('cloudsn.png'))
     return __cloudsn_icon
 
+def get_startup_file_path():
+    return abspath(join(bd.xdg_config_home, "autostart", "cloudsn.desktop"))
+
 

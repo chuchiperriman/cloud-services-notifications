@@ -1,4 +1,5 @@
 [encoding: UTF-8]
+src/cloudsn/core/controller.py
 [type: gettext/glade]data/gmail-account.ui
 [type: gettext/glade]data/greader-account.ui
 [type: gettext/glade]data/pop3-account.ui

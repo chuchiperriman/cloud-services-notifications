@@ -6,6 +6,7 @@ import indicate
 from time import time
 import gtk
 import gobject
+import gettext
 
 class Controller:
 
@@ -85,7 +86,7 @@ class Controller:
     def notify (self, title, message, icon = None):
         try:
             import pynotify
-            if pynotify.init("Cloud Services Notifications"):
+            if pynotify.init(_("Cloud Services Notifications")):
                 n = pynotify.Notification(title, message)
                 n.set_urgency(pynotify.URGENCY_LOW)
                 n.set_timeout(4000)
@@ -103,7 +104,7 @@ class Controller:
             acc.indicator.set_property_int("count", acc.get_unread())
             if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
                 self.notify(acc.get_name(), 
-                    "New messages: " + str(acc.get_new_unread()),
+                    _("New messages: ") + str(acc.get_new_unread()),
                     acc.get_provider().get_icon())
         except Exception as e:
             print "Error trying to update the account " , acc.get_name() , ": " , e

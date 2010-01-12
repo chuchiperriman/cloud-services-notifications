@@ -670,7 +670,7 @@ class AuthProxy(AuthProxy):
         print 'getSession'
         print self._client
         result = self._client('%s.getSession' % self._name, args)
-        print 'getSession'
+        print 'getSession: ', result['session_key']
         self._client.session_key = result['session_key']
         self._client.uid = result['uid']
         self._client.secret = result.get('secret')
@@ -1029,8 +1029,9 @@ class Facebook(object):
         args['api_key'] = self.api_key
         args['v'] = '1.0'
         args['format'] = RESPONSE_FORMAT
+        print args
         args['sig'] = self._hash_args(args)
-
+        print 'sign: ', args['sig']
         return args
 
 
@@ -1198,6 +1199,8 @@ class Facebook(object):
         if self.auth_token is not None:
             args['auth_token'] = self.auth_token
 
+        #Request offline permissions
+        args['req_perms'] = 'offline_access'
         return self.get_url('login', **args)
 
 
@@ -1317,6 +1320,7 @@ class Facebook(object):
                 self._friends = []
 
         if 'session_key' in params:
+            print 'session setted: ', params['session_key']
             self.session_key = params['session_key']
             if 'user' in params:
                 self.uid = params['user']
@@ -1326,6 +1330,7 @@ class Facebook(object):
                 return False
         elif 'profile_session_key' in params:
             self.session_key = params['profile_session_key']
+            print 'session setted profile: ', self.session_key
             if 'profile_user' in params:
                 self.uid = params['profile_user']
             else:

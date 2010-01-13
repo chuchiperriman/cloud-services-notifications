@@ -98,13 +98,6 @@ class Pop3Account (Account):
     def activate(self):
         utils.open_mail_reader()
     
-def mime_decode(str):
-    strn, encoding = decode_header(str)[0]
-    if encoding is None:
-            return strn
-    else:
-            return strn.decode(encoding, "replace")
-
 class PopBoxConnectionError(Exception): pass
 class PopBoxAuthError(Exception): pass
 
@@ -155,11 +148,11 @@ class PopBox:
                 #print st
                 #print "----------------------------------------"
                 msg = self.parser.parsestr(st, True) # header only
-                sub = mime_decode(msg.get("Subject"))
+                sub = utils.mime_decode(msg.get("Subject"))
                 msgid = msg.get("Message-Id")
                 if not msgid:
                     msgid = hash(msg.get("Received") + sub)
-                fr = mime_decode(msg.get("From"))
+                fr = utils.mime_decode(msg.get("From"))
                 messages.append( [msgid, sub, fr] )
             except poplib.error_proto, e:
                 print "Warning: pop3 error %s" % e

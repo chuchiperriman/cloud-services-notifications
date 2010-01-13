@@ -1,16 +1,23 @@
-Milestone 2
+Milestone 3
 ===========
-[ ] Force icons in buttons
-[X] Add option to start the application with the session
-[X] Add i18n support
 [ ] Add facebook notifications of:
 	[ ] Photo tags
 	[ ] New friends request
 	[ ] New event request
 	[ ] A friend posting in your wall
 	[ ] A friend comment a photo where you appear
+
+Milestone 2
+===========
+[ ] Do not run two instances of cloudsn
+[ ] Force icons in buttons
+[X] Add option to start the application with the session
+[ ] cloudsn doesn't check the first time it starts with the session
+[X] Add i18n support
 [ ] Check the correct dependencies in setup.py and debian files
 [ ] Install desktop file into the indicator applet to be show when the application is down
+[ ] Add imap support:
+    [ ] Check inbox mails
 
 Milestone 1
 ===========

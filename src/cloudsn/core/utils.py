@@ -1,6 +1,7 @@
 import gconf
 import os
 import subprocess
+from email.header import decode_header
 
 def show_url(url):
     """Open any @url with default viewer"""
@@ -24,6 +25,13 @@ def get_default_mail_reader():
 def open_mail_reader():
 	cmdline = get_default_mail_reader()
 	invoke_subprocess(cmdline)
+
+def mime_decode(str):
+    strn, encoding = decode_header(str)[0]
+    if encoding is None:
+        return strn
+    else:
+        return strn.decode(encoding, "replace")
 
 if __name__ == "__main__":
     print get_default_mail_reader()

@@ -37,6 +37,7 @@ class ImapProvider(Provider):
             am.add_account (acc)
 
     def update_account (self, account):
+        #TODO Check port, ssl etc correctly
         g = ImapBox (account["host"], account["username"], account["password"], account["port"], account["ssl"])
         news = []
         mails = g.get_mails()
@@ -48,8 +49,50 @@ class ImapProvider(Provider):
 
         account.new_unread = len (news);
 
+    def _create_dialog(self):
+        builder=gtk.Builder()
+        builder.set_translation_domain("cloudsn")
+        builder.add_from_file(config.add_data_prefix("imap-account.ui"))
+        dialog = builder.get_object("dialog")
+        dialog.set_icon(self.get_icon())
+        return (builder, dialog)
+
+    def create_account_dialog(self, account_name):
+        builder, dialog = self._create_dialog()
+        account = None
+        if dialog.run() == 0:
+            host = builder.get_object("host_entry").get_text()
+            username = builder.get_object("username_entry").get_text()
+            password = builder.get_object("password_entry").get_text()
+            #TODO check valid values
+            port = int(builder.get_object("port_entry").get_text())
+            ssl = builder.get_object("ssl_check").get_active()
+            account = ImapAccount(account_name, host, username, password, port, ssl)
+        dialog.destroy()
+        return account
+
+    def edit_account_dialog(self, acc):
+        res = False
+        builder, dialog = self._create_dialog()
+        builder.get_object("host_entry").set_text(acc["host"])
+        builder.get_object("username_entry").set_text(acc["username"])
+        builder.get_object("password_entry").set_text(acc["password"])
+        builder.get_object("port_entry").set_text(str(acc["port"]))
+        builder.get_object("ssl_check").set_active(acc["ssl"])
+        account = None
+        if dialog.run() == 0:
+            acc["host"] = builder.get_object("host_entry").get_text()
+            acc["username"] = builder.get_object("username_entry").get_text()
+            acc["password"] = builder.get_object("password_entry").get_text()
+            acc["port"] = int(builder.get_object("port_entry").get_text())
+            acc["ssl"] = builder.get_object("ssl_check").get_active()
+            res = True
+        dialog.destroy()
+        return res
+
 class ImapAccount (Account):
 
+    #TODO Set ssl to false by default and the correct default port
     def __init__(self, name, host, username, password, port = 993, ssl=True):
         Account.__init__(self, name, ImapProvider.get_instance())
         #TODO Add port, ssl etc

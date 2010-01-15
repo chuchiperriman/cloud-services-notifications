@@ -18,7 +18,18 @@ class Controller:
     
     def __init__(self):
         if Controller.__default:
-           raise Controller.__default 
+           raise Controller.__default
+
+        #Prevent various instances
+        import os, fcntl, sys, tempfile
+        self.lockfile = os.path.normpath(tempfile.gettempdir() + '/cloudsn.lock')
+        self.fp = open(self.lockfile, 'w')
+        try:
+            fcntl.lockf(self.fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError:
+            print "Another instance is already running, quitting."
+            sys.exit(-1)
+
         self.started = False
         self.config = config.SettingsController.get_instance()
         self.config.connect("value-changed", self._settings_changed)
@@ -26,6 +37,7 @@ class Controller:
         self.am = account.AccountManager.get_instance()
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
+        self.checker = CheckerThread()
 
     @staticmethod
     def get_instance():
@@ -88,16 +100,19 @@ class Controller:
         indicator.acc = acc
         
     def update_account(self, acc):
-        #TODO reimplement it
-        pass
-        
+        if self.checker is None or not self.checker.is_alive():
+            self.checker = CheckerThread(acc)
+            self.checker.start()
+        else:
+            print 'The checker is running'
+            
     def update_accounts(self, data=None):
-        c = CheckerThread()
-        c.start()
-        return
-        for acc in self.am.get_accounts():
-            self.update_account(acc)
-
+        if self.checker is None or not self.checker.is_alive():
+            self.checker = CheckerThread()
+            self.checker.start()
+        else:
+            print 'The checker is running'
+        #For the timeout_add_seconds
         return True
 
     def _start_idle(self):
@@ -121,32 +136,32 @@ class Controller:
         signal.signal( signal.SIGINT, self.signint )
         gtk.gdk.threads_init()
         gobject.idle_add(self._start_idle)
-        #gtk.gdk.threads_enter()
         try:
             gtk.main()
         except KeyboardInterrupt:
             print 'keyboardInterrupt'
-        #gtk.gdk.threads_leave()
 
 class CheckerThread (Thread):
-    def __init__(self):
+    def __init__(self, acc = None):
         Thread.__init__ (self)
         self.am = account.AccountManager.get_instance()
+        self.acc = acc
         
     def run(self):
         for acc in self.am.get_accounts():
-            try:
-                acc.update()
-                acc.indicator.set_property_int("count", acc.get_unread())
-                if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
-                    pass
-                    self.notify(acc.get_name(), 
-                        _("New messages: ") + str(acc.get_new_unread()),
-                        acc.get_provider().get_icon())
-                    #account.indicator.set_property('draw-attention', 'true');
-            except Exception as e:
-                print "Error trying to update the account " , acc.get_name() , ": " , e
-
+            if self.acc is None or self.acc == acc: 
+                try:
+                    acc.update()
+                    acc.indicator.set_property_int("count", acc.get_unread())
+                    if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
+                        pass
+                        self.notify(acc.get_name(), 
+                            _("New messages: ") + str(acc.get_new_unread()),
+                            acc.get_provider().get_icon())
+                        #account.indicator.set_property('draw-attention', 'true');
+                except Exception as e:
+                    print "Error trying to update the account " , acc.get_name() , ": " , e
+            
     def notify (self, title, message, icon = None):
         try:
             import pynotify

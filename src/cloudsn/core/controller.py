@@ -7,6 +7,7 @@ from time import time
 import gtk
 import gobject
 import gettext
+from threading import Thread
 
 class Controller:
 
@@ -32,17 +33,17 @@ class Controller:
             Controller.__default = Controller()
         return Controller.__default
 
-    def _account_added_cb(self, am, account):
-        self.create_indicator(account)
+    def _account_added_cb(self, am, acc):
+        self.create_indicator(acc)
 
         while gtk.events_pending():
             gtk.main_iteration(False)
             
         if self.started:
-            self.update_account(account)
+            self.update_account(acc)
 
-    def _account_deleted_cb(self, am, account):
-        account.indicator = None
+    def _account_deleted_cb(self, am, acc):
+        acc.indicator = None
     
     def _settings_changed(self, config, section, key, value):
         if section == "preferences" and key == "minutes":
@@ -58,8 +59,11 @@ class Controller:
             self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
         
     def on_server_display_cb(self, server):
+        #This use the main gtk thread
+        gtk.gdk.threads_enter()
         prefs = preferences.Preferences.get_instance()
         prefs.run()
+        gtk.gdk.threads_leave()
         
     def init_indicator_server(self):
         self.server = indicate.indicate_server_ref_default()
@@ -71,18 +75,78 @@ class Controller:
     def on_indicator_display_cb(self, indicator):
         indicator.account.activate ()
 
-    def create_indicator(self, account):
+    def create_indicator(self, acc):
         indicator = indicate.Indicator()
-        indicator.set_property("name", account.get_name())
+        indicator.set_property("name", acc.get_name())
         indicator.set_property_time("time", time())
-        indicator.set_property_int("count", account.get_unread())
-        if account.get_provider().get_icon() is not None:
-            indicator.set_property_icon("icon", account.get_provider().get_icon())
+        indicator.set_property_int("count", acc.get_unread())
+        if acc.get_provider().get_icon() is not None:
+            indicator.set_property_icon("icon", acc.get_provider().get_icon())
         indicator.show()
         indicator.connect("user-display", self.on_indicator_display_cb)
-        account.indicator = indicator
-        indicator.account = account
+        acc.indicator = indicator
+        indicator.acc = acc
         
+    def update_account(self, acc):
+        #TODO reimplement it
+        pass
+        
+    def update_accounts(self, data=None):
+        c = CheckerThread()
+        c.start()
+        return
+        for acc in self.am.get_accounts():
+            self.update_account(acc)
+
+        return True
+
+    def _start_idle(self):
+        gtk.gdk.threads_enter()
+        self.init_indicator_server()
+        for provider in self.prov_manager.get_providers():
+            provider.register_accounts()
+        gtk.gdk.threads_leave()
+        self.update_accounts()
+        self._update_interval()
+        self.started = True
+        return False
+
+    def signint(self, signl, frme):
+        gobject.source_remove(self.timeout_id)
+        gtk.main_quit()
+        return 0
+    
+    def start(self):
+        import signal
+        signal.signal( signal.SIGINT, self.signint )
+        gtk.gdk.threads_init()
+        gobject.idle_add(self._start_idle)
+        #gtk.gdk.threads_enter()
+        try:
+            gtk.main()
+        except KeyboardInterrupt:
+            print 'keyboardInterrupt'
+        #gtk.gdk.threads_leave()
+
+class CheckerThread (Thread):
+    def __init__(self):
+        Thread.__init__ (self)
+        self.am = account.AccountManager.get_instance()
+        
+    def run(self):
+        for acc in self.am.get_accounts():
+            try:
+                acc.update()
+                acc.indicator.set_property_int("count", acc.get_unread())
+                if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
+                    pass
+                    self.notify(acc.get_name(), 
+                        _("New messages: ") + str(acc.get_new_unread()),
+                        acc.get_provider().get_icon())
+                    #account.indicator.set_property('draw-attention', 'true');
+            except Exception as e:
+                print "Error trying to update the account " , acc.get_name() , ": " , e
+
     def notify (self, title, message, icon = None):
         try:
             import pynotify
@@ -97,43 +161,3 @@ class Controller:
                 print "there was a problem initializing the pynotify module"
         except:
             print "you don't seem to have pynotify installed"
-
-    def update_account(self, acc):
-        try:
-            acc.update()
-            acc.indicator.set_property_int("count", acc.get_unread())
-            if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
-                self.notify(acc.get_name(), 
-                    _("New messages: ") + str(acc.get_new_unread()),
-                    acc.get_provider().get_icon())
-        except Exception as e:
-            print "Error trying to update the account " , acc.get_name() , ": " , e
-                
-        #account.indicator.set_property('draw-attention', 'true');
-        
-    def update_accounts(self, data=None):
-        for acc in self.am.get_accounts():
-            self.update_account(acc)
-
-        return True
-
-    def _start_idle(self):
-        self.init_indicator_server()
-        for provider in self.prov_manager.get_providers():
-            provider.register_accounts()
-            
-        while gtk.events_pending():
-            gtk.main_iteration(False)
-            
-        self.update_accounts()
-        self._update_interval()
-        self.started = True
-        return False
-        
-    def start(self):
-        try:
-            gobject.idle_add(self._start_idle)
-            gtk.main()
-        except KeyboardInterrupt:
-            pass
-

@@ -8,10 +8,15 @@ import gtk
 import gobject
 import gettext
 from threading import Thread
+import syslog
 
-class Controller:
+class Controller (gobject.GObject):
 
     __default = None
+
+    __gtype_name__ = "Controller"
+
+    __gsignals__ = { "account-checked" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))}
 
     timeout_id = -1
     interval = 60
@@ -30,6 +35,7 @@ class Controller:
             print "Another instance is already running, quitting."
             sys.exit(-1)
 
+        gobject.GObject.__init__(self)
         self.started = False
         self.config = config.SettingsController.get_instance()
         self.config.connect("value-changed", self._settings_changed)
@@ -37,7 +43,7 @@ class Controller:
         self.am = account.AccountManager.get_instance()
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
-        self.checker = CheckerThread()
+        self.checker = CheckerThread(self)
 
     @staticmethod
     def get_instance():
@@ -101,14 +107,14 @@ class Controller:
         
     def update_account(self, acc):
         if self.checker is None or not self.checker.is_alive():
-            self.checker = CheckerThread(acc)
+            self.checker = CheckerThread(self, acc)
             self.checker.start()
         else:
             print 'The checker is running'
             
     def update_accounts(self, data=None):
         if self.checker is None or not self.checker.is_alive():
-            self.checker = CheckerThread()
+            self.checker = CheckerThread(self)
             self.checker.start()
         else:
             print 'The checker is running'
@@ -116,6 +122,7 @@ class Controller:
         return True
 
     def _start_idle(self):
+        syslog.syslog('Starting cloudsn')
         gtk.gdk.threads_enter()
         self.init_indicator_server()
         for provider in self.prov_manager.get_providers():
@@ -142,9 +149,10 @@ class Controller:
             print 'keyboardInterrupt'
 
 class CheckerThread (Thread):
-    def __init__(self, acc = None):
+    def __init__(self, controller, acc = None):
         Thread.__init__ (self)
         self.am = account.AccountManager.get_instance()
+        self.controller = controller
         self.acc = acc
         
     def run(self):
@@ -154,11 +162,11 @@ class CheckerThread (Thread):
                     acc.update()
                     acc.indicator.set_property_int("count", acc.get_unread())
                     if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
-                        pass
                         self.notify(acc.get_name(), 
                             _("New messages: ") + str(acc.get_new_unread()),
                             acc.get_provider().get_icon())
                         #account.indicator.set_property('draw-attention', 'true');
+                    self.controller.emit("account-checked", account)
                 except Exception as e:
                     print "Error trying to update the account " , acc.get_name() , ": " , e
             

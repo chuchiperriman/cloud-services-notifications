@@ -1,9 +1,7 @@
 import gtk
 import os
 import shutil
-from cloudsn.core import config
-from cloudsn.core import provider
-from cloudsn.core import account
+from cloudsn.core import config, provider, account
 
 STOP_RESPONSE = 1
 
@@ -100,8 +98,14 @@ class Preferences:
             last_update = dt.strftime("%Y-%m-%d %H:%M:%S")
 
         return last_update
+
+    def __on_account_checked_cb(self, widget, acc):
+        for row in self.store:
+            if row[1] == acc.get_name():
+                row[2] = self.__get_account_date(acc)
     
     def load_window(self):
+        from cloudsn.core.controller import Controller
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
         builder.add_from_file(config.add_data_prefix("preferences.ui"))
@@ -131,6 +135,8 @@ class Preferences:
             self.startup_check.set_active(True)
         else:
             self.startup_check.set_active(False)
+        #Update the last check date
+        Controller.get_instance().connect ("account-checked", self.__on_account_checked_cb)
         
     def run(self):
         if self.window is None:

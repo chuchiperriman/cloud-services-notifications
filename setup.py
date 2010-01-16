@@ -26,6 +26,8 @@ DATA_FILES += [("share/cloudsn", glob('data/*.ui'))]
 
 #desktop
 DATA_FILES += [('share/applications', ['data/cloudsn.desktop'])]
+#Force installation for the indicator applet
+DATA_FILES += [('/usr/share/applications', ['data/cloudsn.desktop'])]
 DATA_FILES += [('share/icons/hicolor/scalable/apps', ['data/cloudsn.svg'])]
 DATA_FILES += [('share/pixmaps', ['data/cloudsn.svg'])]
 DATA_FILES += [('share/icons/hicolor/24x24/apps', ['data/cloudsn.png'])]

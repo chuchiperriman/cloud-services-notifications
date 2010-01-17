@@ -29,7 +29,6 @@ DATA_FILES += [('share/applications', ['data/cloudsn.desktop'])]
 DATA_FILES += [('share/icons/hicolor/scalable/apps', ['data/cloudsn.svg'])]
 DATA_FILES += [('share/pixmaps', ['data/cloudsn.svg'])]
 DATA_FILES += [('share/icons/hicolor/24x24/apps', ['data/cloudsn.png'])]
-DATA_FILES += [('/usr/share/indicators/messages/applications', ['data/cloudsn'])]
 
 class BuildData(build):
     def run (self):
@@ -72,6 +71,12 @@ class InstallData(install_data):
         install_data.run (self)
         #if not self.distribution.without_icon_cache:
         #    self._update_icon_cache ()
+        for path in self.get_outputs():
+            if path.endswith ('share/applications/cloudsn.desktop'):
+                #Install the indicator file
+                f = open ('/usr/share/indicators/messages/applications/cloudsn', 'w')
+                f.write (path + '\n')
+                f.close()
 
     # We should do this on uninstall too
     def _update_icon_cache(self):

@@ -118,22 +118,19 @@ class PopBox:
                 self.mbox = poplib.POP3(self.host, self.port)
             else:
                 self.mbox = poplib.POP3_SSL(self.host, self.port)
-        except Exception:
+        except Exception as e:
+            logger.error("Error connecting the POP3 account: " + e)
             raise PopBoxConnectionError()
 
         try:
             self.mbox.user(self.user)
             self.mbox.pass_(self.password)
-        except poplib.error_proto:
+        except poplib.error_proto as e:
+            logger.error("Auth Error connecting the POP3 account: " + e)
             raise PopBoxAuthError()
 
     def get_mails(self):
-        try:
-            self.__connect()
-        except PopBoxConnectionError:
-            raise PopBoxConnectionError()
-        except PopBoxAuthError:
-            raise PopBoxAuthError()
+        self.__connect()
 
         messages = []
         msgs = self.mbox.list()[1]
@@ -155,7 +152,7 @@ class PopBox:
                 fr = utils.mime_decode(msg.get("From"))
                 messages.append( [msgid, sub, fr] )
             except poplib.error_proto, e:
-                print "Warning: pop3 error %s" % e
+                logger.error("Error reading pop3 box: " + e)
 		
         self.mbox.quit()
         return messages

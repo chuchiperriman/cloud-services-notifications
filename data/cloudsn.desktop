@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
-Name=Cloud Services
-GenericName=Cloud Services
+Name=Cloud Services Notifications
+GenericName=Cloud Services Notifications
 X-GNOME-FullName=Cloud Services Notifications
 Comment=Check when we have a new mail/feed/etc notification
 Exec=cloudsn

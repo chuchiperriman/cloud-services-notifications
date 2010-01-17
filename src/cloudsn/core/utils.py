@@ -9,9 +9,9 @@ def show_url(url):
     from gtk.gdk import screen_get_default
     from glib import GError
     try:
-            show_uri(screen_get_default(), url, get_current_event_time())
+        show_uri(screen_get_default(), url, get_current_event_time())
     except GError, e:
-            print "Error in gtk.show_uri:", e
+        logger.error("Error in gtk.show_uri: " + e)
 
 def invoke_subprocess(cmdline):
 	setsid = getattr(os, 'setsid', None)

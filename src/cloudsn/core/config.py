@@ -6,6 +6,7 @@ from os import mkdir
 from os.path import isdir, join, dirname, abspath
 import gobject
 import gtk
+import gettext
 
 
 #Test if it is the tar/git
@@ -23,7 +24,7 @@ else:
                 _installed = True
                 break
         else:
-            raise Exception("can't find the cloudsn data directory")
+            raise Exception(_("Can't find the cloudsn data directory"))
 
 def get_base_data_prefix ():
     return abspath (_base_prefix)
@@ -131,7 +132,7 @@ class SettingsController(gobject.GObject):
                 if self.accounts[sec]["provider_name"] == provider.get_name():
                     res.append (sec)
             else:
-                print "The account " + sec + " has not a provider_name property"
+                logger.error("The account " + sec + " has not a provider_name property")
                 
         return res
         

@@ -1,14 +1,13 @@
 from cloudsn.core.provider import Provider, ProviderManager
-from cloudsn.core import account
-from cloudsn.core import config
+from cloudsn.core import account, config
 from cloudsn.ui import preferences
+from cloudsn import logger
 import indicate
 from time import time
 import gtk
 import gobject
 import gettext
 from threading import Thread
-import syslog
 
 class Controller (gobject.GObject):
 
@@ -32,6 +31,7 @@ class Controller (gobject.GObject):
         try:
             fcntl.lockf(self.fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except IOError:
+            logger.warn ("Another instance is already running, quitting.")
             print "Another instance is already running, quitting."
             sys.exit(-1)
 
@@ -110,19 +110,18 @@ class Controller (gobject.GObject):
             self.checker = CheckerThread(self, acc)
             self.checker.start()
         else:
-            print 'The checker is running'
+            logger.warn ('The checker is running')
             
     def update_accounts(self, data=None):
         if self.checker is None or not self.checker.is_alive():
             self.checker = CheckerThread(self)
             self.checker.start()
         else:
-            print 'The checker is running'
+            logger.warn ('The checker is running')
         #For the timeout_add_seconds
         return True
 
     def _start_idle(self):
-        syslog.syslog('Starting cloudsn')
         gtk.gdk.threads_enter()
         self.init_indicator_server()
         for provider in self.prov_manager.get_providers():
@@ -146,7 +145,7 @@ class Controller (gobject.GObject):
         try:
             gtk.main()
         except KeyboardInterrupt:
-            print 'keyboardInterrupt'
+            logger.info ('KeyboardInterrupt the main loop')
 
 class CheckerThread (Thread):
     def __init__(self, controller, acc = None):
@@ -168,12 +167,13 @@ class CheckerThread (Thread):
                         #account.indicator.set_property('draw-attention', 'true');
                     self.controller.emit("account-checked", account)
                 except Exception as e:
-                    print "Error trying to update the account " , acc.get_name() , ": " , e
+                    logger.error("Error trying to update the account " +
+                        acc.get_name() + ": " + e)
             
     def notify (self, title, message, icon = None):
         try:
             import pynotify
-            if pynotify.init(_("Cloud Services Notifications")):
+            if pynotify.init("Cloud Services Notifications"):
                 n = pynotify.Notification(title, message)
                 n.set_urgency(pynotify.URGENCY_LOW)
                 n.set_timeout(4000)
@@ -181,6 +181,6 @@ class CheckerThread (Thread):
                     n.set_icon_from_pixbuf(icon)
                 n.show()
             else:
-                print "there was a problem initializing the pynotify module"
+                logger.error ("there was a problem initializing the pynotify module")
         except:
-            print "you don't seem to have pynotify installed"
+            logger.error("you don't seem to have pynotify installed")

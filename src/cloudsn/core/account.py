@@ -50,7 +50,7 @@ class Account:
         sc.del_account_config(self.get_name())
         sc.save_accounts()
     def activate(self):
-        print 'This account type has not an activate action'
+        logger.warn('This account type has not an activate action')
 
 class AccountManager (gobject.GObject):
 

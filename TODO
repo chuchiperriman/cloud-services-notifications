@@ -1,4 +1,4 @@
-Milestone 3
+Milestone 4
 ===========
 [ ] Add facebook notifications of:
 	[ ] Photo tags
@@ -6,6 +6,14 @@ Milestone 3
 	[ ] New event request
 	[ ] A friend posting in your wall
 	[ ] A friend comment a photo where you appear
+
+Milestone 3
+===========
+* Remove the preferences dialog and add an application window
+[ ] Create main the window
+[ ] Add stop and start button
+[ ] Add account list
+[ ] Add/edit/remove/update accounts
 
 Milestone 2
 ===========
@@ -15,8 +23,9 @@ Milestone 2
 [X] Add option to start the application with the session
 [ ] cloudsn doesn't check the first time it starts with the session
 [X] Add i18n support
-[ ] Check the correct dependencies in setup.py and debian files
-[ ] Install desktop file into the indicator applet to be show when the application is down
+[X] Check the correct dependencies in setup.py
+[ ] Check the correct dependencies in debian files
+[X] Install desktop file into the indicator applet to be show when the application is down
 [X] Add imap support:
     [X] Check inbox mails
 

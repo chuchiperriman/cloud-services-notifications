@@ -12,6 +12,22 @@ import os
 import sys
 import subprocess
 
+#check dependencies
+DEPENDENCIES = ['gtk', 'indicate', 'pynotify', 'xdg', 'gconf']
+
+err_deps = []
+for dep in DEPENDENCIES:
+    try:
+        __import__(dep)
+    except ImportError:
+        err_deps += [dep]
+
+if len(err_deps) > 0:
+    print 'Dependencies not found: '
+    for dep in err_deps:
+        print '\t', dep
+    sys.exit(1)
+
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 PO_DIR = 'po'
@@ -107,5 +123,5 @@ setup(name='cloudsn',
       packages=['cloudsn', 'cloudsn.core', 'cloudsn.ui', 'cloudsn.providers'],
       data_files = DATA_FILES,
       scripts=['cloudsn'],
-      cmdclass={'build': BuildData, 'install_data': InstallData},
+      cmdclass={'build': BuildData, 'install_data': InstallData}
      )

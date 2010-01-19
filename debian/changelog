@@ -1,4 +1,15 @@
-cloudsn (0.1.0) unstable; urgency=low
+cloudsn (0.1.1) karmic; urgency=low
+
+  * Basic IMAP support.
+  * Check accounts in a thread
+  * i18n support
+  * Prevent two instances
+  * Option to run cloudsn at startup
+  * Install file into the indicator-applet
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sat, 19 Jan 2010 00:55:55 +0100
+
+cloudsn (0.1.0) karmic; urgency=low
 
   * Initial release.
 

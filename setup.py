@@ -90,9 +90,12 @@ class InstallData(install_data):
         for path in self.get_outputs():
             if path.endswith ('share/applications/cloudsn.desktop'):
                 #Install the indicator file
-                f = open ('/usr/share/indicators/messages/applications/cloudsn', 'w')
-                f.write (path + '\n')
-                f.close()
+                try:
+                    f = open ('/usr/share/indicators/messages/applications/cloudsn', 'w')
+                    f.write (path + '\n')
+                    f.close()
+                except Exception:
+                    warn("Cannot create the indicator file")
 
     # We should do this on uninstall too
     def _update_icon_cache(self):

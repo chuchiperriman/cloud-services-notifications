@@ -1,4 +1,4 @@
-Milestone 4
+Milestone 0.4.0
 ===========
 [ ] Add facebook notifications of:
 	[ ] Photo tags
@@ -7,15 +7,15 @@ Milestone 4
 	[ ] A friend posting in your wall
 	[ ] A friend comment a photo where you appear
 
-Milestone 3
+Milestone 0.3.0
 ===========
-* Remove the preferences dialog and add an application window
+* Scope: Remove the preferences dialog and add an application window
 [ ] Create main the window
 [ ] Add stop and start button
 [ ] Add account list
 [ ] Add/edit/remove/update accounts
 
-Milestone 2
+Milestone 0.2.0
 ===========
 [X] Check the accounts in a different thread
 [X] Update the last check data in the preferences dialog correctly with the threads
@@ -24,12 +24,13 @@ Milestone 2
 [ ] cloudsn doesn't check the first time it starts with the session
 [X] Add i18n support
 [X] Check the correct dependencies in setup.py
-[ ] Check the correct dependencies in debian files
+[X] Check the correct dependencies in debian files
+[ ] Upload the application to my PPA
 [X] Install desktop file into the indicator applet to be show when the application is down
 [X] Add imap support:
     [X] Check inbox mails
 
-Milestone 1
+Milestone 0.1.0
 ===========
 
 [X] Remove the indicator when an account is deleted

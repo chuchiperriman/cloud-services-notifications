@@ -74,12 +74,12 @@ class AccountManager (gobject.GObject):
             AccountManager.__default = AccountManager()
         return AccountManager.__default
     
-    def add_account(self, account, store=False):
-        self.accounts[account.get_name()] = account
+    def add_account(self, acc, store=False):
+        self.accounts[acc.get_name()] = acc
         if store:
-            account.save_conf()
+            acc.save_conf()
 
-        self.emit("account-added", account)
+        self.emit("account-added", acc)
 
     def edit_account(self, account):
         account.save_conf()

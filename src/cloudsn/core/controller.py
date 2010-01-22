@@ -165,7 +165,7 @@ class CheckerThread (Thread):
                             _("New messages: ") + str(acc.get_new_unread()),
                             acc.get_provider().get_icon())
                         #account.indicator.set_property('draw-attention', 'true');
-                    self.controller.emit("account-checked", account)
+                    self.controller.emit("account-checked", acc)
                 except Exception as e:
                     logger.error("Error trying to update the account " +
                         acc.get_name() + ": " + e)

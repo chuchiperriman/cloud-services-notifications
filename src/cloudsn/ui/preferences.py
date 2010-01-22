@@ -75,7 +75,6 @@ class Preferences:
             acc = self.am.get_account(account_name)
 
         Controller.get_instance().update_account(acc)
-        self.store.set_value(citer, 2, self.__get_account_date(acc))
 
     def on_startup_check_toggled(self, widget, data=None):
         if widget.get_active():
@@ -87,9 +86,6 @@ class Preferences:
     def on_update_all_button_clicked(self, widget, data=None):
         from cloudsn.core.controller import Controller
         Controller.get_instance().update_accounts()
-        for row in self.store:
-            acc = self.am.get_account(row[1])
-            row[2] = self.__get_account_date(acc)
 
     def __get_account_date(self, acc):
         last_update = ''

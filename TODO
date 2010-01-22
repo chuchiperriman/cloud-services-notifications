@@ -1,5 +1,5 @@
-Milestone 3
-===========
+Milestone 0.2.0
+===============
 [ ] Add facebook notifications of:
 	[ ] Photo tags
 	[ ] New friends request
@@ -7,21 +7,28 @@ Milestone 3
 	[ ] A friend posting in your wall
 	[ ] A friend comment a photo where you appear
 
-Milestone 2
-===========
+Milestone 0.1.4
+===============
+* Create application window instead of only the preferences
+[ ] Create a new application window
+
+Milestone 0.1.2
+===============
+[ ] Creating new account sometimes doesn't be shown in the indicator
+[X] Fix the date update in preferences
 [X] Check the accounts in a different thread
 [X] Update the last check data in the preferences dialog correctly with the threads
 [X] Do not run two instances of cloudsn
 [X] Add option to start the application with the session
 [ ] cloudsn doesn't check the first time it starts with the session
 [X] Add i18n support
-[ ] Check the correct dependencies in setup.py and debian files
-[ ] Install desktop file into the indicator applet to be show when the application is down
+[X] Check the correct dependencies in setup.py and debian files
+[X] Install desktop file into the indicator applet to be show when the application is down
 [X] Add imap support:
     [X] Check inbox mails
 
-Milestone 1
-===========
+Milestone 0.1.0
+===============
 
 [X] Remove the indicator when an account is deleted
 [X] Set icons to the dialogs

@@ -12,6 +12,22 @@ import os
 import sys
 import subprocess
 
+#check dependencies
+DEPENDENCIES = ['gtk', 'indicate', 'pynotify', 'xdg', 'gconf']
+
+err_deps = []
+for dep in DEPENDENCIES:
+    try:
+        __import__(dep)
+    except ImportError:
+        err_deps += [dep]
+
+if len(err_deps) > 0:
+    print 'Dependencies not found: '
+    for dep in err_deps:
+        print '\t', dep
+    sys.exit(1)
+
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
 
 PO_DIR = 'po'
@@ -29,7 +45,6 @@ DATA_FILES += [('share/applications', ['data/cloudsn.desktop'])]
 DATA_FILES += [('share/icons/hicolor/scalable/apps', ['data/cloudsn.svg'])]
 DATA_FILES += [('share/pixmaps', ['data/cloudsn.svg'])]
 DATA_FILES += [('share/icons/hicolor/24x24/apps', ['data/cloudsn.png'])]
-DATA_FILES += [('/usr/share/indicators/messages/applications', ['data/cloudsn'])]
 
 class BuildData(build):
     def run (self):
@@ -72,6 +87,15 @@ class InstallData(install_data):
         install_data.run (self)
         #if not self.distribution.without_icon_cache:
         #    self._update_icon_cache ()
+        for path in self.get_outputs():
+            if path.endswith ('share/applications/cloudsn.desktop'):
+                #Install the indicator file
+                try:
+                    f = open ('/usr/share/indicators/messages/applications/cloudsn', 'w')
+                    f.write (path + '\n')
+                    f.close()
+                except Exception:
+                    warn("Cannot create the indicator file")
 
     # We should do this on uninstall too
     def _update_icon_cache(self):
@@ -102,5 +126,5 @@ setup(name='cloudsn',
       packages=['cloudsn', 'cloudsn.core', 'cloudsn.ui', 'cloudsn.providers'],
       data_files = DATA_FILES,
       scripts=['cloudsn'],
-      cmdclass={'build': BuildData, 'install_data': InstallData},
+      cmdclass={'build': BuildData, 'install_data': InstallData}
      )

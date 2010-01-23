@@ -2,6 +2,7 @@ import gtk
 import os
 import shutil
 from cloudsn.core import config, provider, account
+from cloudsn import logger
 
 STOP_RESPONSE = 1
 
@@ -45,10 +46,21 @@ class Preferences:
             provider = self.pm.get_provider(provider_name)
             account_name = self.account_name_entry.get_text()
             if account_name != "":
-                account = provider.create_account_dialog(account_name)
-                if account is not None:
-                    self.am.add_account(account, True)
-                    self.store.append([account.get_provider().get_icon(), account.get_name(),''])
+                try:
+                    self.am.validate_account(account_name)
+                    account = provider.create_account_dialog(account_name)
+                    if account is not None:
+                        self.am.add_account(account, True)
+                        self.store.append([account.get_provider().get_icon(), account.get_name(),''])
+                except Exception as e:
+                    logger.error ('Error adding a new account: ' + str(e))
+                    md = gtk.MessageDialog(self.window,
+                        gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
+                        gtk.BUTTONS_CLOSE,
+                        'Error adding a new account: ' + str(e))
+                    md.run()
+                    md.destroy()
+
 
     def on_account_edit_button_clicked(self, widget, data=None):
         acc, citer = self.get_selected_account()

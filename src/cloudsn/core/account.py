@@ -1,6 +1,7 @@
 from cloudsn.core import config
 import gobject
 from datetime import datetime
+import gettext
 
 class Account:
     def __init__ (self, name, provider):
@@ -73,8 +74,14 @@ class AccountManager (gobject.GObject):
         if not AccountManager.__default:
             AccountManager.__default = AccountManager()
         return AccountManager.__default
+
+    def validate_account(self, account_name):
+        if account_name in self.accounts:
+            error = _('The account %s already exists' % (account_name))
+            raise Exception(error)
     
     def add_account(self, acc, store=False):
+        self.validate_account(acc.get_name())
         self.accounts[acc.get_name()] = acc
         if store:
             acc.save_conf()

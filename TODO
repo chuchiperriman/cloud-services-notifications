@@ -9,12 +9,13 @@ Milestone 0.2.0
 
 Milestone 0.1.4
 ===============
-* Create application window instead of only the preferences
+* Application window and gmail/imap folders
 [ ] Create a new application window
 
 Milestone 0.1.2
 ===============
 [ ] Creating new account sometimes doesn't be shown in the indicator
+[ ] Prevent accounts with the same name
 [X] Fix the date update in preferences
 [X] Check the accounts in a different thread
 [X] Update the last check data in the preferences dialog correctly with the threads

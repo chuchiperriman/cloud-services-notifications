@@ -103,7 +103,7 @@ class Controller (gobject.GObject):
         indicator.show()
         indicator.connect("user-display", self.on_indicator_display_cb)
         acc.indicator = indicator
-        indicator.acc = acc
+        indicator.account = acc
         
     def update_account(self, acc):
         if self.checker is None or not self.checker.is_alive():
@@ -168,7 +168,7 @@ class CheckerThread (Thread):
                     self.controller.emit("account-checked", acc)
                 except Exception as e:
                     logger.error("Error trying to update the account " +
-                        acc.get_name() + ": " + e)
+                        acc.get_name() + ": " + str(e))
             
     def notify (self, title, message, icon = None):
         try:

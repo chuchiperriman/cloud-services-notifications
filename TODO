@@ -1,4 +1,4 @@
-Milestone 0.2.0
+Milestone 0.X.0
 ===============
 [ ] Add facebook notifications of:
 	[ ] Photo tags
@@ -7,10 +7,20 @@ Milestone 0.2.0
 	[ ] A friend posting in your wall
 	[ ] A friend comment a photo where you appear
 
-Milestone 0.1.4
+Milestone 0.4.0
 ===============
 * Application window and gmail/imap folders
 [ ] Create a new application window
+
+Milestone 0.3.0
+===============
+* Twitter time
+[ ] Study and add Twitter support
+
+Milestone 0.2.0
+===============
+[ ] Add GMail tags support
+[ ] Add IMAP folders support
 [ ] Creating new account sometimes are not shown in the indicator
 [X] cloudsn doesn't check the first time it starts with the session
 

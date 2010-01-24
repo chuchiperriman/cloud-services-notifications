@@ -8,19 +8,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 15:37+0100\n"
-"PO-Revision-Date: 2010-01-11 15:38+0100\n"
+"POT-Creation-Date: 2010-01-25 00:56+0100\n"
+"PO-Revision-Date: 2010-01-25 00:57+0100\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
 "Language-Team: Español <kupfer-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cloudsn/core/controller.py:89
-msgid "Cloud Services Notifications"
-msgstr "Notificaciones de servicios en la nube"
+#: ../src/cloudsn/core/controller.py:34
+msgid "Another instance is already running, quitting."
+msgstr "Hay otra instancia arrancada, Saliendo."
 
-#: ../src/cloudsn/core/controller.py:107
+#: ../src/cloudsn/core/controller.py:187
 msgid "New messages: "
 msgstr "Mensajes nuevos: "
 
@@ -94,6 +94,9 @@ msgstr "Lanzar aplicación al iniciar"
 #: ../data/preferences.ui.h:11
 msgid "Update all accounts:  "
 msgstr "Actualizar todas las cuentas: "
+
+#~ msgid "Cloud Services Notifications"
+#~ msgstr "Notificaciones de servicios en la nube"
 
 #~ msgid "Account Name"
 #~ msgstr "Nombre de cuenta"

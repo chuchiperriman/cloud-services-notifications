@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-11 15:37+0100\n"
+"POT-Creation-Date: 2010-01-25 00:56+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cloudsn/core/controller.py:89
-msgid "Cloud Services Notifications"
+#: ../src/cloudsn/core/controller.py:34
+msgid "Another instance is already running, quitting."
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:107
+#: ../src/cloudsn/core/controller.py:187
 msgid "New messages: "
 msgstr ""
 

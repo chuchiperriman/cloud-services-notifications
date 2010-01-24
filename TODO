@@ -11,17 +11,17 @@ Milestone 0.1.4
 ===============
 * Application window and gmail/imap folders
 [ ] Create a new application window
+[ ] Creating new account sometimes are not shown in the indicator
+[ ] cloudsn doesn't check the first time it starts with the session
 
 Milestone 0.1.2
 ===============
-[ ] Creating new account sometimes doesn't be shown in the indicator
 [X] Prevent accounts with the same name
 [X] Fix the date update in preferences
 [X] Check the accounts in a different thread
 [X] Update the last check data in the preferences dialog correctly with the threads
 [X] Do not run two instances of cloudsn
 [X] Add option to start the application with the session
-[ ] cloudsn doesn't check the first time it starts with the session
 [X] Add i18n support
 [X] Check the correct dependencies in setup.py
 [X] Check the correct dependencies in debian files

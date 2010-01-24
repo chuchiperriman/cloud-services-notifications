@@ -1,3 +1,9 @@
+cloudsn (0.1.2) karmic; urgency=low
+
+  * Fixes
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 24 Jan 2010 21:02:55 +0100
+
 cloudsn (0.1.1) karmic; urgency=low
 
   * Basic IMAP support.

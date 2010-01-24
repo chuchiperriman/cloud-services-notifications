@@ -12,6 +12,9 @@ import os
 import sys
 import subprocess
 
+from imp import load_module, find_module
+const = load_module("const", *find_module("const",["src/cloudsn"]))
+
 #check dependencies
 DEPENDENCIES = ['gtk', 'indicate', 'pynotify', 'xdg', 'gconf']
 
@@ -116,8 +119,8 @@ class InstallData(install_data):
 
         return data_files
 
-setup(name='cloudsn',
-      version='0.1.1',
+setup(name=const.APP_NAME,
+      version=const.APP_VERSION,
       description='Python Distribution Utilities',
       author=r'Jesús Barbero Rodríguez',
       author_email='chuchiperriman@gmail.com',

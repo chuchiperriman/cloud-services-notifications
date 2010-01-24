@@ -5,10 +5,7 @@ from .core import config
 from os.path import join, abspath
 import gettext
 import locale
-
-APP_NAME="cloudsn"
-APP_NAME="cloudsn"
-APP_LONG_NAME="Cloud Services Notifications"
+from const import *
 
 def setup_locale_and_gettext():
     """Set up localization with gettext"""

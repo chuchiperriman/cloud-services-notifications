@@ -123,6 +123,7 @@ class Controller (gobject.GObject):
 
     def _start_idle(self):
         gtk.gdk.threads_enter()
+        self.networkmanager_connect()
         self.init_indicator_server()
         for provider in self.prov_manager.get_providers():
             provider.register_accounts()
@@ -136,7 +137,38 @@ class Controller (gobject.GObject):
         gobject.source_remove(self.timeout_id)
         gtk.main_quit()
         return 0
-    
+
+    def networkmanager_connect(self):
+        # vytvorim si objekt D-Bus systemovy kanal
+        import dbus
+        import dbus.mainloop.glib
+
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
+        self.bus = dbus.SystemBus()
+
+        # vytvorim si proxy objekt pre NetworkManager
+        nm = self.bus.get_object('org.freedesktop.NetworkManager', '/org/freedesktop/NetworkManager')
+        nm_if = dbus.Interface(nm, 'org.freedesktop.NetworkManager')
+
+        # zavolame state() na zistenie stavu NM (3 znamena connected)
+        print nm.state()
+
+        # Bind the onSignOn function with Pidgin's BuddySignedOn event
+        #bus.add_signal_receiver(_on_network_connect,
+        #    dbus_interface="org.freedesktop.NetworkManager",
+        #    signal_name="DeviceNowActive")
+        SERVICE = 'org.freedesktop.NetworkManager'
+        DEVINTERFACE = 'org.freedesktop.NetworkManager.Devices'
+        PATH = '/org/freedesktop/NetworkManager'
+        nm_if.connect_to_signal('DeviceNowActives', self.device_now_active)
+
+        #self.bus.add_signal_receiver(self.device_now_active, 'DeviceNowActive', SERVICE, SERVICE, PATH)
+
+    def device_now_active(self, interface_path, wireless_essid=None):
+        print 'aaaaa'
+        logger.debug('connect network')
+
     def start(self):
         import signal
         signal.signal( signal.SIGINT, self.signint )
@@ -184,3 +216,6 @@ class CheckerThread (Thread):
                 logger.error ("there was a problem initializing the pynotify module")
         except:
             logger.error("you don't seem to have pynotify installed")
+
+def _on_network_connect(path, wireless=None):
+    print 'connect'

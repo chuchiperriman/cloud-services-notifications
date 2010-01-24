@@ -1,5 +1,5 @@
 from cloudsn.core.provider import Provider, ProviderManager
-from cloudsn.core import account, config
+from cloudsn.core import account, config, networkmanager
 from cloudsn.ui import preferences
 from cloudsn import logger
 import indicate
@@ -31,8 +31,9 @@ class Controller (gobject.GObject):
         try:
             fcntl.lockf(self.fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except IOError:
-            logger.warn ("Another instance is already running, quitting.")
-            print "Another instance is already running, quitting."
+            message = _("Another instance is already running, quitting.")
+            logger.warn (message)
+            print message
             sys.exit(-1)
 
         gobject.GObject.__init__(self)
@@ -89,10 +90,21 @@ class Controller (gobject.GObject):
         self.server.connect("server-display", self.on_server_display_cb)
         self.server.set_desktop_file(config.add_apps_prefix("cloudsn.desktop"))
         self.server.show()
+        logger.debug("Indicator server created")
 
     def on_indicator_display_cb(self, indicator):
         indicator.account.activate ()
 
+    def on_nm_state_changed (self):
+        if self.nm.state == networkmanager.STATE_CONNECTED:
+            logger.debug("Network connected")
+            #Force update
+            self.update_accounts()
+        else:
+            logger.debug("Network disconnected")
+            if self.checker is not None:
+                self.checker.stop = True
+    
     def create_indicator(self, acc):
         indicator = indicate.Indicator()
         indicator.set_property("name", acc.get_name())
@@ -106,6 +118,10 @@ class Controller (gobject.GObject):
         indicator.account = acc
         
     def update_account(self, acc):
+        """acc=None will check all accounts"""
+        if self.nm.offline():
+            logger.warn ("The network is not connected, the account cannot be updated")
+            return
         if self.checker is None or not self.checker.is_alive():
             self.checker = CheckerThread(self, acc)
             self.checker.start()
@@ -113,20 +129,18 @@ class Controller (gobject.GObject):
             logger.warn ('The checker is running')
             
     def update_accounts(self, data=None):
-        if self.checker is None or not self.checker.is_alive():
-            self.checker = CheckerThread(self)
-            self.checker.start()
-        else:
-            logger.warn ('The checker is running')
+        self.update_account(None)
         #For the timeout_add_seconds
         return True
 
     def _start_idle(self):
         gtk.gdk.threads_enter()
-        self.networkmanager_connect()
         self.init_indicator_server()
         for provider in self.prov_manager.get_providers():
             provider.register_accounts()
+        
+        self.nm = networkmanager.NetworkManager()
+        self.nm.set_statechange_callback(self.on_nm_state_changed)
         gtk.gdk.threads_leave()
         self.update_accounts()
         self._update_interval()
@@ -137,37 +151,6 @@ class Controller (gobject.GObject):
         gobject.source_remove(self.timeout_id)
         gtk.main_quit()
         return 0
-
-    def networkmanager_connect(self):
-        # vytvorim si objekt D-Bus systemovy kanal
-        import dbus
-        import dbus.mainloop.glib
-
-        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-
-        self.bus = dbus.SystemBus()
-
-        # vytvorim si proxy objekt pre NetworkManager
-        nm = self.bus.get_object('org.freedesktop.NetworkManager', '/org/freedesktop/NetworkManager')
-        nm_if = dbus.Interface(nm, 'org.freedesktop.NetworkManager')
-
-        # zavolame state() na zistenie stavu NM (3 znamena connected)
-        print nm.state()
-
-        # Bind the onSignOn function with Pidgin's BuddySignedOn event
-        #bus.add_signal_receiver(_on_network_connect,
-        #    dbus_interface="org.freedesktop.NetworkManager",
-        #    signal_name="DeviceNowActive")
-        SERVICE = 'org.freedesktop.NetworkManager'
-        DEVINTERFACE = 'org.freedesktop.NetworkManager.Devices'
-        PATH = '/org/freedesktop/NetworkManager'
-        nm_if.connect_to_signal('DeviceNowActives', self.device_now_active)
-
-        #self.bus.add_signal_receiver(self.device_now_active, 'DeviceNowActive', SERVICE, SERVICE, PATH)
-
-    def device_now_active(self, interface_path, wireless_essid=None):
-        print 'aaaaa'
-        logger.debug('connect network')
 
     def start(self):
         import signal
@@ -185,11 +168,18 @@ class CheckerThread (Thread):
         self.am = account.AccountManager.get_instance()
         self.controller = controller
         self.acc = acc
+        self.stop = False
         
     def run(self):
+        logger.debug("Starting checker")
         for acc in self.am.get_accounts():
-            if self.acc is None or self.acc == acc: 
+            if self.stop:
+                logger.debug("The checker has been stopped")
+                return
+                
+            if self.acc is None or self.acc == acc:
                 try:
+                    logger.debug('Updating account: ' + acc.get_name())
                     acc.update()
                     acc.indicator.set_property_int("count", acc.get_unread())
                     if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
@@ -201,7 +191,9 @@ class CheckerThread (Thread):
                 except Exception as e:
                     logger.error("Error trying to update the account " +
                         acc.get_name() + ": " + str(e))
-            
+
+        logger.debug("Ending checker")
+        
     def notify (self, title, message, icon = None):
         try:
             import pynotify
@@ -217,5 +209,3 @@ class CheckerThread (Thread):
         except:
             logger.error("you don't seem to have pynotify installed")
 
-def _on_network_connect(path, wireless=None):
-    print 'connect'

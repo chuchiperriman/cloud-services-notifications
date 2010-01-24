@@ -16,7 +16,7 @@ from imp import load_module, find_module
 const = load_module("const", *find_module("const",["src/cloudsn"]))
 
 #check dependencies
-DEPENDENCIES = ['gtk', 'indicate', 'pynotify', 'xdg', 'gconf']
+DEPENDENCIES = ['gtk', 'indicate', 'pynotify', 'xdg', 'gconf', 'dbus']
 
 err_deps = []
 for dep in DEPENDENCIES:

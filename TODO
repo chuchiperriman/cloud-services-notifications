@@ -12,7 +12,7 @@ Milestone 0.1.4
 * Application window and gmail/imap folders
 [ ] Create a new application window
 [ ] Creating new account sometimes are not shown in the indicator
-[ ] cloudsn doesn't check the first time it starts with the session
+[X] cloudsn doesn't check the first time it starts with the session
 
 Milestone 0.1.2
 ===============

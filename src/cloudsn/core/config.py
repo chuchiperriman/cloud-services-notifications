@@ -118,7 +118,8 @@ class SettingsController(gobject.GObject):
                 for key, default in section.iteritems():
                     if isinstance(default, int):
                         default = str(default)
-                    parser.set(secname, key, default)
+                    if not parser.has_option(secname, key):
+                        parser.set(secname, key, default)
                     
         fill_parser(self.config_prefs, self.__default_prefs)
 

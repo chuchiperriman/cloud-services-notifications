@@ -1,4 +1,4 @@
-from cloudsn.core.account import Account, AccountManager
+from cloudsn.core.account import Account, AccountManager, Notification
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
@@ -45,9 +45,9 @@ class GMailProvider(Provider):
         for mail in g.get_mails():
             if mail.mail_id not in account.mails:
                 account.mails[mail.mail_id] = mail
-                news.append (mail)
+                news.append (Notification(mail.mail_id, mail.title, mail.author_name))
 
-        account.new_unread = len (news);
+        account.new_unread = news;
 
     def _create_dialog(self):
         builder=gtk.Builder()
@@ -87,7 +87,14 @@ class GMailAccount (Account):
         self["username"] = username
         self["password"] = password
         self.mails = {}
-    
+        self.new_unread = []
+
+    def get_total_unread (self):
+        return len(self.mails)
+
+    def get_new_unread_notifications(self):
+        return self.new_unread
+        
     def activate (self):
         utils.show_url ("http://gmail.google.com")
 

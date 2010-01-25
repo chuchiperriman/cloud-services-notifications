@@ -109,7 +109,7 @@ class Controller (gobject.GObject):
         indicator = indicate.Indicator()
         indicator.set_property("name", acc.get_name())
         indicator.set_property_time("time", time())
-        indicator.set_property_int("count", acc.get_unread())
+        indicator.set_property_int("count", acc.get_total_unread())
         if acc.get_provider().get_icon() is not None:
             indicator.set_property_icon("icon", acc.get_provider().get_icon())
         indicator.show()
@@ -134,17 +134,21 @@ class Controller (gobject.GObject):
         return True
 
     def _start_idle(self):
-        gtk.gdk.threads_enter()
-        self.init_indicator_server()
-        for provider in self.prov_manager.get_providers():
-            provider.register_accounts()
-        
-        self.nm = networkmanager.NetworkManager()
-        self.nm.set_statechange_callback(self.on_nm_state_changed)
-        gtk.gdk.threads_leave()
-        self.update_accounts()
-        self._update_interval()
-        self.started = True
+        try:
+            gtk.gdk.threads_enter()
+            self.init_indicator_server()
+            for provider in self.prov_manager.get_providers():
+                provider.register_accounts()
+            
+            self.nm = networkmanager.NetworkManager()
+            self.nm.set_statechange_callback(self.on_nm_state_changed)
+            gtk.gdk.threads_leave()
+            self.update_accounts()
+            self._update_interval()
+            self.started = True
+        except Exception as e:
+            logger.error ("Error starting the application: " + str(e))
+            
         return False
 
     def signint(self, signl, frme):
@@ -181,12 +185,22 @@ class CheckerThread (Thread):
                 try:
                     logger.debug('Updating account: ' + acc.get_name())
                     acc.update()
-                    acc.indicator.set_property_int("count", acc.get_unread())
-                    if acc.get_provider().has_notifications() and acc.get_new_unread() > 0:
-                        self.notify(acc.get_name(), 
-                            _("New messages: ") + str(acc.get_new_unread()),
-                            acc.get_provider().get_icon())
-                        #account.indicator.set_property('draw-attention', 'true');
+                    acc.indicator.set_property_int("count", acc.get_total_unread())
+                    if acc.get_provider().has_notifications():
+                        nots = acc.get_new_unread_notifications()
+                        message = None
+                        if len(nots) > 0:
+                            message = _("New messages: ") + str(len(nots))
+                            
+                        if len(nots) <= 3:
+                            for n in nots:
+                                message += "\n" + n.message
+
+                        if message:
+                            self.notify(acc.get_name(), 
+                                message,
+                                acc.get_provider().get_icon())
+                            #account.indicator.set_property('draw-attention', 'true');
                     self.controller.emit("account-checked", acc)
                 except Exception as e:
                     logger.error("Error trying to update the account " +

@@ -3,10 +3,14 @@ import gobject
 from datetime import datetime
 import gettext
 
+class Notification:
+    def __init__(self, id = None, message = None, sender = None):
+        self.id = id
+        self.sender = sender
+        self.message = message
+
 class Account:
     def __init__ (self, name, provider):
-        self.unread = 0
-        self.new_unread = 0
         self.properties = {}
         self.properties["name"] = name
         self.properties["provider_name"] = provider.get_name()
@@ -31,11 +35,11 @@ class Account:
     def get_last_update (self):
         return self.last_update
         
-    def get_unread (self):
-        return self.unread
+    def get_total_unread (self):
+        return 0
 
-    def get_new_unread (self):
-        return self.new_unread
+    def get_new_unread_notifications(self):
+        return []
 
     def update (self):
         self.provider.update_account (self)
@@ -50,6 +54,7 @@ class Account:
         sc = config.SettingsController.get_instance()
         sc.del_account_config(self.get_name())
         sc.save_accounts()
+        
     def activate(self):
         logger.warn('This account type has not an activate action')
 

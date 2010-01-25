@@ -22,6 +22,7 @@ Milestone 0.2.0
 [ ] Add GMail tags support
 [ ] Add IMAP folders support
 [ ] Creating new account sometimes are not shown in the indicator
+[ ] Show e-mail suject in the notification 
 [X] cloudsn doesn't check the first time it starts with the session
 
 Milestone 0.1.2

@@ -58,6 +58,32 @@ class Account:
     def activate(self):
         logger.warn('This account type has not an activate action')
 
+class AccountBase (Account):
+
+    def __init__(self, name, username, password, provider, url=None):
+        Account.__init__(self, name, provider)
+        self["username"] = username
+        self["password"] = password
+        self.total_unread = 0
+        self.notifications = None
+        self.new_unread = []
+        self.url = None
+
+    def get_total_unread (self):
+        if self.notifications:
+            return len(self.notifications)
+        else:
+            return self.total_unread
+
+    def get_new_unread_notifications(self):
+        return self.new_unread
+        
+    def activate (self):
+        if self.url:
+            utils.show_url (url)
+        else:
+            super(AccountBase,self).activate()
+
 class AccountManager (gobject.GObject):
 
     __default = None

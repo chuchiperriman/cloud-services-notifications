@@ -1,4 +1,4 @@
-from cloudsn.core.account import Account, AccountManager
+from cloudsn.core.account import AccountBase, AccountManager
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
@@ -29,13 +29,15 @@ class GReaderProvider(Provider):
         am = AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
-            acc = GReaderAccount (account_name, acc_config["username"], acc_config["password"])
+            acc = AccountBase(account_name, acc_config["username"],
+                acc_config["password"], GReaderProvider.get_instance(),
+                "http://reader.google.com")
             am.add_account (acc)
 
     def update_account (self, account):
         g = GreaderAtom (account["username"], account["password"])
         g.refreshInfo()
-        account.unread = g.getTotalUnread()
+        account.total_unread = g.getTotalUnread()
 
     def _create_dialog(self):
         builder=gtk.Builder()
@@ -51,7 +53,9 @@ class GReaderProvider(Provider):
         if dialog.run() == 0:
             username = builder.get_object("username_entry").get_text()
             password = builder.get_object("password_entry").get_text()
-            account = GReaderAccount(account_name, username, password)
+            account = AccountBase(account_name, username,
+                password, GReaderProvider.get_instance(),
+                "http://reader.google.com")
         dialog.destroy()
         return account
         
@@ -67,15 +71,6 @@ class GReaderProvider(Provider):
             res = True
         dialog.destroy()
         return res
-
-class GReaderAccount (Account):
-    def __init__(self, name, username, password):
-        Account.__init__(self, name, GReaderProvider.get_instance())
-        self["username"] = username
-        self["password"] = password
-    def activate (self):
-        utils.show_url ("http://reader.google.com")
-
 
 class GreaderAtom:
 	

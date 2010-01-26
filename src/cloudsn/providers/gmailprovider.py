@@ -1,4 +1,4 @@
-from cloudsn.core.account import Account, AccountManager, Notification
+from cloudsn.core.account import AccountBase, AccountManager, Notification
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
@@ -28,23 +28,20 @@ class GMailProvider(Provider):
         am = AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
-            acc = GMailAccount (account_name, acc_config["username"], acc_config["password"])
+            acc = AccountBase(account_name, acc_config["username"],
+                acc_config["password"], GMailProvider.get_instance(),
+                "http://gmail.google.com")
+            acc.notifications = {}
             am.add_account (acc)
 
     def update_account (self, account):
         g = GmailAtom (account["username"], account["password"])
         g.refreshInfo()
-        """
-        if g.getUnreadMsgCount () > 0:
-            message = ""
-            for i in range (g.getUnreadMsgCount ()):
-                message += "- \n" + g.getMsgTitle (i) + "\n"
-        """
         account.unread = g.getUnreadMsgCount ()
         news = []
         for mail in g.get_mails():
-            if mail.mail_id not in account.mails:
-                account.mails[mail.mail_id] = mail
+            if mail.mail_id not in account.notifications:
+                account.notifications[mail.mail_id] = mail
                 news.append (Notification(mail.mail_id, mail.title, mail.author_name))
 
         account.new_unread = news;
@@ -63,7 +60,10 @@ class GMailProvider(Provider):
         if dialog.run() == 0:
             username = builder.get_object("username_entry").get_text()
             password = builder.get_object("password_entry").get_text()
-            account = GMailAccount(account_name, username, password)
+            account = AccountBase(account_name, username,
+                password, GMailProvider.get_instance(),
+                "http://gmail.google.com")
+            account.notifications = {}
         dialog.destroy()
         return account
         
@@ -79,25 +79,6 @@ class GMailProvider(Provider):
             res = True
         dialog.destroy()
         return res
-
-class GMailAccount (Account):
-
-    def __init__(self, name, username, password):
-        Account.__init__(self, name, GMailProvider.get_instance())
-        self["username"] = username
-        self["password"] = password
-        self.mails = {}
-        self.new_unread = []
-
-    def get_total_unread (self):
-        return len(self.mails)
-
-    def get_new_unread_notifications(self):
-        return self.new_unread
-        
-    def activate (self):
-        utils.show_url ("http://gmail.google.com")
-
 
 # Auxiliar structure
 class Mail:

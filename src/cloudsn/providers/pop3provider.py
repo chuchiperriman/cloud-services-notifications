@@ -6,9 +6,10 @@ Based on pop3.py:
     
 """
 from cloudsn.core.provider import Provider
-from cloudsn.core.account import Account, AccountManager
+from cloudsn.core.account import AccountBase, AccountManager, Notification
 from cloudsn.core import config
 from cloudsn.core import utils
+from cloudsn import logger
 
 import poplib
 from email.Parser import Parser as EmailParser
@@ -36,20 +37,19 @@ class Pop3Provider(Provider):
         am = AccountManager.get_instance()
         for account_name in sc.get_account_list_by_provider(self):
             acc_config = sc.get_account_config(account_name)
-            acc = Pop3Account (account_name, acc_config["host"], acc_config["username"], acc_config["password"])
+            acc = Pop3Account (account_name, acc_config["host"], 
+                acc_config["username"], acc_config["password"])
             am.add_account (acc)
 
     def update_account (self, account):
         g = PopBox (account["username"], account["password"], account["host"])
-        news = []
+        account.new_unread = []
         mails = g.get_mails()
-        account.unread = len(mails)
         for mail_id, sub, fr in mails:
-            if mail_id not in account.mails:
-                account.mails[mail_id] = sub
-                news.append (mail_id)
-
-        account.new_unread = len (news);
+            if mail_id not in account.notifications:
+                n = Notification(mail_id, sub, fr)
+                account.notifications[mail_id] = sub
+                account.new_unread.append (n)
         
     def _create_dialog(self):
         builder=gtk.Builder()
@@ -85,24 +85,26 @@ class Pop3Provider(Provider):
         dialog.destroy()
         return res
 
+class Pop3Account (AccountBase):
 
-class Pop3Account (Account):
-
-    def __init__(self, name, host, username, password):
-        Account.__init__(self, name, Pop3Provider.get_instance())
-        #TODO Add port, ssl etc
+    #TODO Set ssl to false by default and the correct default port
+    def __init__(self, name, host, username, password, port = 995, ssl=True):
+        AccountBase.__init__(self, name, username, password, Pop3Provider.get_instance())
         self["host"] = host
-        self["username"] = username
-        self["password"] = password
-        self.mails = {}
+        self["port"] = port
+        self["ssl"] = ssl
+        self.notifications = {}
+        
     def activate(self):
         utils.open_mail_reader()
-    
+        
 class PopBoxConnectionError(Exception): pass
 class PopBoxAuthError(Exception): pass
 
 class PopBox:
-    def __init__(self, user, password, host, port = 110, ssl = False):
+    #TODO Set the port and ssl correctly
+    #def __init__(self, user, password, host, port = 110, ssl = False):
+    def __init__(self, user, password, host, port = 995, ssl = True):
         self.user = user
         self.password = password
         self.host = host
@@ -119,14 +121,14 @@ class PopBox:
             else:
                 self.mbox = poplib.POP3_SSL(self.host, self.port)
         except Exception as e:
-            logger.error("Error connecting the POP3 account: " + e)
+            logger.error("Error connecting the POP3 account: " + str(e))
             raise PopBoxConnectionError()
 
         try:
             self.mbox.user(self.user)
             self.mbox.pass_(self.password)
         except poplib.error_proto as e:
-            logger.error("Auth Error connecting the POP3 account: " + e)
+            logger.error("Auth Error connecting the POP3 account: " + str(e))
             raise PopBoxAuthError()
 
     def get_mails(self):
@@ -135,7 +137,6 @@ class PopBox:
         messages = []
         msgs = self.mbox.list()[1]
         for msg in msgs:
-	        
             try:
                 msgNum = int(msg.split(" ")[0])
                 msgSize = int(msg.split(" ")[1])
@@ -151,8 +152,8 @@ class PopBox:
                     msgid = hash(msg.get("Received") + sub)
                 fr = utils.mime_decode(msg.get("From"))
                 messages.append( [msgid, sub, fr] )
-            except poplib.error_proto, e:
-                logger.error("Error reading pop3 box: " + e)
+            except Exception as e:
+                logger.error("Error reading pop3 box: " + str(e))
 		
         self.mbox.quit()
         return messages

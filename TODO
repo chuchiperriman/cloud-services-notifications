@@ -19,6 +19,7 @@ Milestone 0.3.0
 
 Milestone 0.2.0
 ===============
+[ ] Option to enable/disable accounts
 [ ] Add GMail tags support
 [ ] Add IMAP folders support
 [ ] Add Imap SSL and port configuration

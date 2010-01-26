@@ -6,7 +6,7 @@ Based on imap.py:
     
 """
 from cloudsn.core.provider import Provider
-from cloudsn.core.account import Account, AccountManager
+from cloudsn.core.account import AccountBase, AccountManager, Notification
 from cloudsn.core import config
 from cloudsn.core import utils
 import imaplib
@@ -39,15 +39,13 @@ class ImapProvider(Provider):
     def update_account (self, account):
         #TODO Check port, ssl etc correctly
         g = ImapBox (account["host"], account["username"], account["password"], account["port"], account["ssl"])
-        news = []
+        account.new_unread = []
         mails = g.get_mails()
-        account.unread = len(mails)
         for mail_id, sub, fr in mails:
-            if mail_id not in account.mails:
-                account.mails[mail_id] = sub
-                news.append (mail_id)
-
-        account.new_unread = len (news);
+            if mail_id not in account.notifications:
+                n = Notification(mail_id, sub, fr)
+                account.notifications[mail_id] = sub
+                account.new_unread.append (n)
 
     def _create_dialog(self):
         builder=gtk.Builder()
@@ -90,18 +88,16 @@ class ImapProvider(Provider):
         dialog.destroy()
         return res
 
-class ImapAccount (Account):
+class ImapAccount (AccountBase):
 
     #TODO Set ssl to false by default and the correct default port
     def __init__(self, name, host, username, password, port = 993, ssl=True):
-        Account.__init__(self, name, ImapProvider.get_instance())
-        #TODO Add port, ssl etc
+        AccountBase.__init__(self, name, username, password, ImapProvider.get_instance())
         self["host"] = host
-        self["username"] = username
-        self["password"] = password
         self["port"] = port
         self["ssl"] = ssl
-        self.mails = {}
+        self.notifications = {}
+        
     def activate(self):
         utils.open_mail_reader()
 

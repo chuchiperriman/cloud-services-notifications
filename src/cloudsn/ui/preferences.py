@@ -51,7 +51,7 @@ class Preferences:
                     account = provider.create_account_dialog(account_name)
                     if account is not None:
                         self.am.add_account(account, True)
-                        self.store.append([account.get_provider().get_icon(), account.get_name(),''])
+                        self.store.append([account.get_provider().get_icon(), account.get_name(),'',acc.get_active()])
                 except Exception as e:
                     logger.error ('Error adding a new account: ' + str(e))
                     md = gtk.MessageDialog(self.window,
@@ -95,6 +95,14 @@ class Preferences:
         else:
             os.remove (config.get_startup_file_path())
 
+    def on_active_cell_toglled (self, cell, path, data=None):
+        active = not self.store[path][3]
+        self.store[path][3] = active
+        account_name = self.store[path][1]
+        acc = self.am.get_account(account_name)
+        acc.set_active(active)
+        acc.save_conf()
+
     def on_update_all_button_clicked(self, widget, data=None):
         from cloudsn.core.controller import Controller
         Controller.get_instance().update_accounts()
@@ -131,7 +139,7 @@ class Preferences:
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         for acc in self.am.get_accounts():
-            self.store.append([acc.get_provider().get_icon(), acc.get_name(), self.__get_account_date(acc)])
+            self.store.append([acc.get_provider().get_icon(), acc.get_name(), self.__get_account_date(acc), acc.get_active()])
 
         self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))

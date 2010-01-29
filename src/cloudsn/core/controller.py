@@ -181,7 +181,7 @@ class CheckerThread (Thread):
                 logger.debug("The checker has been stopped")
                 return
                 
-            if self.acc is None or self.acc == acc:
+            if acc.get_active() and (self.acc is None or self.acc == acc):
                 try:
                     logger.debug('Updating account: ' + acc.get_name())
                     acc.update()

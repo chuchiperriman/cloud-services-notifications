@@ -16,12 +16,17 @@ class Account:
         self.properties["provider_name"] = provider.get_name()
         self.provider = provider
         self.last_update = None
+        self.properties["active"] = True
         
     def __getitem__(self, key):
         return self.properties[key]
 
     def __setitem__(self, key, value):
-        self.properties[key] = value
+        print key, '-', value
+        if key == 'active' and isinstance(active, str):
+            self.properties[key] = bool(active)
+        else:
+            self.properties[key] = value
 
     def get_properties(self):
         return self.properties
@@ -31,6 +36,12 @@ class Account:
 
     def get_provider (self):
         return self.provider
+        
+    def get_active (self):
+        return self.properties["active"]
+
+    def set_active(self, active):
+        self.properties["active"] = active
 
     def get_last_update (self):
         return self.last_update
@@ -42,8 +53,9 @@ class Account:
         return []
 
     def update (self):
-        self.provider.update_account (self)
-        self.last_update = datetime.now()
+        if self.properties["active"]:
+            self.provider.update_account (self)
+            self.last_update = datetime.now()
 
     def save_conf(self):
         sc = config.SettingsController.get_instance()

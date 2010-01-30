@@ -1,4 +1,4 @@
-from cloudsn.core.account import AccountBase, AccountManager
+from cloudsn.core.account import AccountCacheMails, AccountManager
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
@@ -23,17 +23,12 @@ class GReaderProvider(Provider):
         if not GReaderProvider.__default:
             GReaderProvider.__default = GReaderProvider()
         return GReaderProvider.__default
-        
-    def register_accounts (self):
-        sc = config.SettingsController.get_instance()
-        am = AccountManager.get_instance()
-        for account_name in sc.get_account_list_by_provider(self):
-            acc_config = sc.get_account_config(account_name)
-            acc = AccountBase(account_name, acc_config["username"],
-                acc_config["password"], GReaderProvider.get_instance(),
-                "http://reader.google.com")
-            am.add_account (acc)
 
+    def load_account(self, props):
+        acc = AccountCacheMails(props, self)
+        acc.properties["activate_url"] = "http://reader.google.com"
+        return acc
+        
     def update_account (self, account):
         g = GreaderAtom (account["username"], account["password"])
         g.refreshInfo()
@@ -53,9 +48,10 @@ class GReaderProvider(Provider):
         if dialog.run() == 0:
             username = builder.get_object("username_entry").get_text()
             password = builder.get_object("password_entry").get_text()
-            account = AccountBase(account_name, username,
-                password, GReaderProvider.get_instance(),
-                "http://reader.google.com")
+            props = {'name' : account_name, 'provider_name' : self.get_name(),
+                'username' : username, 'password' : password,
+                'activate_url' : "http://reader.google.com"}
+            account = self.load_account(props)
         dialog.destroy()
         return account
         

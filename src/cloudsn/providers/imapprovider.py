@@ -6,7 +6,7 @@ Based on imap.py:
     
 """
 from cloudsn.core.provider import Provider
-from cloudsn.core.account import AccountBase, AccountManager, Notification
+from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core import config
 from cloudsn.core import utils
 import imaplib
@@ -28,14 +28,9 @@ class ImapProvider(Provider):
             ImapProvider.__default = ImapProvider()
         return ImapProvider.__default
 
-    def register_accounts (self):
-        sc = config.SettingsController.get_instance()
-        am = AccountManager.get_instance()
-        for account_name in sc.get_account_list_by_provider(self):
-            acc_config = sc.get_account_config(account_name)
-            acc = ImapAccount (account_name, acc_config["host"], acc_config["username"], acc_config["password"])
-            am.add_account (acc)
-
+    def load_account(self, props):
+        return AccountCacheMails(props, self)
+    
     def update_account (self, account):
         #TODO Check port, ssl etc correctly
         g = ImapBox (account["host"], account["username"], account["password"], account["port"], account["ssl"])
@@ -65,7 +60,10 @@ class ImapProvider(Provider):
             #TODO check valid values
             port = int(builder.get_object("port_entry").get_text())
             ssl = builder.get_object("ssl_check").get_active()
-            account = ImapAccount(account_name, host, username, password, port, ssl)
+            props = {'name' : account_name, 'provider_name' : self.get_name(),
+                'host' : host, 'username' : username, 'password' : password,
+                'port' : port, 'ssl' : ssl}
+            account = self.load_account(props)
         dialog.destroy()
         return account
 
@@ -87,20 +85,6 @@ class ImapProvider(Provider):
             res = True
         dialog.destroy()
         return res
-
-class ImapAccount (AccountBase):
-
-    #TODO Set ssl to false by default and the correct default port
-    def __init__(self, name, host, username, password, port = 993, ssl=True):
-        AccountBase.__init__(self, name, username, password, ImapProvider.get_instance())
-        self["host"] = host
-        self["port"] = port
-        self["ssl"] = ssl
-        self.notifications = {}
-        
-    def activate(self):
-        utils.open_mail_reader()
-
 
 class ImapBoxConnectionError(Exception): pass
 class ImapBoxAuthError(Exception): pass

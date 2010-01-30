@@ -44,6 +44,7 @@ class Controller (gobject.GObject):
         self.am = account.AccountManager.get_instance()
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
+        self.am.load_accounts()
         self.checker = CheckerThread(self)
 
     @staticmethod
@@ -137,9 +138,6 @@ class Controller (gobject.GObject):
         try:
             gtk.gdk.threads_enter()
             self.init_indicator_server()
-            for provider in self.prov_manager.get_providers():
-                provider.register_accounts()
-            
             self.nm = networkmanager.NetworkManager()
             self.nm.set_statechange_callback(self.on_nm_state_changed)
             gtk.gdk.threads_leave()
@@ -184,7 +182,7 @@ class CheckerThread (Thread):
             if acc.get_active() and (self.acc is None or self.acc == acc):
                 try:
                     logger.debug('Updating account: ' + acc.get_name())
-                    acc.update()
+                    self.am.update_account(acc)
                     acc.indicator.set_property_int("count", acc.get_total_unread())
                     if acc.get_provider().has_notifications():
                         nots = acc.get_new_unread_notifications()
@@ -203,8 +201,7 @@ class CheckerThread (Thread):
                             #account.indicator.set_property('draw-attention', 'true');
                     self.controller.emit("account-checked", acc)
                 except Exception as e:
-                    logger.error("Error trying to update the account " +
-                        acc.get_name() + ": " + str(e))
+                    logger.exception("Error trying to update the account %s: %s", acc.get_name(), e)
 
         logger.debug("Ending checker")
         

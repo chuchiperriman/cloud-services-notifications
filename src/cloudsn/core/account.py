@@ -1,4 +1,5 @@
-from cloudsn.core import config
+from cloudsn.core import config, utils
+from cloudsn import logger
 import gobject
 from datetime import datetime
 import gettext
@@ -10,23 +11,22 @@ class Notification:
         self.message = message
 
 class Account:
-    def __init__ (self, name, provider):
-        self.properties = {}
-        self.properties["name"] = name
+    def __init__ (self, properties, provider):
+        if 'name' not in properties:
+            raise Exception(_("The name property is mandatory"))
+        self.properties = properties
         self.properties["provider_name"] = provider.get_name()
         self.provider = provider
+        self.total_unread = 0
         self.last_update = None
-        self.properties["active"] = True
+        if 'active' not in self.properties:
+            self.properties["active"] = True
         
     def __getitem__(self, key):
         return self.properties[key]
 
     def __setitem__(self, key, value):
-        print key, '-', value
-        if key == 'active' and isinstance(active, str):
-            self.properties[key] = bool(active)
-        else:
-            self.properties[key] = value
+        self.properties[key] = value
 
     def get_properties(self):
         return self.properties
@@ -38,48 +38,32 @@ class Account:
         return self.provider
         
     def get_active (self):
-        return self.properties["active"]
+        return bool(self.properties["active"])
 
     def set_active(self, active):
-        self.properties["active"] = active
+        self.properties["active"] = bool(active)
 
     def get_last_update (self):
         return self.last_update
         
     def get_total_unread (self):
-        return 0
+        return self.total_unread
 
     def get_new_unread_notifications(self):
         return []
 
-    def update (self):
-        if self.properties["active"]:
-            self.provider.update_account (self)
-            self.last_update = datetime.now()
+    def activate (self):
+        if "activate_url" in self.properties:
+            utils.show_url (self.properties["activate_url"])
+        else:
+            logger.warn('This account type has not an activate action')
 
-    def save_conf(self):
-        sc = config.SettingsController.get_instance()
-        sc.set_account_config (self)
-        sc.save_accounts()
+class AccountCacheMails (Account):
 
-    def del_conf(self):
-        sc = config.SettingsController.get_instance()
-        sc.del_account_config(self.get_name())
-        sc.save_accounts()
-        
-    def activate(self):
-        logger.warn('This account type has not an activate action')
-
-class AccountBase (Account):
-
-    def __init__(self, name, username, password, provider, url=None):
-        Account.__init__(self, name, provider)
-        self["username"] = username
-        self["password"] = password
-        self.total_unread = 0
-        self.notifications = None
+    def __init__(self, properties, provider):
+        Account.__init__(self, properties, provider)
+        self.notifications = {}
         self.new_unread = []
-        self.url = None
 
     def get_total_unread (self):
         if self.notifications:
@@ -90,12 +74,6 @@ class AccountBase (Account):
     def get_new_unread_notifications(self):
         return self.new_unread
         
-    def activate (self):
-        if self.url:
-            utils.show_url (url)
-        else:
-            super(AccountBase,self).activate()
-
 class AccountManager (gobject.GObject):
 
     __default = None
@@ -110,7 +88,10 @@ class AccountManager (gobject.GObject):
         if AccountManager.__default:
            raise AccountManager.__default
         gobject.GObject.__init__(self)
+        from cloudsn.core.provider import ProviderManager
         self.accounts = {}
+        self.sc = config.SettingsController.get_instance()
+        self.pm = ProviderManager.get_instance()
 
     @staticmethod
     def get_instance():
@@ -118,22 +99,26 @@ class AccountManager (gobject.GObject):
             AccountManager.__default = AccountManager()
         return AccountManager.__default
 
+    def load_accounts(self):
+        accs_conf = self.sc.get_accounts_config()
+        for conf in accs_conf.values():
+            provider = self.pm.get_provider(conf['provider_name'])
+            if provider:
+                acc = provider.load_account (conf)
+                self.add_account(acc)
+            else:
+                logger.error("The provider %s doesn't exists" % (conf['provider_name']))
+    
     def validate_account(self, account_name):
         if account_name in self.accounts:
             error = _('The account %s already exists' % (account_name))
             raise Exception(error)
     
-    def add_account(self, acc, store=False):
+    def add_account(self, acc):
         self.validate_account(acc.get_name())
         self.accounts[acc.get_name()] = acc
-        if store:
-            acc.save_conf()
 
         self.emit("account-added", acc)
-
-    def edit_account(self, account):
-        account.save_conf()
-        self.emit("account-changed", account)
 
     def get_account(self, account_name):
         return self.accounts[account_name]
@@ -144,6 +129,16 @@ class AccountManager (gobject.GObject):
     def del_account(self, account, complete=True):
         del self.accounts[account.get_name()]
         if complete:
-            account.del_conf()
+            self.sc.del_account_config(account.get_name())
+            self.sc.save_accounts()
         self.emit("account-deleted", account)
-        
+
+    def update_account (self, acc):
+        if acc.get_active():
+            acc.provider.update_account (acc)
+            acc.last_update = datetime.now()
+
+    def save_account(self, acc):
+        self.sc.set_account_config (acc)
+        self.sc.save_accounts()
+        self.emit("account-changed", acc)

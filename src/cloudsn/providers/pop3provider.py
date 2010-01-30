@@ -6,7 +6,7 @@ Based on pop3.py:
     
 """
 from cloudsn.core.provider import Provider
-from cloudsn.core.account import AccountBase, AccountManager, Notification
+from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core import config
 from cloudsn.core import utils
 from cloudsn import logger
@@ -31,16 +31,10 @@ class Pop3Provider(Provider):
         if not Pop3Provider.__default:
             Pop3Provider.__default = Pop3Provider()
         return Pop3Provider.__default
-        
-    def register_accounts (self):
-        sc = config.SettingsController.get_instance()
-        am = AccountManager.get_instance()
-        for account_name in sc.get_account_list_by_provider(self):
-            acc_config = sc.get_account_config(account_name)
-            acc = Pop3Account (account_name, acc_config["host"], 
-                acc_config["username"], acc_config["password"])
-            am.add_account (acc)
 
+    def load_account(self, props):
+        return AccountCacheMails(props, self)
+            
     def update_account (self, account):
         g = PopBox (account["username"], account["password"], account["host"])
         account.new_unread = []
@@ -66,7 +60,9 @@ class Pop3Provider(Provider):
             host = builder.get_object("host_entry").get_text()
             username = builder.get_object("username_entry").get_text()
             password = builder.get_object("password_entry").get_text()
-            account = Pop3Account(account_name, host, username, password)
+            props = {'name' : account_name, 'provider_name' : self.get_name(),
+                'host' : host, 'username' : username, 'password' : password}
+            account = self.load_account(props)
         dialog.destroy()
         return account
         
@@ -85,19 +81,6 @@ class Pop3Provider(Provider):
         dialog.destroy()
         return res
 
-class Pop3Account (AccountBase):
-
-    #TODO Set ssl to false by default and the correct default port
-    def __init__(self, name, host, username, password, port = 995, ssl=True):
-        AccountBase.__init__(self, name, username, password, Pop3Provider.get_instance())
-        self["host"] = host
-        self["port"] = port
-        self["ssl"] = ssl
-        self.notifications = {}
-        
-    def activate(self):
-        utils.open_mail_reader()
-        
 class PopBoxConnectionError(Exception): pass
 class PopBoxAuthError(Exception): pass
 

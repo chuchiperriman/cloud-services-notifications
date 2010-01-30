@@ -1,4 +1,4 @@
-from cloudsn.core.account import AccountBase, AccountManager, Notification
+from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
@@ -23,17 +23,11 @@ class GMailProvider(Provider):
             GMailProvider.__default = GMailProvider()
         return GMailProvider.__default
 
-    def register_accounts (self):
-        sc = config.SettingsController.get_instance()
-        am = AccountManager.get_instance()
-        for account_name in sc.get_account_list_by_provider(self):
-            acc_config = sc.get_account_config(account_name)
-            acc = AccountBase(account_name, acc_config["username"],
-                acc_config["password"], GMailProvider.get_instance(),
-                "http://gmail.google.com")
-            acc.notifications = {}
-            am.add_account (acc)
-
+    def load_account(self, props):
+        acc = AccountCacheMails(props, self)
+        acc.properties["activate_url"] = "http://gmail.google.com"
+        return acc
+        
     def update_account (self, account):
         g = GmailAtom (account["username"], account["password"])
         g.refreshInfo()
@@ -60,9 +54,10 @@ class GMailProvider(Provider):
         if dialog.run() == 0:
             username = builder.get_object("username_entry").get_text()
             password = builder.get_object("password_entry").get_text()
-            account = AccountBase(account_name, username,
-                password, GMailProvider.get_instance(),
-                "http://gmail.google.com")
+            props = {"name" : account_name, "provider_name" : self.get_name(),
+                "username" : username, "password" : password, 
+                "activate_url" : "http://gmail.google.com"}
+            account = AccountCacheMails(props, self)
             account.notifications = {}
         dialog.destroy()
         return account

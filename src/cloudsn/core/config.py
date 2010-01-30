@@ -126,6 +126,9 @@ class SettingsController(gobject.GObject):
     def get_account_list (self):
         return self.accounts.keys ()
 
+    def get_accounts_config (self):
+        return self.accounts
+
     def get_account_list_by_provider (self, provider):
         res = []
         for sec in self.accounts.keys():

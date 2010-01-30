@@ -19,13 +19,14 @@ Milestone 0.3.0
 
 Milestone 0.2.0
 ===============
+[ ] If cloudsn is running in a session and open a new one, it tell "cloudsn is running"
 [ ] Option to enable/disable accounts
 [ ] Add GMail tags support
 [ ] Add IMAP folders support
 [ ] Add Imap SSL and port configuration
 [ ] Add POP3 SSL and port configuration
 [ ] Creating new account sometimes are not shown in the indicator
-[ ] Show e-mail suject in the notification 
+[X] Show e-mail suject in the notification 
 [X] cloudsn doesn't check the first time it starts with the session
 
 Milestone 0.1.2

@@ -1,10 +1,14 @@
+from cloudsn.core.account import Account
+
 class Provider:
     
     def __init__ (self, name):
         self.name = name
         self.icon = None
-    def register_accounts(self):
-        pass
+        
+    def load_account(self, props):
+        return Account(props, self)
+        
     def update_account (self, account_data):
         pass
     def has_indicator(self):

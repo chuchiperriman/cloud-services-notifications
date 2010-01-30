@@ -38,7 +38,12 @@ class Account:
         return self.provider
         
     def get_active (self):
-        return bool(self.properties["active"])
+        val = self.properties["active"]
+        if isinstance (val,bool):
+            return val
+        elif isinstance (val, str):
+            return val.strip().lower() == 'true'
+        return True
 
     def set_active(self, active):
         self.properties["active"] = bool(active)
@@ -119,6 +124,10 @@ class AccountManager (gobject.GObject):
         self.accounts[acc.get_name()] = acc
 
         self.emit("account-added", acc)
+
+    def set_account_active (self, acc, active):
+        acc.set_active(active)
+        self.save_account(acc)
 
     def get_account(self, account_name):
         return self.accounts[account_name]

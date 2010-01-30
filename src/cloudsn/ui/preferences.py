@@ -101,8 +101,7 @@ class Preferences:
         self.store[path][3] = active
         account_name = self.store[path][1]
         acc = self.am.get_account(account_name)
-        acc.set_active(active)
-        self.am.save_account(acc)
+        self.am.set_account_active(acc, active)
 
     def on_update_all_button_clicked(self, widget, data=None):
         from cloudsn.core.controller import Controller

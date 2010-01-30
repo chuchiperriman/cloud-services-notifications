@@ -1,6 +1,6 @@
-import logging, tempfile
+import logging, tempfile, getpass
 
-LOGGING_FILE=tempfile.gettempdir() + '/cloudsn.log'
+LOGGING_FILE=tempfile.gettempdir() + '/cloudsn-'+getpass.getuser()+'.log'
 
 logging.basicConfig(filename=LOGGING_FILE,level=logging.DEBUG)
 

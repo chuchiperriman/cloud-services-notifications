@@ -25,8 +25,8 @@ class Controller (gobject.GObject):
            raise Controller.__default
 
         #Prevent various instances
-        import os, fcntl, sys, tempfile
-        self.lockfile = os.path.normpath(tempfile.gettempdir() + '/cloudsn.lock')
+        import os, fcntl, sys, tempfile, getpass
+        self.lockfile = os.path.normpath(tempfile.gettempdir() + '/cloudsn-'+getpass.getuser()+'.lock')
         self.fp = open(self.lockfile, 'w')
         try:
             fcntl.lockf(self.fp, fcntl.LOCK_EX | fcntl.LOCK_NB)

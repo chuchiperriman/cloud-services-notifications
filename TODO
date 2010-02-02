@@ -9,16 +9,20 @@ Milestone 0.X.0
 
 Milestone 0.4.0
 ===============
-* Application window and gmail/imap folders
+* Application window
 [ ] Create a new application window
 
 Milestone 0.3.0
 ===============
 * Twitter time
 [ ] Study and add Twitter support
+[ ] Control the screensaver. If it is active don't show notifications
+	and show it when the user gets active again.
 
 Milestone 0.2.0
 ===============
+[ ] Show general errors with  notifications (if we can) or stderr
+[ ] Show the first connection error on an account (Not in every check).
 [X] If cloudsn is running in a session and open a new one, it tell "cloudsn is running"
 [X] Option to enable/disable accounts
 [ ] Add GMail tags support

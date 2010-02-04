@@ -1,5 +1,5 @@
 from cloudsn.core.provider import Provider, ProviderManager
-from cloudsn.core import account, config, networkmanager
+from cloudsn.core import account, config, networkmanager, notification
 from cloudsn.ui import preferences
 from cloudsn import logger
 import indicate
@@ -145,7 +145,13 @@ class Controller (gobject.GObject):
             self._update_interval()
             self.started = True
         except Exception as e:
-            logger.error ("Error starting the application: " + str(e))
+            logger.exception ("Error starting the application: %s", e)
+            try:
+                #TODO Set the error icon
+                notification.notify(_("Application Error"), 
+                    _("Error starting the application: %s") % (str(e)))
+            except Exception as e:
+                logger.exception ("Error notifying the error: %s", e)
             
         return False
 
@@ -195,28 +201,15 @@ class CheckerThread (Thread):
                                 message += "\n" + n.message
 
                         if message:
-                            self.notify(acc.get_name(), 
+                            notification.notify(acc.get_name(), 
                                 message,
                                 acc.get_provider().get_icon())
                             #account.indicator.set_property('draw-attention', 'true');
                     self.controller.emit("account-checked", acc)
+                except notification.NotificationError as ne:
+                    logger.exception("Error trying to notify with libnotify: %s", e)
                 except Exception as e:
                     logger.exception("Error trying to update the account %s: %s", acc.get_name(), e)
 
         logger.debug("Ending checker")
-        
-    def notify (self, title, message, icon = None):
-        try:
-            import pynotify
-            if pynotify.init("Cloud Services Notifications"):
-                n = pynotify.Notification(title, message)
-                n.set_urgency(pynotify.URGENCY_LOW)
-                n.set_timeout(4000)
-                if icon:
-                    n.set_icon_from_pixbuf(icon)
-                n.show()
-            else:
-                logger.error ("there was a problem initializing the pynotify module")
-        except:
-            logger.error("you don't seem to have pynotify installed")
 

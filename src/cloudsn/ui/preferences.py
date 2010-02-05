@@ -137,6 +137,7 @@ class Preferences:
         self.account_name_entry = builder.get_object("account_name_entry");
         self.startup_check = builder.get_object("startup_check")
         for prov in self.pm.get_providers():
+            print prov
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         for acc in self.am.get_accounts():
             self.store.append([acc.get_provider().get_icon(), acc.get_name(), self.__get_account_date(acc), acc.get_active()])
@@ -168,8 +169,11 @@ class Preferences:
         return result
 
 def main ():
-    for prov in provider.ProviderManager.get_instance().get_providers():
-        prov.register_accounts()
+    import cloudsn.cloudsn
+    import cloudsn.core.controller
+    cloudsn.cloudsn.setup_locale_and_gettext()
+    #account.AccountManager.get_instance().load_accounts()
+    cloudsn.core.controller.Controller.get_instance()
     prefs = Preferences.get_instance()
     prefs.dialog_only = True
     prefs.run()

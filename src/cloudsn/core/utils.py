@@ -1,4 +1,5 @@
 import gconf
+import gtk
 import os
 import subprocess
 from email.header import decode_header
@@ -33,6 +34,19 @@ def mime_decode(str):
     else:
         return strn.decode(encoding, "replace")
 
+def get_boolean (value):
+    if isinstance (value,bool):
+        return value
+    elif isinstance (value, str):
+        return value.strip().lower() == 'true'
+    return False
+
+def get_error_pixbuf():
+    icons = gtk.icon_theme_get_default()
+    l = gtk.ICON_LOOKUP_USE_BUILTIN
+    return icons.load_icon(gtk.STOCK_DIALOG_ERROR, 32, l)
+
 if __name__ == "__main__":
     print get_default_mail_reader()
     open_mail_reader()
+    

@@ -1,5 +1,5 @@
 from cloudsn.core.provider import Provider, ProviderManager
-from cloudsn.core import account, config, networkmanager, notification
+from cloudsn.core import account, config, networkmanager, notification, utils
 from cloudsn.ui import preferences
 from cloudsn import logger
 import indicate
@@ -189,6 +189,7 @@ class CheckerThread (Thread):
                 try:
                     logger.debug('Updating account: ' + acc.get_name())
                     self.am.update_account(acc)
+                    acc.error_notified = False
                     acc.indicator.set_property_int("count", acc.get_total_unread())
                     if acc.get_provider().has_notifications():
                         nots = acc.get_new_unread_notifications()
@@ -210,6 +211,11 @@ class CheckerThread (Thread):
                     logger.exception("Error trying to notify with libnotify: %s", e)
                 except Exception as e:
                     logger.exception("Error trying to update the account %s: %s", acc.get_name(), e)
+                    if not acc.error_notified:
+                        notification.notify (_("Error checking account %s") % (acc.get_name()),
+                            str(e),
+                            utils.get_error_pixbuf())
+                        acc.error_notified = True
 
         logger.debug("Ending checker")
 

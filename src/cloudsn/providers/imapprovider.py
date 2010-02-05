@@ -74,7 +74,7 @@ class ImapProvider(Provider):
         builder.get_object("username_entry").set_text(acc["username"])
         builder.get_object("password_entry").set_text(acc["password"])
         builder.get_object("port_entry").set_text(str(acc["port"]))
-        builder.get_object("ssl_check").set_active(acc["ssl"])
+        builder.get_object("ssl_check").set_active(utils.get_boolean(acc["ssl"]))
         account = None
         if dialog.run() == 0:
             acc["host"] = builder.get_object("host_entry").get_text()
@@ -105,18 +105,12 @@ class ImapBox:
 		self.mbox = None
 
 	def __connect(self):
-		try:
-			if not self.ssl:
-				self.mbox = imaplib.IMAP4(self.host, self.port)
-			else:
-				self.mbox = imaplib.IMAP4_SSL(self.host, self.port)
-		except Exception:
-			raise ImapBoxConnectionError()
+		if not self.ssl:
+			self.mbox = imaplib.IMAP4(self.host, self.port)
+		else:
+			self.mbox = imaplib.IMAP4_SSL(self.host, self.port)
 
-		try:
-			self.mbox.login(self.user, self.password)
-		except Exception, e:
-			raise ImapBoxAuthError()
+		self.mbox.login(self.user, self.password)
 	
 	def get_mails(self):
 		

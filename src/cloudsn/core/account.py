@@ -19,6 +19,7 @@ class Account:
         self.provider = provider
         self.total_unread = 0
         self.last_update = None
+        self.error_notified = False
         if 'active' not in self.properties:
             self.properties["active"] = True
         
@@ -38,12 +39,7 @@ class Account:
         return self.provider
         
     def get_active (self):
-        val = self.properties["active"]
-        if isinstance (val,bool):
-            return val
-        elif isinstance (val, str):
-            return val.strip().lower() == 'true'
-        return True
+        return utils.get_boolean(self.properties["active"])
 
     def set_active(self, active):
         self.properties["active"] = bool(active)

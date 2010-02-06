@@ -149,7 +149,8 @@ class Controller (gobject.GObject):
             try:
                 #TODO Set the error icon
                 notification.notify(_("Application Error"), 
-                    _("Error starting the application: %s") % (str(e)))
+                    _("Error starting the application: %s") % (str(e)),
+                    utils.get_error_pixbuf())
             except Exception as e:
                 logger.exception ("Error notifying the error: %s", e)
             

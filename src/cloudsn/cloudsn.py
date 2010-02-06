@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
 from .core.controller import Controller
-from .core import config
+from .core import config, utils, notification
+from . import logger
 from os.path import join, abspath
 import gettext
 import locale
@@ -26,9 +27,15 @@ def setup_locale_and_gettext():
         pass
 
 def start ():
-    setup_locale_and_gettext()
-    cr = Controller.get_instance()
-    cr.start()
+    try:
+        setup_locale_and_gettext()
+        cr = Controller.get_instance()
+        cr.start()
+    except Exception as e:
+        logger.exception("Error starting cloudsn: %s", e)
+        notification.notify (_("Error starting cloudsn"),
+                            str(e),
+                            utils.get_error_pixbuf())
 
 if __name__ == "__main__":
     start()

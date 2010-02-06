@@ -13,7 +13,7 @@ class Notification:
 class Account:
     def __init__ (self, properties, provider):
         if 'name' not in properties:
-            raise Exception(_("The name property is mandatory"))
+            raise Exception(_("Error loading account configuration: The name property is mandatory, check your configuration"))
         self.properties = properties
         self.properties["provider_name"] = provider.get_name()
         self.provider = provider
@@ -108,7 +108,7 @@ class AccountManager (gobject.GObject):
                 acc = provider.load_account (conf)
                 self.add_account(acc)
             else:
-                logger.error("The provider %s doesn't exists" % (conf['provider_name']))
+                logger.error("Error in account %s: The provider %s doesn't exists" % (conf['provider_name']))
     
     def validate_account(self, account_name):
         if account_name in self.accounts:

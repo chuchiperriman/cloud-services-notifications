@@ -7,12 +7,7 @@ Milestone 0.X.0
 	[ ] A friend posting in your wall
 	[ ] A friend comment a photo where you appear
 
-Milestone 0.4.0
-===============
-* Application window
-[ ] Create a new application window
-
-Milestone 0.3.0
+Milestone 0.5.0
 ===============
 * Twitter time
 [ ] Study and add Twitter support
@@ -22,17 +17,26 @@ Milestone 0.3.0
 [ ] Creating new account sometimes are not shown in the indicator (created a
 	new bug in launchpad for libindicate)
 
+Milestone 0.4.0
+===============
+[ ] Add GMail tags support
+[ ] Add IMAP folders support
+[ ] Add Imap SSL and port configuration
+[ ] Add POP3 SSL and port configuration
+[ ] Configure when notify the GReader feeds (if > 30 or if 10 new feeds...)
+
+Milestone 0.3.0
+===============
+* dbus time!!
+[ ] Create the clodsn dbus service
+[ ] Create the application window (preferences) in a separate application
+
 Milestone 0.2.0
 ===============
 [X] Show general errors with  notifications (if we can) or stderr
 [X] Show the first connection error on an account (Not in every check).
 [X] If cloudsn is running in a session and open a new one, it tell "cloudsn is running"
 [X] Option to enable/disable accounts
-[ ] Add GMail tags support
-[ ] Add IMAP folders support
-[ ] Add Imap SSL and port configuration
-[ ] Add POP3 SSL and port configuration
-[ ] Configure when notify the GReader feeds (if > 30 or if 10 new feeds...)
 [X] Show e-mail suject in the notification 
 [X] cloudsn doesn't check the first time it starts with the session
 

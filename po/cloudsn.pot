@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 00:56+0100\n"
+"POT-Creation-Date: 2010-02-08 00:52+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,12 +16,26 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cloudsn/core/controller.py:34
+#: ../src/cloudsn/core/controller.py:33
 msgid "Another instance is already running, quitting."
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:187
+#: ../src/cloudsn/core/controller.py:140
 msgid "New messages: "
+msgstr ""
+
+#: ../src/cloudsn/core/controller.py:157
+#, python-format
+msgid "Error checking account %s"
+msgstr ""
+
+#: ../src/cloudsn/core/controller.py:180
+msgid "Application Error"
+msgstr ""
+
+#: ../src/cloudsn/core/controller.py:181
+#, python-format
+msgid "Error starting the application: %s"
 msgstr ""
 
 #: ../data/gmail-account.ui.h:1 ../data/greader-account.ui.h:1

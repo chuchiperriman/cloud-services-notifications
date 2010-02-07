@@ -7,7 +7,6 @@ from time import time
 import gtk
 import gobject
 import gettext
-from threading import Thread
 
 class Controller (gobject.GObject):
 
@@ -45,7 +44,6 @@ class Controller (gobject.GObject):
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
         self.am.load_accounts()
-        self.checker = CheckerThread(self)
 
     @staticmethod
     def get_instance():
@@ -79,11 +77,8 @@ class Controller (gobject.GObject):
             self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
         
     def on_server_display_cb(self, server):
-        #This use the main gtk thread
-        gtk.gdk.threads_enter()
         prefs = preferences.Preferences.get_instance()
         prefs.run()
-        gtk.gdk.threads_leave()
         
     def init_indicator_server(self):
         self.server = indicate.indicate_server_ref_default()
@@ -103,8 +98,6 @@ class Controller (gobject.GObject):
             self.update_accounts()
         else:
             logger.debug("Network disconnected")
-            if self.checker is not None:
-                self.checker.stop = True
     
     def create_indicator(self, acc):
         indicator = indicate.Indicator()
@@ -123,70 +116,18 @@ class Controller (gobject.GObject):
         if self.nm.offline():
             logger.warn ("The network is not connected, the account cannot be updated")
             return
-        if self.checker is None or not self.checker.is_alive():
-            self.checker = CheckerThread(self, acc)
-            self.checker.start()
-        else:
-            logger.warn ('The checker is running')
-            
-    def update_accounts(self, data=None):
-        self.update_account(None)
-        #For the timeout_add_seconds
-        return True
+        #TODO Check if the updater is running
+        self.__real_update_account(acc)
 
-    def _start_idle(self):
-        try:
-            gtk.gdk.threads_enter()
-            self.init_indicator_server()
-            self.nm = networkmanager.NetworkManager()
-            self.nm.set_statechange_callback(self.on_nm_state_changed)
-            gtk.gdk.threads_leave()
-            self.update_accounts()
-            self._update_interval()
-            self.started = True
-        except Exception as e:
-            logger.exception ("Error starting the application: %s", e)
-            try:
-                #TODO Set the error icon
-                notification.notify(_("Application Error"), 
-                    _("Error starting the application: %s") % (str(e)),
-                    utils.get_error_pixbuf())
-            except Exception as e:
-                logger.exception ("Error notifying the error: %s", e)
-            
-        return False
-
-    def signint(self, signl, frme):
-        gobject.source_remove(self.timeout_id)
-        gtk.main_quit()
-        return 0
-
-    def start(self):
-        import signal
-        signal.signal( signal.SIGINT, self.signint )
-        gtk.gdk.threads_init()
-        gobject.idle_add(self._start_idle)
-        try:
-            gtk.main()
-        except KeyboardInterrupt:
-            logger.info ('KeyboardInterrupt the main loop')
-
-class CheckerThread (Thread):
-    def __init__(self, controller, acc = None):
-        Thread.__init__ (self)
-        self.am = account.AccountManager.get_instance()
-        self.controller = controller
-        self.acc = acc
-        self.stop = False
+    def __real_update_account(self, paramacc):
         
-    def run(self):
         logger.debug("Starting checker")
         for acc in self.am.get_accounts():
-            if self.stop:
-                logger.debug("The checker has been stopped")
+            if self.nm.state != networkmanager.STATE_CONNECTED:
+                logger.debug("The network is not connected, the accounts will not be updated")
                 return
                 
-            if acc.get_active() and (self.acc is None or self.acc == acc):
+            if acc.get_active() and (paramacc is None or paramacc == acc):
                 try:
                     logger.debug('Updating account: ' + acc.get_name())
                     self.am.update_account(acc)
@@ -207,7 +148,7 @@ class CheckerThread (Thread):
                                 message,
                                 acc.get_provider().get_icon())
                             #account.indicator.set_property('draw-attention', 'true');
-                    self.controller.emit("account-checked", acc)
+                    self.emit("account-checked", acc)
                 except notification.NotificationError as ne:
                     logger.exception("Error trying to notify with libnotify: %s", e)
                 except Exception as e:
@@ -219,4 +160,42 @@ class CheckerThread (Thread):
                         acc.error_notified = True
 
         logger.debug("Ending checker")
+        
+    def update_accounts(self, data=None):
+        self.update_account(None)
+        #For the timeout_add_seconds
+        return True
+
+    def _start_idle(self):
+        try:
+            self.init_indicator_server()
+            self.nm = networkmanager.NetworkManager()
+            self.nm.set_statechange_callback(self.on_nm_state_changed)
+            self.update_accounts()
+            self._update_interval()
+            self.started = True
+        except Exception as e:
+            logger.exception ("Error starting the application: %s", e)
+            try:
+                notification.notify(_("Application Error"), 
+                    _("Error starting the application: %s") % (str(e)),
+                    utils.get_error_pixbuf())
+            except Exception as e:
+                logger.exception ("Error notifying the error: %s", e)
+            
+        return False
+
+    def signint(self, signl, frme):
+        gobject.source_remove(self.timeout_id)
+        gtk.main_quit()
+        return 0
+
+    def start(self):
+        import signal
+        signal.signal( signal.SIGINT, self.signint )
+        gobject.idle_add(self._start_idle)
+        try:
+            gtk.main()
+        except KeyboardInterrupt:
+            logger.info ('KeyboardInterrupt the main loop')
 

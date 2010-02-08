@@ -1,3 +1,15 @@
+cloudsn (0.2.0) karmic; urgency=low
+
+  * Show general errors with  notifications (if we can) or stderr
+  * Show the first connection error on an account (Not in every check).
+  * If cloudsn is running in a session and open a new one, it tell "cloudsn is running"
+  * Option to enable/disable accounts
+  * Show e-mail suject in the notification
+  * cloudsn doesn't check the first time it starts with the session
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 08 Feb 2010 01:01:00 +0100
+
 cloudsn (0.1.2) karmic; urgency=low
 
   * Fixes

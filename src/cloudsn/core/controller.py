@@ -2,7 +2,6 @@ from cloudsn.core.provider import Provider, ProviderManager
 from cloudsn.core import account, config, networkmanager, notification, utils
 from cloudsn.ui import preferences
 from cloudsn import logger
-import indicate
 from time import time
 import gtk
 import gobject
@@ -81,13 +80,17 @@ class Controller (gobject.GObject):
         prefs.run()
         
     def init_indicator_server(self):
-        self.server = indicate.indicate_server_ref_default()
-        self.server.set_type("message.im")
-        self.server.connect("server-display", self.on_server_display_cb)
-        self.server.set_desktop_file(config.add_apps_prefix("cloudsn.desktop"))
-        self.server.show()
-        logger.debug("Indicator server created")
-
+        try:
+            import indicate
+            self.server = indicate.indicate_server_ref_default()
+            self.server.set_type("message.im")
+            self.server.connect("server-display", self.on_server_display_cb)
+            self.server.set_desktop_file(config.add_apps_prefix("cloudsn.desktop"))
+            self.server.show()
+            logger.debug("Indicator server created")
+        except Exception, e:
+            logger.exception("Error loading the indicate server: %s", e)
+            
     def on_indicator_display_cb(self, indicator):
         indicator.account.activate ()
 
@@ -100,16 +103,20 @@ class Controller (gobject.GObject):
             logger.debug("Network disconnected")
     
     def create_indicator(self, acc):
-        indicator = indicate.Indicator()
-        indicator.set_property("name", acc.get_name())
-        indicator.set_property_time("time", time())
-        indicator.set_property_int("count", acc.get_total_unread())
-        if acc.get_provider().get_icon() is not None:
-            indicator.set_property_icon("icon", acc.get_provider().get_icon())
-        indicator.show()
-        indicator.connect("user-display", self.on_indicator_display_cb)
-        acc.indicator = indicator
-        indicator.account = acc
+        try:
+            import indicate
+            indicator = indicate.Indicator()
+            indicator.set_property("name", acc.get_name())
+            indicator.set_property_time("time", time())
+            indicator.set_property_int("count", acc.get_total_unread())
+            if acc.get_provider().get_icon() is not None:
+                indicator.set_property_icon("icon", acc.get_provider().get_icon())
+            indicator.show()
+            indicator.connect("user-display", self.on_indicator_display_cb)
+            acc.indicator = indicator
+            indicator.account = acc
+        except Exception, e:
+            logger.exception("Error creating the indicator: %s",e)
         
     def update_account(self, acc):
         """acc=None will check all accounts"""
@@ -132,7 +139,8 @@ class Controller (gobject.GObject):
                     logger.debug('Updating account: ' + acc.get_name())
                     self.am.update_account(acc)
                     acc.error_notified = False
-                    acc.indicator.set_property_int("count", acc.get_total_unread())
+                    if hasattr(acc, "indicator"):
+                        acc.indicator.set_property_int("count", acc.get_total_unread())
                     if acc.get_provider().has_notifications():
                         nots = acc.get_new_unread_notifications()
                         message = None
@@ -149,9 +157,9 @@ class Controller (gobject.GObject):
                                 acc.get_provider().get_icon())
                             #account.indicator.set_property('draw-attention', 'true');
                     self.emit("account-checked", acc)
-                except notification.NotificationError as ne:
+                except notification.NotificationError, ne:
                     logger.exception("Error trying to notify with libnotify: %s", e)
-                except Exception as e:
+                except Exception, e:
                     logger.exception("Error trying to update the account %s: %s", acc.get_name(), e)
                     if not acc.error_notified:
                         notification.notify (_("Error checking account %s") % (acc.get_name()),
@@ -174,13 +182,13 @@ class Controller (gobject.GObject):
             self.update_accounts()
             self._update_interval()
             self.started = True
-        except Exception as e:
+        except Exception, e:
             logger.exception ("Error starting the application: %s", e)
             try:
                 notification.notify(_("Application Error"), 
                     _("Error starting the application: %s") % (str(e)),
                     utils.get_error_pixbuf())
-            except Exception as e:
+            except Exception, e:
                 logger.exception ("Error notifying the error: %s", e)
             
         return False

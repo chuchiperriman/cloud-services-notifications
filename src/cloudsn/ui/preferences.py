@@ -53,7 +53,7 @@ class Preferences:
                         self.am.add_account(account)
                         self.am.save_account(account)
                         self.store.append([account.get_provider().get_icon(), account.get_name(),'',account.get_active()])
-                except Exception as e:
+                except Exception, e:
                     logger.error ('Error adding a new account: ' + str(e))
                     md = gtk.MessageDialog(self.window,
                         gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,

@@ -31,7 +31,7 @@ def start ():
         setup_locale_and_gettext()
         cr = Controller.get_instance()
         cr.start()
-    except Exception as e:
+    except Exception, e:
         logger.exception("Error starting cloudsn: %s", e)
         notification.notify (_("Error starting cloudsn"),
                             str(e),

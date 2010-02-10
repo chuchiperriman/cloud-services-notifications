@@ -1,3 +1,6 @@
+#For the with statement in python 2.5
+from __future__ import with_statement
+
 import ConfigParser
 import xdg.BaseDirectory as bd
 import os

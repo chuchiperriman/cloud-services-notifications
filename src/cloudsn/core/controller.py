@@ -1,5 +1,5 @@
 from cloudsn.core.provider import Provider, ProviderManager
-from cloudsn.core import account, config, networkmanager, notification, utils
+from cloudsn.core import account, config, networkmanager, notification, utils, indicator
 from cloudsn.ui import preferences
 from cloudsn import logger
 from time import time
@@ -43,6 +43,7 @@ class Controller (gobject.GObject):
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
         self.am.load_accounts()
+        self.im = indicator.IndicatorManager.get_instance()
 
     @staticmethod
     def get_instance():

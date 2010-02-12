@@ -39,11 +39,11 @@ class Controller (gobject.GObject):
         self.config = config.SettingsController.get_instance()
         self.config.connect("value-changed", self._settings_changed)
         self.prov_manager = ProviderManager.get_instance()
+        self.im = indicator.IndicatorManager.get_instance()
         self.am = account.AccountManager.get_instance()
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
         self.am.load_accounts()
-        self.im = indicator.IndicatorManager.get_instance()
 
     @staticmethod
     def get_instance():
@@ -52,7 +52,9 @@ class Controller (gobject.GObject):
         return Controller.__default
 
     def _account_added_cb(self, am, acc):
-        self.create_indicator(acc)
+        indi = self.im.get_indicator()
+        if indi:
+            indi.create_indicator(acc)
 
         while gtk.events_pending():
             gtk.main_iteration(False)
@@ -81,6 +83,7 @@ class Controller (gobject.GObject):
         prefs.run()
         
     def init_indicator_server(self):
+        #TODO Move to the correct Indicator object
         try:
             import indicate
             self.server = indicate.indicate_server_ref_default()
@@ -104,6 +107,7 @@ class Controller (gobject.GObject):
             logger.debug("Network disconnected")
     
     def create_indicator(self, acc):
+        #TODO Move to the correct Indicator object
         try:
             import indicate
             indicator = indicate.Indicator()
@@ -177,7 +181,6 @@ class Controller (gobject.GObject):
 
     def _start_idle(self):
         try:
-            self.init_indicator_server()
             self.nm = networkmanager.NetworkManager()
             self.nm.set_statechange_callback(self.on_nm_state_changed)
             self.update_accounts()

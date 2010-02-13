@@ -7,7 +7,7 @@ Milestone 0.X.0
 	[ ] A friend posting in your wall
 	[ ] A friend comment a photo where you appear
 
-Milestone 0.5.0
+Milestone 0.X.0
 ===============
 * Twitter time
 [ ] Study and add Twitter support
@@ -17,7 +17,7 @@ Milestone 0.5.0
 [ ] Creating new account sometimes are not shown in the indicator (created a
 	new bug in launchpad for libindicate)
 
-Milestone 0.4.0
+Milestone 0.X.0
 ===============
 [ ] Add GMail tags support
 [ ] Add IMAP folders support
@@ -25,11 +25,23 @@ Milestone 0.4.0
 [ ] Add POP3 SSL and port configuration
 [ ] Configure when notify the GReader feeds (if > 30 or if 10 new feeds...)
 
-Milestone 0.3.0
+Milestone 0.X.0
 ===============
 * dbus time!!
 [ ] Create the clodsn dbus service
 [ ] Create the application window (preferences) in a separate application
+
+Milestone 0.3.0
+===============
+* The debian version
+[X] Do it compatible with debian and python 2.5
+[X] Create an status icon indicator
+[X] Indicator selectable
+[ ] Set libindicate optional on setup.py
+StatusIconIndicator:
+[ ] Align the unread number at right
+[ ] The icon is not shown until the first accoun check finish
+
 
 Milestone 0.2.0
 ===============

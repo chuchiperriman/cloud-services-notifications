@@ -12,13 +12,20 @@ from time import time
 
 class IndicatorApplet (Indicator):
 
-    def __init__(self):
-        self.server = indicate.indicate_server_ref_default()
-        self.server.set_type("message.im")
-        self.server.connect("server-display", self.on_server_display_cb)
-        self.server.set_desktop_file(config.add_apps_prefix("cloudsn.desktop"))
-        self.server.show()
-        logger.debug("Indicator server created")
+    def get_name(self):
+        return _("Indicator Applet")
+
+    def set_active(self, active):
+        if active:
+            self.server = indicate.indicate_server_ref_default()
+            self.server.set_type("message.im")
+            self.server.connect("server-display", self.on_server_display_cb)
+            self.server.set_desktop_file(config.add_apps_prefix("cloudsn.desktop"))
+            self.server.show()
+            logger.debug("Indicator server created")
+        else:
+            #TODO Discable the indicators
+            logger.debug("deactivate Not implemented")
 
     def create_indicator(self, acc):
         indicator = indicate.Indicator()

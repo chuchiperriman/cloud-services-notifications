@@ -1,7 +1,7 @@
 import gtk
 import os
 import shutil
-from cloudsn.core import config, provider, account
+from cloudsn.core import config, provider, account, indicator
 from cloudsn import logger
 
 STOP_RESPONSE = 1
@@ -18,6 +18,7 @@ class Preferences:
         self.config = config.SettingsController.get_instance()
         self.pm = provider.ProviderManager.get_instance()
         self.am = account.AccountManager.get_instance()
+        self.im = indicator.IndicatorManager.get_instance()
 
     @staticmethod
     def get_instance():
@@ -136,6 +137,8 @@ class Preferences:
         self.providers_store = builder.get_object("providers_store");
         self.account_name_entry = builder.get_object("account_name_entry");
         self.startup_check = builder.get_object("startup_check")
+        self.indicator_combo = builder.get_object("indicator_combo")
+        self.indicators_store = builder.get_object("indicators_store");
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         for acc in self.am.get_accounts():
@@ -151,6 +154,15 @@ class Preferences:
             self.startup_check.set_active(True)
         else:
             self.startup_check.set_active(False)
+        #Populate indicator combo
+        i=0
+        indicator_name = self.config.get_prefs()["indicator"]
+        for indi in self.im.get_indicators():
+            self.indicators_store.append([indi.get_name()])
+            if indi.get_name() == indicator_name:
+                self.indicator_combo.set_active(i)
+            i+=1
+
         #Update the last check date
         Controller.get_instance().connect ("account-checked", self.__on_account_checked_cb)
         
@@ -160,6 +172,9 @@ class Preferences:
 
         result = self.window.run()
         self.config.set_pref ("minutes", self.minutes.get_value())
+        iiter = self.indicator_combo.get_active_iter()
+        if iiter:
+            self.config.set_pref ("indicator", self.indicators_store.get_value(iiter,0))
         self.config.save_prefs()
         self.window.destroy()
         self.window = None

@@ -5,21 +5,29 @@ from cloudsn.core import config
 from cloudsn.ui import preferences
 from cloudsn.core.indicator import Indicator
 from cloudsn.const import *
+import gettext
 
 class StatusIconIndicator (Indicator):
 
-    def __init__(self):
-        self.statusIcon = gtk.StatusIcon()
-        self.statusIcon.set_from_pixbuf(config.get_cloudsn_icon())
-        self.statusIcon.set_visible(True)
-        self.statusIcon.set_tooltip(APP_LONG_NAME)
-        self.statusIcon.connect('activate', self.main_cb, self.statusIcon)
+    def set_active(self, active):
+        if active:
+            self.statusIcon = gtk.StatusIcon()
+            self.statusIcon.set_from_pixbuf(config.get_cloudsn_icon())
+            self.statusIcon.set_visible(True)
+            self.statusIcon.set_tooltip(APP_LONG_NAME)
+            self.statusIcon.connect('activate', self.main_cb, self.statusIcon)
 
-        self.menu = self.create_pref_menu()        
-        self.indmenu = self.create_main_menu()
+            self.menu = self.create_pref_menu()        
+            self.indmenu = self.create_main_menu()
 
-        self.statusIcon.connect('popup-menu', self.popup_menu_cb, self.menu)
-        self.statusIcon.set_visible(1)
+            self.statusIcon.connect('popup-menu', self.popup_menu_cb, self.menu)
+            self.statusIcon.set_visible(1)
+        else:
+            #TODO Discable the indicators
+            logger.debug("deactivate Not implemented")
+
+    def get_name(self):
+        return _("Status Icon")
 
     def create_main_menu(self):
         indmenu = gtk.Menu()

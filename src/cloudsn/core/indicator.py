@@ -1,7 +1,12 @@
-
 class Indicator:
     def create_indicator(self, acc):
         pass;
+
+    def update_account(self, acc):
+        pass
+
+    def remove_indicator(self, acc):
+        pass
 
 class IndicatorManager():
 

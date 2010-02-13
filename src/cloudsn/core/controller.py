@@ -63,6 +63,7 @@ class Controller (gobject.GObject):
             self.update_account(acc)
 
     def _account_deleted_cb(self, am, acc):
+        self.im.get_indicator().remove_indicator(acc)
         acc.indicator = None
     
     def _settings_changed(self, config, section, key, value):
@@ -145,7 +146,7 @@ class Controller (gobject.GObject):
                     self.am.update_account(acc)
                     acc.error_notified = False
                     if hasattr(acc, "indicator"):
-                        acc.indicator.set_property_int("count", acc.get_total_unread())
+                        self.im.get_indicator().update_account(acc)
                     if acc.get_provider().has_notifications():
                         nots = acc.get_new_unread_notifications()
                         message = None

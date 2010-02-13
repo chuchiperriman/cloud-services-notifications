@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -81,5 +80,3 @@ class StatusIconIndicator (Indicator):
                 data.popup(None, None, gtk.status_icon_position_menu,
                            3, time, self.statusIcon)
 
-if __name__ == "__main__":
-    helloWord = HelloTray()

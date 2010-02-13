@@ -17,8 +17,10 @@ class IndicatorManager():
            raise IndicatorManager.__default
         
         #TODO Use the correct indicator
-        from cloudsn.ui.indicators import statusicon
-        self.indicator = statusicon.StatusIconIndicator()
+        #from cloudsn.ui.indicators import statusicon
+        #self.indicator = statusicon.StatusIconIndicator()
+        from cloudsn.ui.indicators import indicatorapplet
+        self.indicator = indicatorapplet.IndicatorApplet()
         
     @staticmethod
     def get_instance():

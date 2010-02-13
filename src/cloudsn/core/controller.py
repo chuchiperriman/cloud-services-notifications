@@ -79,26 +79,6 @@ class Controller (gobject.GObject):
             gobject.source_remove(self.timeout_id)
             self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
         
-    def on_server_display_cb(self, server):
-        prefs = preferences.Preferences.get_instance()
-        prefs.run()
-        
-    def init_indicator_server(self):
-        #TODO Move to the correct Indicator object
-        try:
-            import indicate
-            self.server = indicate.indicate_server_ref_default()
-            self.server.set_type("message.im")
-            self.server.connect("server-display", self.on_server_display_cb)
-            self.server.set_desktop_file(config.add_apps_prefix("cloudsn.desktop"))
-            self.server.show()
-            logger.debug("Indicator server created")
-        except Exception, e:
-            logger.exception("Error loading the indicate server: %s", e)
-            
-    def on_indicator_display_cb(self, indicator):
-        indicator.account.activate ()
-
     def on_nm_state_changed (self):
         if self.nm.state == networkmanager.STATE_CONNECTED:
             logger.debug("Network connected")
@@ -107,23 +87,6 @@ class Controller (gobject.GObject):
         else:
             logger.debug("Network disconnected")
     
-    def create_indicator(self, acc):
-        #TODO Move to the correct Indicator object
-        try:
-            import indicate
-            indicator = indicate.Indicator()
-            indicator.set_property("name", acc.get_name())
-            indicator.set_property_time("time", time())
-            indicator.set_property_int("count", acc.get_total_unread())
-            if acc.get_provider().get_icon() is not None:
-                indicator.set_property_icon("icon", acc.get_provider().get_icon())
-            indicator.show()
-            indicator.connect("user-display", self.on_indicator_display_cb)
-            acc.indicator = indicator
-            indicator.account = acc
-        except Exception, e:
-            logger.exception("Error creating the indicator: %s",e)
-        
     def update_account(self, acc):
         """acc=None will check all accounts"""
         if self.nm.offline():

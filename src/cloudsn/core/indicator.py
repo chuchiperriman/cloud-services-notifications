@@ -1,3 +1,6 @@
+from cloudsn.core import config, utils, notification
+from cloudsn import logger
+
 class Indicator:
 
     def get_name(self):
@@ -22,20 +25,34 @@ class IndicatorManager():
         if IndicatorManager.__default:
            raise IndicatorManager.__default
 
+        self.indicator= None
         self.indicators = {}
         #TODO Use the correct indicator
         from cloudsn.ui.indicators import statusicon
-        indi = statusicon.StatusIconIndicator()
-        self.indicators[indi.get_name()] = indi
-        self.indicator = indi
+        statusindi = statusicon.StatusIconIndicator()
+        self.indicators[statusindi.get_name()] = statusindi
         try:
             from cloudsn.ui.indicators import indicatorapplet
             indi = indicatorapplet.IndicatorApplet()
             self.indicators[indi.get_name()] = indi
-            self.indicator = indi
         except Exception,e:
             logger.exception("The indicator applet provider cannot be loaded: %s", e)
 
+        self.config = config.SettingsController.get_instance()
+        indicator_conf = self.config.get_prefs()["indicator"]
+        if indicator_conf:
+            for name in self.indicators:
+                if name == indicator_conf:
+                    self.indicator = self.indicators[name]
+                    break
+            if not self.indicator:
+                logger.error("The indicator named %s is configured but it cannot be found" % (indicator_conf))
+                notification.notify (_("Indicator error"),
+                                    _("The indicator named %s is configured but it cannot be found") % (indicator_conf),
+                                    utils.get_error_pixbuf())
+        if not self.indicator:
+            self.indicator = statusindi
+            
         self.indicator.set_active(True)
         
     @staticmethod

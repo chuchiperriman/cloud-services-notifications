@@ -1,3 +1,13 @@
+cloudsn (0.2.4) unstable; urgency=low
+
+  * preferences: The indicator plugin is selectable
+  * Status icon indicator: New indicator using GtkStatusIcon
+  * indicator: new indicator API
+  * python: Now works wih python 2.5
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 14 Feb 2010 23:47:00 +0100
+
 cloudsn (0.2.0) karmic; urgency=low
 
   * Show general errors with  notifications (if we can) or stderr

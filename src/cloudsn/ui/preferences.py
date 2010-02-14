@@ -93,6 +93,8 @@ class Preferences:
     def on_startup_check_toggled(self, widget, data=None):
         if widget.get_active():
             if not os.path.exists(config.get_startup_file_path()):
+                if not os.path.exists(config.get_startup_file_dir()):
+                    os.makedirs(config.get_startup_file_dir())
                 shutil.copyfile(config.add_data_prefix("cloudsn.desktop"),config.get_startup_file_path())
         else:
             os.remove (config.get_startup_file_path())

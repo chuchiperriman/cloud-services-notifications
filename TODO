@@ -37,7 +37,9 @@ Milestone 0.3.0
 [X] Do it compatible with debian and python 2.5
 [X] Create an status icon indicator
 [X] Indicator selectable
-[ ] Set libindicate optional on setup.py
+[X] Set libindicate optional on setup.py
+[ ] Show the added account on preferences before check it and update
+	the time when finish the first update
 StatusIconIndicator:
 [ ] Align the unread number at right
 [ ] The icon is not shown until the first accoun check finish

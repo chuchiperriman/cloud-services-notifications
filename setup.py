@@ -16,7 +16,9 @@ from imp import load_module, find_module
 const = load_module("const", *find_module("const",["src/cloudsn"]))
 
 #check dependencies
-DEPENDENCIES = ['gtk', 'indicate', 'pynotify', 'xdg', 'gconf', 'dbus']
+DEPENDENCIES = ['gtk', 'pynotify', 'xdg', 'gconf', 'dbus']
+
+DEP_OPTIONALS = ['indicate']
 
 err_deps = []
 for dep in DEPENDENCIES:
@@ -30,6 +32,18 @@ if len(err_deps) > 0:
     for dep in err_deps:
         print '\t', dep
     sys.exit(1)
+    
+err_opts = []
+for dep in DEP_OPTIONALS:
+    try:
+        __import__(dep)
+    except ImportError:
+        err_opts += [dep]
+if len(err_deps) > 0:
+    print 'Optional dependencies not founds: '
+    for dep in err_deps:
+        print '\t', dep
+
 
 os.chdir(os.path.abspath(os.path.dirname(__file__)))
 

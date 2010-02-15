@@ -43,6 +43,7 @@ class Controller (gobject.GObject):
         self.am = account.AccountManager.get_instance()
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
+        self.am.connect("account-active-changed", self._account_active_cb)
         self.am.load_accounts()
 
     @staticmethod
@@ -53,18 +54,21 @@ class Controller (gobject.GObject):
 
     def _account_added_cb(self, am, acc):
         indi = self.im.get_indicator()
-        if indi:
+        if indi and acc.get_active():
             indi.create_indicator(acc)
 
-        while gtk.events_pending():
-            gtk.main_iteration(False)
-            
         if self.started:
             self.update_account(acc)
 
     def _account_deleted_cb(self, am, acc):
         self.im.get_indicator().remove_indicator(acc)
-        acc.indicator = None
+    
+    def _account_active_cb(self, am, acc):
+        if acc.get_active():
+            self.im.get_indicator().create_indicator(acc)
+            self.update_account(acc)
+        else:
+            self.im.get_indicator().remove_indicator(acc)
     
     def _settings_changed(self, config, section, key, value):
         if section == "preferences" and key == "minutes":
@@ -106,10 +110,20 @@ class Controller (gobject.GObject):
             if acc.get_active() and (paramacc is None or paramacc == acc):
                 try:
                     logger.debug('Updating account: ' + acc.get_name())
+                    
+                    #Process events to show the main icon
+                    while gtk.events_pending():
+                        gtk.main_iteration(False)
+                        
                     self.am.update_account(acc)
                     acc.error_notified = False
                     if hasattr(acc, "indicator"):
                         self.im.get_indicator().update_account(acc)
+                    
+                    #Process events to show the indicator menu
+                    while gtk.events_pending():
+                        gtk.main_iteration(False)
+                        
                     if acc.get_provider().has_notifications():
                         nots = acc.get_new_unread_notifications()
                         message = None

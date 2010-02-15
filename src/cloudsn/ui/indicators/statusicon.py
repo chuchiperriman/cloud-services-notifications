@@ -58,7 +58,7 @@ class StatusIconIndicator (Indicator):
         indmenuItem.set_always_show_image (True)
         self.indmenu.append(indmenuItem)
         acc.indicator = indmenuItem
-
+    
     def update_account(self, acc):
         acc.indicator.get_child().set_label(("%s (%i)") % (acc.get_name(),acc.get_total_unread()))
 

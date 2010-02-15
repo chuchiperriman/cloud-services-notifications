@@ -83,7 +83,8 @@ class AccountManager (gobject.GObject):
 
     __gsignals__ = { "account-added" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
                      "account-deleted" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-                     "account-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))}
+                     "account-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+                     "account-active-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))}
     
     def __init__(self):
         if AccountManager.__default:
@@ -108,7 +109,7 @@ class AccountManager (gobject.GObject):
                 acc = provider.load_account (conf)
                 self.add_account(acc)
             else:
-                logger.error("Error in account %s: The provider %s doesn't exists" % (conf['provider_name']))
+                logger.error("Error in account %s: The provider %s doesn't exists" % (conf['name'], conf['provider_name']))
     
     def validate_account(self, account_name):
         if account_name in self.accounts:
@@ -122,8 +123,10 @@ class AccountManager (gobject.GObject):
         self.emit("account-added", acc)
 
     def set_account_active (self, acc, active):
-        acc.set_active(active)
-        self.save_account(acc)
+        if acc.get_active() != active:
+            acc.set_active(active)
+            self.emit("account-active-changed", acc)
+            self.save_account(acc)
 
     def get_account(self, account_name):
         return self.accounts[account_name]

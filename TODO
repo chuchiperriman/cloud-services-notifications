@@ -39,13 +39,13 @@ Milestone 0.3.0
 [X] Indicator selectable
 [X] Set libindicate optional on setup.py
 [X] Add basic twitter messages notifications
-[ ] Show the added account on preferences before check it and update
+[X] Show the added account on preferences before check it and update
 	the time when finish the first update
-[ ] Fix focus problem in the add dialogs
-[ ] When an account is disabled we must remove the indicator or disable it
+[!] Fix focus problem in the add dialogs (We will change the dialog soon)
+[X] When an account is disabled we must remove the indicator or disable it
 StatusIconIndicator:
 [ ] Align the unread number at right
-[ ] The icon is not shown until the first accoun check finish
+[X] The icon is not shown until the first accoun check finish
 
 
 Milestone 0.2.0

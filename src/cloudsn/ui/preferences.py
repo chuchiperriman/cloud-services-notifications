@@ -53,7 +53,9 @@ class Preferences:
                     if account is not None:
                         self.am.add_account(account)
                         self.am.save_account(account)
-                        self.store.append([account.get_provider().get_icon(), account.get_name(),'',account.get_active()])
+                        self.store.append([account.get_provider().get_icon(),
+                                account.get_name(),self.__get_account_date(acc),
+                                account.get_active()])
                 except Exception, e:
                     logger.error ('Error adding a new account: ' + str(e))
                     md = gtk.MessageDialog(self.window,
@@ -95,7 +97,8 @@ class Preferences:
             if not os.path.exists(config.get_startup_file_path()):
                 if not os.path.exists(config.get_startup_file_dir()):
                     os.makedirs(config.get_startup_file_dir())
-                shutil.copyfile(config.add_data_prefix("cloudsn.desktop"),config.get_startup_file_path())
+                shutil.copyfile(config.add_data_prefix("cloudsn.desktop"),
+                    config.get_startup_file_path())
         else:
             os.remove (config.get_startup_file_path())
 
@@ -144,7 +147,8 @@ class Preferences:
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         for acc in self.am.get_accounts():
-            self.store.append([acc.get_provider().get_icon(), acc.get_name(), self.__get_account_date(acc), acc.get_active()])
+            self.store.append([acc.get_provider().get_icon(), acc.get_name(),
+                self.__get_account_date(acc), acc.get_active()])
 
         self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))
@@ -166,7 +170,8 @@ class Preferences:
             i+=1
 
         #Update the last check date
-        Controller.get_instance().connect ("account-checked", self.__on_account_checked_cb)
+        Controller.get_instance().connect ("account-checked", 
+            self.__on_account_checked_cb)
         
     def run(self):
         if self.window is None:

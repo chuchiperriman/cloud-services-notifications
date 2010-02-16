@@ -1,3 +1,13 @@
+cloudsn (0.3.0) unstable; urgency=low
+
+  * preferences: Better account activation management
+  * StatusIcon: Correct alignment
+  * twitter: Basic twitter notifications
+  * setup.py: libindicate is optional
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 16 Feb 2010 01:47:00 +0100
+
 cloudsn (0.2.4) unstable; urgency=low
 
   * preferences: The indicator plugin is selectable

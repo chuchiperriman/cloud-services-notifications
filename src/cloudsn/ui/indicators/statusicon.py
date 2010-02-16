@@ -52,19 +52,32 @@ class StatusIconIndicator (Indicator):
     def create_indicator(self, acc):
         indmenuItem = gtk.ImageMenuItem(gtk.STOCK_QUIT)
         pix = acc.get_provider().get_icon().scale_simple(16,16,gtk.gdk.INTERP_BILINEAR)
+        
+        """
         indmenuItem.set_image(gtk.image_new_from_pixbuf(pix))
         indmenuItem.get_child().set_label(("%s (%i)") % (acc.get_name(),acc.get_total_unread()))
         indmenuItem.connect('activate', self.acc_activate_cb, acc)
         indmenuItem.set_always_show_image (True)
+        """
+        indmenuItem = gtk.MenuItem()
+        box = gtk.HBox()
+        box.pack_start(gtk.image_new_from_pixbuf(pix), False, False)
+        box.pack_start(gtk.Label(acc.get_name()), False, True, 10)
+        total_label = gtk.Label(("(%i)") % (acc.get_total_unread()))
+        box.pack_end(total_label, False, False)
+        indmenuItem.add(box)
+        indmenuItem.connect('activate', self.acc_activate_cb, acc)
         self.indmenu.append(indmenuItem)
         acc.indicator = indmenuItem
+        acc.total_label = total_label
     
     def update_account(self, acc):
-        acc.indicator.get_child().set_label(("%s (%i)") % (acc.get_name(),acc.get_total_unread()))
+        acc.total_label.set_label(("(%i)") % (acc.get_total_unread()))
 
     def remove_indicator(self, acc):
         self.indmenu.remove(acc.indicator)
         acc.indicator = None
+        acc.total_label = None
         
     def preferences_cb(self, widget, acc = None):
         prefs = preferences.Preferences.get_instance()

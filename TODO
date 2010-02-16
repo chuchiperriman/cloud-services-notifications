@@ -44,7 +44,7 @@ Milestone 0.3.0
 [!] Fix focus problem in the add dialogs (We will change the dialog soon)
 [X] When an account is disabled we must remove the indicator or disable it
 StatusIconIndicator:
-[ ] Align the unread number at right
+[X] Align the unread number at right
 [X] The icon is not shown until the first accoun check finish
 
 

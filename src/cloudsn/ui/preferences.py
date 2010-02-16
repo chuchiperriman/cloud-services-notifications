@@ -54,7 +54,7 @@ class Preferences:
                         self.am.add_account(account)
                         self.am.save_account(account)
                         self.store.append([account.get_provider().get_icon(),
-                                account.get_name(),self.__get_account_date(acc),
+                                account.get_name(),self.__get_account_date(account),
                                 account.get_active()])
                 except Exception, e:
                     logger.error ('Error adding a new account: ' + str(e))

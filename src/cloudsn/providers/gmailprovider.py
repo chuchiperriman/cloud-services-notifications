@@ -29,16 +29,23 @@ class GMailProvider(Provider):
         return acc
         
     def update_account (self, account):
-        g = GmailAtom (account["username"], account["password"])
-        g.refreshInfo()
-        account.unread = g.getUnreadMsgCount ()
         news = []
-        for mail in g.get_mails():
-            if mail.mail_id not in account.notifications:
-                account.notifications[mail.mail_id] = mail
-                news.append (Notification(mail.mail_id, mail.title, mail.author_name))
+        notifications = {}
+        labels = [None]
+        if 'labels' in account.get_properties():
+            labels += [l.strip() for l in account["labels"].split(",")]
+        
+        for label in labels:
+            g = GmailAtom (account["username"], account["password"], label)
+            g.refreshInfo()
+            
+            for mail in g.get_mails():
+                notifications[mail.mail_id] = mail
+                if mail.mail_id not in account.notifications:
+                    news.append (Notification(mail.mail_id, mail.title, mail.author_name))
 
         account.new_unread = news;
+        account.notifications = notifications
 
     def _create_dialog(self):
         builder=gtk.Builder()
@@ -170,8 +177,9 @@ class GmailAtom:
     host = "https://mail.google.com"
     url = host + "/mail/feed/atom"
 
-    def __init__(self, user, pswd):
+    def __init__(self, user, pswd, label = None):
         self.m = MailHandler()
+        self.label = label
         # initialize authorization handler
         auth_handler = urllib2.HTTPBasicAuthHandler()
         auth_handler.add_password( self.realm, self.host, user, pswd)
@@ -179,10 +187,12 @@ class GmailAtom:
         urllib2.install_opener(opener)
 
     def sendRequest(self):
-        return urllib2.urlopen(self.url)
+        url = self.url
+        if self.label:
+            url = url + "/" + self.label
+        return urllib2.urlopen(url)
 
     def refreshInfo(self):
-        # get the page and parse it
         p = sax.parseString( self.sendRequest().read(), self.m)
 
     def getUnreadMsgCount(self):

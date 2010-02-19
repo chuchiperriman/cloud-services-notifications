@@ -19,7 +19,6 @@ Milestone 0.X.0
 
 Milestone 0.X.0
 ===============
-[ ] Add GMail tags support
 [ ] Add IMAP folders support
 [ ] Add Imap SSL and port configuration
 [ ] Add POP3 SSL and port configuration
@@ -31,6 +30,18 @@ Milestone 0.X.0
 [ ] Create the clodsn dbus service
 [ ] Create the application window (preferences) in a separate application
 
+Milestone 0.4.0
+===============
+* Threading again and better notifications...
+[X] Fix focus problem in the add dialogs
+[X] Add GMail labels support
+[ ] Add threads support again to check the accounts
+[ ] Create a notifications queue (in debian libnotify doesn't have a queue)
+    and raise it in a new thread
+[ ] Configure if show notifications separately or in a single notification
+    when an account has N new items (show the N subjects in a notification or
+    show N notifications)
+
 Milestone 0.3.0
 ===============
 * The debian version
@@ -41,7 +52,6 @@ Milestone 0.3.0
 [X] Add basic twitter messages notifications
 [X] Show the added account on preferences before check it and update
 	the time when finish the first update
-[!] Fix focus problem in the add dialogs (We will change the dialog soon)
 [X] When an account is disabled we must remove the indicator or disable it
 StatusIconIndicator:
 [X] Align the unread number at right

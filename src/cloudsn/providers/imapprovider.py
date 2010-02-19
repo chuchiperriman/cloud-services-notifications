@@ -42,16 +42,17 @@ class ImapProvider(Provider):
                 account.notifications[mail_id] = sub
                 account.new_unread.append (n)
 
-    def _create_dialog(self):
+    def _create_dialog(self, parent):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
         builder.add_from_file(config.add_data_prefix("imap-account.ui"))
         dialog = builder.get_object("dialog")
         dialog.set_icon(self.get_icon())
+        dialog.set_transient_for(parent)
         return (builder, dialog)
 
-    def create_account_dialog(self, account_name):
-        builder, dialog = self._create_dialog()
+    def create_account_dialog(self, account_name, parent):
+        builder, dialog = self._create_dialog(parent)
         account = None
         if dialog.run() == 0:
             host = builder.get_object("host_entry").get_text()
@@ -67,9 +68,9 @@ class ImapProvider(Provider):
         dialog.destroy()
         return account
 
-    def edit_account_dialog(self, acc):
+    def edit_account_dialog(self, acc, parent):
         res = False
-        builder, dialog = self._create_dialog()
+        builder, dialog = self._create_dialog(parent)
         builder.get_object("host_entry").set_text(acc["host"])
         builder.get_object("username_entry").set_text(acc["username"])
         builder.get_object("password_entry").set_text(acc["password"])

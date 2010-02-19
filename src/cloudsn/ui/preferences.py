@@ -49,7 +49,7 @@ class Preferences:
             if account_name != "":
                 try:
                     self.am.validate_account(account_name)
-                    account = provider.create_account_dialog(account_name)
+                    account = provider.create_account_dialog(account_name, self.window)
                     if account is not None:
                         self.am.add_account(account)
                         self.am.save_account(account)
@@ -69,7 +69,7 @@ class Preferences:
     def on_account_edit_button_clicked(self, widget, data=None):
         acc, citer = self.get_selected_account()
         provider = acc.get_provider()
-        if provider.edit_account_dialog(acc):
+        if provider.edit_account_dialog(acc,self.window):
             self.am.save_account(acc)
         
     def on_account_del_button_clicked (self, widget, data=None):

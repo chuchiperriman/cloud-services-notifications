@@ -19,10 +19,10 @@ class Provider:
         return self.name
     def get_icon (self):
         return self.icon
-    def create_account_dialog(self, account_name):
+    def create_account_dialog(self, account_name, parent_window):
         """ Returns the new created account"""
         return None
-    def edit_account_dialog(self, acc):
+    def edit_account_dialog(self, acc, parent_window):
         """ Returns True if the account has been changed"""
         return False
 

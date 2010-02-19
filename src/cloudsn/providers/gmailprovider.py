@@ -47,37 +47,82 @@ class GMailProvider(Provider):
         account.new_unread = news;
         account.notifications = notifications
 
-    def _create_dialog(self):
+    def add_label_button_clicked_cb (self, widget, data=None):
+        siter = self.labels_store.append()
+        self.labels_store.set_value(siter, 0, _("Type the label name here"))
+        selection = self.labels_treeview.get_selection()
+        selection.select_iter(siter)
+        model, path_list = selection.get_selected_rows()
+        path = path_list[0]
+        self.labels_treeview.grab_focus()
+        self.labels_treeview.set_cursor(path,self.labels_treeview.get_column(0), True)
+        
+        
+    def del_label_button_clicked_cb (self, widget, data=None):
+        selection = self.labels_treeview.get_selection()
+        model, path_list = selection.get_selected_rows()
+        if path_list:
+            path = path_list[0]
+            siter = model.get_iter(path)
+            self.labels_store.remove(siter)
+    
+    def label_cell_edited_cb(self, cell, path, new_text):
+        siter = self.labels_store.get_iter((int(path), ))
+        self.labels_store.set_value(siter, 0, new_text)
+        
+    def _create_dialog(self, parent):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
         builder.add_from_file(config.add_data_prefix("gmail-account.ui"))
         dialog = builder.get_object("gmail_dialog")
+        dialog.set_transient_for(parent)
+        self.labels_store = builder.get_object("labels_store")
+        self.labels_treeview = builder.get_object("labels_treeview")
+        builder.connect_signals(self)
         dialog.set_icon(self.get_icon())
         return (builder, dialog)
-        
-    def create_account_dialog(self, account_name):
-        builder, dialog = self._create_dialog()
+    
+    def __get_labels(self):
+        labels = []
+        def add(model, path, siter, labels):
+            label = model.get_value(siter, 0)
+            labels.append(label)
+        self.labels_store.foreach(add, labels)
+        labels_string = ""
+        for label in labels:
+            labels_string += label + ","
+        return labels_string[:len(labels_string)-1]
+    
+    def create_account_dialog(self, account_name, parent):
+        builder, dialog = self._create_dialog(parent)
         account = None
         if dialog.run() == 0:
             username = builder.get_object("username_entry").get_text()
             password = builder.get_object("password_entry").get_text()
             props = {"name" : account_name, "provider_name" : self.get_name(),
                 "username" : username, "password" : password, 
-                "activate_url" : "http://gmail.google.com"}
+                "activate_url" : "http://gmail.google.com",
+                "labels" : self.__get_labels()}
             account = AccountCacheMails(props, self)
             account.notifications = {}
         dialog.destroy()
         return account
         
-    def edit_account_dialog(self, acc):
+    def edit_account_dialog(self, acc, parent):
         res = False
-        builder, dialog = self._create_dialog()
+        builder, dialog = self._create_dialog(parent)
         builder.get_object("username_entry").set_text(acc["username"])
         builder.get_object("password_entry").set_text(acc["password"])
+        labels = [l.strip() for l in acc["labels"].split(",")]
+        for label in labels:
+            if label != '':
+                siter = self.labels_store.append()
+                self.labels_store.set_value(siter, 0, label)
         account = None
         if dialog.run() == 0:
             acc["username"] = builder.get_object("username_entry").get_text()
             acc["password"] = builder.get_object("password_entry").get_text()
+            acc["labels"] = self.__get_labels()
             res = True
         dialog.destroy()
         return res

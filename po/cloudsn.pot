@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-08 00:52+0100\n"
+"POT-Creation-Date: 2010-02-22 00:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,22 +20,30 @@ msgstr ""
 msgid "Another instance is already running, quitting."
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:140
+#: ../src/cloudsn/core/controller.py:138
 msgid "New messages: "
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:157
+#: ../src/cloudsn/core/controller.py:155
 #, python-format
 msgid "Error checking account %s"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:180
+#: ../src/cloudsn/core/controller.py:177
 msgid "Application Error"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:181
+#: ../src/cloudsn/core/controller.py:178
 #, python-format
 msgid "Error starting the application: %s"
+msgstr ""
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:30
+msgid "Status Icon"
+msgstr ""
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:45
+msgid "Update accounts"
 msgstr ""
 
 #: ../data/gmail-account.ui.h:1 ../data/greader-account.ui.h:1
@@ -44,15 +52,19 @@ msgid "<b>Account information</b>"
 msgstr ""
 
 #: ../data/gmail-account.ui.h:2
+msgid "<b>Labels to check</b>"
+msgstr ""
+
+#: ../data/gmail-account.ui.h:3
 msgid "New GMail Account"
 msgstr ""
 
-#: ../data/gmail-account.ui.h:3 ../data/greader-account.ui.h:3
+#: ../data/gmail-account.ui.h:4 ../data/greader-account.ui.h:3
 #: ../data/pop3-account.ui.h:3
 msgid "Password: "
 msgstr ""
 
-#: ../data/gmail-account.ui.h:4 ../data/greader-account.ui.h:4
+#: ../data/gmail-account.ui.h:5 ../data/greader-account.ui.h:4
 #: ../data/pop3-account.ui.h:5
 msgid "Username: "
 msgstr ""
@@ -82,29 +94,33 @@ msgid "General"
 msgstr ""
 
 #: ../data/preferences.ui.h:5
-msgid "Minutes: "
+msgid "Indicate status with: "
 msgstr ""
 
 #: ../data/preferences.ui.h:6
-msgid "New Account"
+msgid "Minutes: "
 msgstr ""
 
 #: ../data/preferences.ui.h:7
-msgid "Preferences"
+msgid "New Account"
 msgstr ""
 
 #: ../data/preferences.ui.h:8
-msgid "Press to stop the service: "
+msgid "Preferences"
 msgstr ""
 
 #: ../data/preferences.ui.h:9
-msgid "Provider: "
+msgid "Press to stop the service: "
 msgstr ""
 
 #: ../data/preferences.ui.h:10
-msgid "Run application on startup"
+msgid "Provider: "
 msgstr ""
 
 #: ../data/preferences.ui.h:11
+msgid "Run application on startup"
+msgstr ""
+
+#: ../data/preferences.ui.h:12
 msgid "Update all accounts:  "
 msgstr ""

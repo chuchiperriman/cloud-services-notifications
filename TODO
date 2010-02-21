@@ -37,9 +37,9 @@ Milestone 0.4.0
 [X] Add GMail labels support
 [X] Add threads support again to check the accounts
 [X] Fix greader auth problem with the threads enabled
-[ ] Prevent two updates at the same time
+[ ] Prevent two updates at the same time (same provider)
 [X] Add an "Update accounts" option to the status icon context dialog
-[ ] Create a notifications queue (in debian libnotify doesn't have a queue)
+[X] Create a notifications queue (in debian libnotify doesn't have a queue)
     and raise it in a new thread
 [ ] Configure if show notifications separately or in a single notification
     when an account has N new items (show the N subjects in a notification or

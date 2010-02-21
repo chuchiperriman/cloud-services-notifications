@@ -1,7 +1,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-from cloudsn.core import config
+from cloudsn.core import config, controller
 from cloudsn.ui import preferences
 from cloudsn.core.indicator import Indicator
 from cloudsn.const import *
@@ -41,6 +41,10 @@ class StatusIconIndicator (Indicator):
 
     def create_pref_menu(self):
         menu = gtk.Menu()
+        menuItem = gtk.ImageMenuItem(gtk.STOCK_REFRESH)
+        menuItem.get_child().set_text(_("Update accounts"))
+        menuItem.connect('activate', self.update_accounts_cb, self.statusIcon)
+        menu.append(menuItem)
         menuItem = gtk.ImageMenuItem(gtk.STOCK_PREFERENCES)
         menuItem.connect('activate', self.preferences_cb, self.statusIcon)
         menu.append(menuItem)
@@ -82,6 +86,10 @@ class StatusIconIndicator (Indicator):
     def preferences_cb(self, widget, acc = None):
         prefs = preferences.Preferences.get_instance()
         prefs.run()
+    
+    def update_accounts_cb(self, widget, acc = None):
+        c = controller.Controller.get_instance()
+        c.update_accounts()
         
     def acc_activate_cb(self, widget, acc = None):
         acc.activate()

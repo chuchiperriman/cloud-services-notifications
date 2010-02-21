@@ -228,14 +228,13 @@ class GmailAtom:
         # initialize authorization handler
         auth_handler = urllib2.HTTPBasicAuthHandler()
         auth_handler.add_password( self.realm, self.host, user, pswd)
-        opener = urllib2.build_opener(auth_handler)
-        urllib2.install_opener(opener)
+        self.opener = urllib2.build_opener(auth_handler)
 
     def sendRequest(self):
         url = self.url
         if self.label:
             url = url + "/" + self.label
-        return urllib2.urlopen(url)
+        return self.opener.open(url)
 
     def refreshInfo(self):
         p = sax.parseString( self.sendRequest().read(), self.m)

@@ -6,6 +6,7 @@ from time import time
 import gtk
 import gobject
 import gettext
+import thread
 
 class Controller (gobject.GObject):
 
@@ -78,10 +79,12 @@ class Controller (gobject.GObject):
         old = self.interval
         self.interval = int(float(self.config.get_prefs()["minutes"]) * 60)
         if self.timeout_id < 0:
-            self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
+            self.timeout_id = gobject.timeout_add_seconds(self.interval,
+                                self.update_accounts, None)
         elif self.interval != old:
             gobject.source_remove(self.timeout_id)
-            self.timeout_id = gobject.timeout_add_seconds(self.interval, self.update_accounts, None)
+            self.timeout_id = gobject.timeout_add_seconds(self.interval,
+                                self.update_accounts, None)
         
     def on_nm_state_changed (self):
         if self.nm.state == networkmanager.STATE_CONNECTED:
@@ -96,59 +99,63 @@ class Controller (gobject.GObject):
         if self.nm.offline():
             logger.warn ("The network is not connected, the account cannot be updated")
             return
-        #TODO Check if the updater is running
-        self.__real_update_account(acc)
-
-    def __real_update_account(self, paramacc):
         
-        logger.debug("Starting checker")
-        for acc in self.am.get_accounts():
-            if self.nm.state != networkmanager.STATE_CONNECTED:
-                logger.debug("The network is not connected, the accounts will not be updated")
-                return
-                
-            if acc.get_active() and (paramacc is None or paramacc == acc):
-                try:
-                    logger.debug('Updating account: ' + acc.get_name())
-                    
-                    #Process events to show the main icon
-                    while gtk.events_pending():
-                        gtk.main_iteration(False)
-                        
-                    self.am.update_account(acc)
-                    acc.error_notified = False
-                    if hasattr(acc, "indicator"):
-                        self.im.get_indicator().update_account(acc)
-                    
-                    #Process events to show the indicator menu
-                    while gtk.events_pending():
-                        gtk.main_iteration(False)
-                        
-                    if acc.get_provider().has_notifications():
-                        nots = acc.get_new_unread_notifications()
-                        message = None
-                        if len(nots) > 0:
-                            message = _("New messages: ") + str(len(nots))
-                            
-                        if len(nots) <= 3:
-                            for n in nots:
-                                message += "\n" + n.message
+        #TODO Check if the updater is running
+        if acc is None:
+            for acc in self.am.get_accounts():
+                thread.start_new_thread(self.__real_update_account, (acc,))
+        else:
+            thread.start_new_thread(self.__real_update_account, (acc,))
+            
+        #self.__real_update_account(acc)
 
-                        if message:
-                            notification.notify(acc.get_name(), 
-                                message,
-                                acc.get_provider().get_icon())
-                            #account.indicator.set_property('draw-attention', 'true');
-                    self.emit("account-checked", acc)
-                except notification.NotificationError, ne:
-                    logger.exception("Error trying to notify with libnotify: %s", e)
-                except Exception, e:
-                    logger.exception("Error trying to update the account %s: %s", acc.get_name(), e)
-                    if not acc.error_notified:
-                        notification.notify (_("Error checking account %s") % (acc.get_name()),
-                            str(e),
-                            utils.get_error_pixbuf())
-                        acc.error_notified = True
+    def __real_update_account(self, acc):
+        logger.debug("Starting checker")
+        if not acc.get_active():
+            logger.debug("The account %s is not active, it will not be updated" % (acc.get_name()))
+            return
+            
+        try:
+            logger.debug('Updating account: ' + acc.get_name())
+            
+            #Process events to show the main icon
+            while gtk.events_pending():
+                gtk.main_iteration(False)
+                
+            self.am.update_account(acc)
+            acc.error_notified = False
+            if hasattr(acc, "indicator"):
+                self.im.get_indicator().update_account(acc)
+            
+            #Process events to show the indicator menu
+            while gtk.events_pending():
+                gtk.main_iteration(False)
+                
+            if acc.get_provider().has_notifications():
+                nots = acc.get_new_unread_notifications()
+                message = None
+                if len(nots) > 0:
+                    message = _("New messages: ") + str(len(nots))
+                    
+                if len(nots) <= 3:
+                    for n in nots:
+                        message += "\n" + n.message
+
+                if message:
+                    notification.notify(acc.get_name(), 
+                        message,
+                        acc.get_provider().get_icon())
+                    #account.indicator.set_property('draw-attention', 'true');
+            self.emit("account-checked", acc)
+        except notification.NotificationError, ne:
+            logger.exception("Error trying to notify with libnotify: %s", e)
+        except Exception, e:
+            logger.exception("Error trying to update the account %s: %s", acc.get_name(), e)
+            if not acc.error_notified:
+                notification.notify (_("Error checking account %s") % (acc.get_name()),
+                    str(e),
+                    utils.get_error_pixbuf())
+                acc.error_notified = True
 
         logger.debug("Ending checker")
         
@@ -172,20 +179,13 @@ class Controller (gobject.GObject):
                     utils.get_error_pixbuf())
             except Exception, e:
                 logger.exception ("Error notifying the error: %s", e)
-            
+        
         return False
 
-    def signint(self, signl, frme):
-        gobject.source_remove(self.timeout_id)
-        gtk.main_quit()
-        return 0
-
     def start(self):
-        import signal
-        signal.signal( signal.SIGINT, self.signint )
+        gobject.threads_init()
         gobject.idle_add(self._start_idle)
         try:
             gtk.main()
         except KeyboardInterrupt:
             logger.info ('KeyboardInterrupt the main loop')
-

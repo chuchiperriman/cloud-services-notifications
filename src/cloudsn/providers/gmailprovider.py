@@ -31,9 +31,11 @@ class GMailProvider(Provider):
     def update_account (self, account):
         news = []
         notifications = {}
-        labels = [None]
+        labels = []
         if 'labels' in account.get_properties():
             labels += [l.strip() for l in account["labels"].split(",")]
+        else:
+            labels = [None]
         
         for label in labels:
             g = GmailAtom (account["username"], account["password"], label)

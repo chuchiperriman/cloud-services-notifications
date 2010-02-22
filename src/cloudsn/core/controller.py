@@ -134,18 +134,17 @@ class Controller (gobject.GObject):
             if acc.get_provider().has_notifications():
                 nots = acc.get_new_unread_notifications()
                 message = None
-                if len(nots) > 0:
-                    message = _("New messages: ") + str(len(nots))
-                    
-                if len(nots) <= 3:
-                    for n in nots:
-                        message += "\n" + n.message
-
-                if message:
+                if len(nots) > 3:
                     notification.notify(acc.get_name(), 
-                        message,
+                        _("New messages: ") + str(len(nots)),
                         acc.get_provider().get_icon())
-                    #account.indicator.set_property('draw-attention', 'true');
+                    
+                if len(nots) > 0 and len(nots) <= 3:
+                    for n in nots:
+                        notification.notify(acc.get_name(), 
+                            n.message,
+                            acc.get_provider().get_icon())
+
             self.emit("account-checked", acc)
         except notification.NotificationError, ne:
             logger.exception("Error trying to notify with libnotify: %s", e)

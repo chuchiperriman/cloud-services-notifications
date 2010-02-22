@@ -46,6 +46,7 @@ class Controller (gobject.GObject):
         self.am.connect("account-deleted", self._account_deleted_cb)
         self.am.connect("account-active-changed", self._account_active_cb)
         self.am.load_accounts()
+        self.accounts_checking = []
 
     @staticmethod
     def get_instance():
@@ -110,10 +111,16 @@ class Controller (gobject.GObject):
         #self.__real_update_account(acc)
 
     def __real_update_account(self, acc):
+        if acc in self.accounts_checking:
+            logger.warn("The account %s is being checked" % (acc.get_name()))
+            return
+        
         logger.debug("Starting checker")
         if not acc.get_active():
             logger.debug("The account %s is not active, it will not be updated" % (acc.get_name()))
             return
+        
+        self.accounts_checking.append(acc)
             
         try:
             logger.debug('Updating account: ' + acc.get_name())
@@ -155,6 +162,8 @@ class Controller (gobject.GObject):
                     str(e),
                     utils.get_error_pixbuf())
                 acc.error_notified = True
+        finally:
+            self.accounts_checking.remove(acc)
 
         logger.debug("Ending checker")
         

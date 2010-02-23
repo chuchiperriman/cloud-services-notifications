@@ -9,11 +9,13 @@ class TwitterProvider(Provider):
 
     __default = None
 
-    def __init__(self):
-        if TwitterProvider.__default:
-           raise TwitterProvider.__default
-        Provider.__init__(self, "Twitter")
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('twitter.png'))
+    def __init__(self, name = "Twitter", icon = "twitter.png",
+                activate_url = "http://twitter.com",
+                api_url = "http://twitter.com"):
+        Provider.__init__(self, name)
+        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix(icon))
+        self.activate_url = activate_url
+        self.api_url = api_url
 
     @staticmethod
     def get_instance():
@@ -23,14 +25,15 @@ class TwitterProvider(Provider):
 
     def load_account(self, props):
         acc = TwitterAccount(props, self)
-        acc.properties["activate_url"] = "http://twitter.com"
+        acc.properties["activate_url"] = self.activate_url
         acc.last_id = -1
         return acc
         
     def update_account (self, account):
         
         api = twitter.Api(username=account['username'],
-            password=account['password'])
+            password=account['password'],
+            base_url=self.api_url)
         #base_url="identi.ca/api/"
 
         since_id = None
@@ -74,7 +77,7 @@ class TwitterProvider(Provider):
             password = builder.get_object("password_entry").get_text()
             props = {'name' : account_name, 'provider_name' : self.get_name(),
                 'username' : username, 'password' : password,
-                'activate_url' : "http://twitter.com"}
+                'activate_url' : self.activate_url}
             account = self.load_account(props)
         dialog.destroy()
         return account

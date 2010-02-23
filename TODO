@@ -44,7 +44,9 @@ Milestone 0.4.0
 [X] Configure if show notifications separately or in a single notification
     when an account has N new items (show the N subjects in a notification or
     show N notifications)
-[ ] Configure the maximun number of new notifications to be shown.
+[X] Configure the maximun number of new notifications to be shown.
+[ ] Do not show separated notifications the first time then the application
+    starts, only the total unread
 [ ] Basic identi.ca support
 
 Milestone 0.3.0

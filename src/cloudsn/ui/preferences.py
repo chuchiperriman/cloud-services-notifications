@@ -134,6 +134,7 @@ class Preferences:
         builder.connect_signals(self)
         self.window=builder.get_object("dialog")
         self.minutes=builder.get_object("minutes_spin")
+        self.max_not_spin=builder.get_object("max_not_spin")
         #tests
         self.store = builder.get_object("account_store");
         self.account_tree = builder.get_object("account_treeview");
@@ -152,6 +153,7 @@ class Preferences:
 
         self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))
+        self.max_not_spin.set_value (float(self.config.get_prefs()["max_notifications"]))
 
         self.window.set_icon(config.get_cloudsn_icon())
         self.dialog_new.set_icon(config.get_cloudsn_icon())
@@ -179,6 +181,7 @@ class Preferences:
 
         result = self.window.run()
         self.config.set_pref ("minutes", self.minutes.get_value())
+        self.config.set_pref ("max_notifications", self.max_not_spin.get_value())
         iiter = self.indicator_combo.get_active_iter()
         if iiter:
             self.config.set_pref ("indicator", self.indicators_store.get_value(iiter,0))

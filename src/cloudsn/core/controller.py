@@ -121,7 +121,7 @@ class Controller (gobject.GObject):
             return
         
         self.accounts_checking.append(acc)
-            
+        max_notifications = int(float(self.config.get_prefs()["max_notifications"]))
         try:
             logger.debug('Updating account: ' + acc.get_name())
             
@@ -141,12 +141,12 @@ class Controller (gobject.GObject):
             if acc.get_provider().has_notifications():
                 nots = acc.get_new_unread_notifications()
                 message = None
-                if len(nots) > 3:
+                if len(nots) > max_notifications:
                     notification.notify(acc.get_name(), 
                         _("New messages: ") + str(len(nots)),
                         acc.get_provider().get_icon())
                     
-                if len(nots) > 0 and len(nots) <= 3:
+                if len(nots) > 0 and len(nots) <= max_notifications:
                     for n in nots:
                         notification.notify(acc.get_name(), 
                             n.message,

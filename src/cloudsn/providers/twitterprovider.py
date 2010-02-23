@@ -31,6 +31,7 @@ class TwitterProvider(Provider):
         
         api = twitter.Api(username=account['username'],
             password=account['password'])
+        #base_url="identi.ca/api/"
 
         since_id = None
         if account.last_id != -1:

@@ -28,7 +28,18 @@ Milestone 0.X.0
 ===============
 * dbus time!!
 [ ] Create the clodsn dbus service
-[ ] Create the application window (preferences) in a separate application
+
+Milestone 0.5.0
+===============
+* GUI time...
+- Twitter/Identi.ca:
+    [ ] Select to use the profile avatar or the default icon in the indicator
+    [ ] Select to use the message avatar or the default icon in notifications
+[ ] Reestructure the application window
+[ ] Application window in a separate application
+[ ] Do dinamic panels to configure accounts (or custom)
+
+
 
 Milestone 0.4.0
 ===============

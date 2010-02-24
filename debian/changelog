@@ -1,3 +1,13 @@
+cloudsn (0.4.0) unstable; urgency=low
+
+  * gmail: Added additional labels checking
+  * threads: Check accounts in threads again
+  * notifications: In queue and configure the maximum notifications
+  * Identi.ca: Added basic Identi.ca support
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Wed, 24 Feb 2010 01:28:00 +0100
+
 cloudsn (0.3.0) unstable; urgency=low
 
   * preferences: Better account activation management

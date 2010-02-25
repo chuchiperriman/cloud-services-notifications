@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>Test chuchiperriman/cloud-services-notifications @ GitHub</title>
+	<title>Cloud Services Notifications</title>
 	
 	<style type="text/css">
 		body {
@@ -18,11 +18,11 @@
       margin: 0 auto;
       width: 700px;
     }
-		h1 { font-size: 3.8em; color: #2e2e2e; margin-bottom: 3px; }
+		h1 { font-size: 2.4em; color: #2e2e2e; margin-bottom: 3px; }
 		h1 .small { font-size: 0.4em; }
 		h1 a { text-decoration: none }
-		h2 { font-size: 1.5em; color: #2e2e2e; }
-    h3 { text-align: center; color: #2e2e2e; }
+		h2 { font-size: 1.2em; color: #2e2e2e; }
+    h3 { font-size: 1.0em; color: #2e2e2e; }
     a { color: #2e2e2e; }
     .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
     .download { float: right; }
@@ -49,17 +49,43 @@
       <span class="small">by <a href="http://github.com/chuchiperriman">chuchiperriman</a></span></h1>
 
     <div class="description">
-      Notify when arrive new mails, rss, calendars, tweets etc in the configured accounts
+      Notify when arrive new mails (pop3, gmail, imap), rss, tweets etc in the configured accounts. 
     </div>
 
-    <h2>License</h2>
-<p>GPL License http://www.gnu.org/copyleft/gpl.html</p>
+<h2>Features</h2>
+<p>Cloudsn try to implement the MVC pattern and it separates the providers, 
+configuration, indicators and notifications</p>
+<p>The providers check accounts against different services. Currently cloudsn
+ has these providers implemented:
+<ul>
+    <li>GMail</li>
+    <li>GReader</li>
+    <li>Pop3</li>
+    <li>IMAP</li>
+    <li>Twitter</li>
+    <li>Identi.ca</li>
+</ul>
+</p>
+<p>The indicators are a list of accounts and its unread items indicating the 
+state of every one. Currently you can choose between use one of these:
+<ul>
+    <li>Status Icon: Show the cloudsn icon and a list of active accounts with the information</li>
+    <li>Indicator-applet: Uses the indicator applet to list the accounts with the information</li>
+</ul>
+</p>
+<h2>Screenshots</h2>
+<h3>The status icon</h3>
+<img src="images/statusicon.png" />
+<h3>Indicators in the status icon</h3>
+<img src="images/statusicon-indicators.png" />
+<h3>Preferences</h3>
+<img src="images/preferences.png" />
+<h3>Account list</h3>
+<img src="images/accounts.png" />
+<h3>Selecting the provider</h3>
+<img src="images/providers.png" />
 <h2>Authors</h2>
 <p>Jesús Barbero Rodríguez (chuchiperriman@gmail.com)<br/><br/>      </p>
-<h2>Contact</h2>
-<p>Jesús Barbero Rodríguez (chuchiperriman@gmail.com)<br/>      </p>
-
-
     <h2>Download</h2>
     <p>
       You can download this project in either
@@ -70,6 +96,8 @@
       by running:
       <pre>$ git clone git://github.com/chuchiperriman/cloud-services-notifications</pre>
     </p>
+    <h2>License</h2>
+<p>GPL License http://www.gnu.org/copyleft/gpl.html</p>
       
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/chuchiperriman/cloud-services-notifications">chuchiperriman/cloud-services-notifications</a>

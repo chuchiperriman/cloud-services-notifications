@@ -32,21 +32,24 @@ class IndicatorApplet (Indicator):
         indicator.set_property("name", acc.get_name())
         indicator.set_property_time("time", time())
         indicator.set_property_int("count", acc.get_total_unread())
-        if acc.get_provider().get_icon() is not None:
-            indicator.set_property_icon("icon", acc.get_provider().get_icon())
+        indicator.set_property_icon("icon", acc.get_icon())
         indicator.show()
         indicator.connect("user-display", self.on_indicator_display_cb)
         acc.indicator = indicator
         indicator.account = acc
+        acc.is_error_icon = False
 
     def update_account(self, acc):
         #We had a previous error but now the update works.
-        if acc.error_notified:
-            acc.indicator.set_property_icon("icon", acc.get_provider().get_icon())
+        if acc.is_error_icon:
+            acc.indicator.set_property_icon("icon", acc.get_icon())
+            acc.is_error_icon = False
         acc.indicator.set_property_int("count", acc.get_total_unread())
 
     def update_error(self, acc):
-        acc.indicator.set_property_icon("icon", utils.get_account_error_pixbuf(acc))
+        if not acc.is_error_icon:
+            acc.indicator.set_property_icon("icon", acc.get_icon())
+            acc.is_error_icon = True
         acc.indicator.set_property_int("count", 0)
         
     def remove_indicator(self, acc):

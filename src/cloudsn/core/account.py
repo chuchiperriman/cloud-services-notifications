@@ -59,6 +59,12 @@ class Account:
         else:
             logger.warn('This account type has not an activate action')
 
+    def get_icon (self):
+        if self.error_notified:
+            return utils.get_account_error_pixbuf(self)
+        else:
+            return self.get_provider().get_icon()
+
 class AccountCacheMails (Account):
 
     def __init__(self, properties, provider):

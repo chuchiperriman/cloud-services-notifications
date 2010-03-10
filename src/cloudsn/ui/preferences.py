@@ -53,7 +53,7 @@ class Preferences:
                     if account is not None:
                         self.am.add_account(account)
                         self.am.save_account(account)
-                        self.store.append([account.get_provider().get_icon(),
+                        self.store.append([account.get_icon(),
                                 account.get_name(),self.__get_account_date(account),
                                 account.get_active()])
                 except Exception, e:
@@ -82,7 +82,7 @@ class Preferences:
 
     def on_update_button_clicked(self, widget, data=None):
         from cloudsn.core.controller import Controller
-
+        acc = None
         selection = self.account_tree.get_selection()
         model, paths = selection.get_selected_rows()
         for path in paths:
@@ -90,7 +90,8 @@ class Preferences:
             account_name = self.store.get_value(citer, 1)
             acc = self.am.get_account(account_name)
 
-        Controller.get_instance().update_account(acc)
+        if acc:
+            Controller.get_instance().update_account(acc)
 
     def on_startup_check_toggled(self, widget, data=None):
         if widget.get_active():
@@ -124,6 +125,13 @@ class Preferences:
     def __on_account_checked_cb(self, widget, acc):
         for row in self.store:
             if row[1] == acc.get_name():
+                row[0] = acc.get_icon()
+                row[2] = self.__get_account_date(acc)
+    
+    def __on_account_check_error_cb(self, widget, acc):
+        for row in self.store:
+            if row[1] == acc.get_name():
+                row[0] = acc.get_icon()
                 row[2] = self.__get_account_date(acc)
     
     def load_window(self):
@@ -148,7 +156,7 @@ class Preferences:
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         for acc in self.am.get_accounts():
-            self.store.append([acc.get_provider().get_icon(), acc.get_name(),
+            self.store.append([acc.get_icon(), acc.get_name(),
                 self.__get_account_date(acc), acc.get_active()])
 
         self.providers_combo.set_active(0)
@@ -174,6 +182,9 @@ class Preferences:
         #Update the last check date
         Controller.get_instance().connect ("account-checked", 
             self.__on_account_checked_cb)
+        
+        Controller.get_instance().connect ("account-check-error", 
+            self.__on_account_check_error_cb)
         
     def run(self):
         if self.window is None:

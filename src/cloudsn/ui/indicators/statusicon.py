@@ -55,7 +55,7 @@ class StatusIconIndicator (Indicator):
         
     def create_indicator(self, acc):
         indmenuItem = gtk.ImageMenuItem(gtk.STOCK_QUIT)
-        pix = self.scale_pixbuf(acc.get_provider().get_icon())
+        pix = self.scale_pixbuf(acc.get_icon())
         
         """
         indmenuItem.set_image(gtk.image_new_from_pixbuf(pix))
@@ -76,16 +76,20 @@ class StatusIconIndicator (Indicator):
         acc.indicator = indmenuItem
         acc.total_label = total_label
         acc.menu_icon = menu_icon
+        acc.is_error_icon = False
     
     def update_account(self, acc):
         #We had a previous error but now the update works.
-        if acc.error_notified:
-            acc.menu_icon.set_from_pixbuf(self.scale_pixbuf(acc.get_provider().get_icon()))
+        if acc.is_error_icon:
+            acc.menu_icon.set_from_pixbuf(self.scale_pixbuf(acc.get_icon()))
+            acc.is_error_icon = False
         
         acc.total_label.set_label(("(%i)") % (acc.get_total_unread()))
 
     def update_error(self, acc):
-        acc.menu_icon.set_from_pixbuf(self.scale_pixbuf(utils.get_account_error_pixbuf(acc)))
+        if not acc.is_error_icon:
+            acc.menu_icon.set_from_pixbuf(self.scale_pixbuf(acc.get_icon()))
+            acc.is_error_icon = True
         acc.total_label.set_label("")
 
     def remove_indicator(self, acc):

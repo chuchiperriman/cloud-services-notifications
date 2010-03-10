@@ -14,7 +14,8 @@ class Controller (gobject.GObject):
 
     __gtype_name__ = "Controller"
 
-    __gsignals__ = { "account-checked" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))}
+    __gsignals__ = { "account-checked" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
+                     "account-check-error" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))}
 
     timeout_id = -1
     interval = 60
@@ -130,10 +131,12 @@ class Controller (gobject.GObject):
                 gtk.main_iteration(False)
                 
             self.am.update_account(acc)
+            
+            acc.error_notified = False
+            
             if hasattr(acc, "indicator"):
                 self.im.get_indicator().update_account(acc)
                 
-            acc.error_notified = False
             
             #Process events to show the indicator menu
             while gtk.events_pending():
@@ -145,13 +148,13 @@ class Controller (gobject.GObject):
                 if len(nots) > max_notifications:
                     notification.notify(acc.get_name(), 
                         _("New messages: ") + str(len(nots)),
-                        acc.get_provider().get_icon())
+                        acc.get_icon())
                     
                 if len(nots) > 0 and len(nots) <= max_notifications:
                     for n in nots:
                         notification.notify(acc.get_name(), 
                             n.message,
-                            acc.get_provider().get_icon())
+                            acc.get_icon())
 
             self.emit("account-checked", acc)
         except notification.NotificationError, ne:
@@ -159,11 +162,12 @@ class Controller (gobject.GObject):
         except Exception, e:
             logger.exception("Error trying to update the account %s: %s", acc.get_name(), e)
             if not acc.error_notified:
+                acc.error_notified = True
                 notification.notify (_("Error checking account %s") % (acc.get_name()),
                     str(e),
-                    utils.get_account_error_pixbuf(acc))
+                    acc.get_icon())
                 self.im.get_indicator().update_error(acc)
-                acc.error_notified = True
+            self.emit("account-check-error", acc)
         finally:
             self.accounts_checking.remove(acc)
 

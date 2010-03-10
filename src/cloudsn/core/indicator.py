@@ -16,6 +16,9 @@ class Indicator:
 
     def remove_indicator(self, acc):
         pass
+    
+    def update_error(self, acc):
+        pass
 
 class IndicatorManager():
 

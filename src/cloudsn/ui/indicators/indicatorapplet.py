@@ -2,7 +2,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-from cloudsn.core import config
+from cloudsn.core import config, utils
 from cloudsn.ui import preferences
 from cloudsn.core.indicator import Indicator
 import indicate
@@ -40,10 +40,16 @@ class IndicatorApplet (Indicator):
         indicator.account = acc
 
     def update_account(self, acc):
+        #We had a previous error but now the update works.
+        if acc.error_notified:
+            acc.indicator.set_property_icon("icon", acc.get_provider().get_icon())
         acc.indicator.set_property_int("count", acc.get_total_unread())
 
+    def update_error(self, acc):
+        acc.indicator.set_property_icon("icon", utils.get_account_error_pixbuf(acc))
+        acc.indicator.set_property_int("count", 0)
+        
     def remove_indicator(self, acc):
-        self.indmenu.remove(acc.indicator)
         acc.indicator = None
 
     def on_server_display_cb(self, server):

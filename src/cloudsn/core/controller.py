@@ -130,9 +130,10 @@ class Controller (gobject.GObject):
                 gtk.main_iteration(False)
                 
             self.am.update_account(acc)
-            acc.error_notified = False
             if hasattr(acc, "indicator"):
                 self.im.get_indicator().update_account(acc)
+                
+            acc.error_notified = False
             
             #Process events to show the indicator menu
             while gtk.events_pending():
@@ -160,7 +161,8 @@ class Controller (gobject.GObject):
             if not acc.error_notified:
                 notification.notify (_("Error checking account %s") % (acc.get_name()),
                     str(e),
-                    utils.get_error_pixbuf())
+                    utils.get_account_error_pixbuf(acc))
+                self.im.get_indicator().update_error(acc)
                 acc.error_notified = True
         finally:
             self.accounts_checking.remove(acc)

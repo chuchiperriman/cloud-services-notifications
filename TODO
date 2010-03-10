@@ -36,7 +36,8 @@ Milestone 0.5.0
     [ ] Select to use the profile avatar or the default icon in the indicator
     [ ] Select to use the message avatar or the default icon in notifications
     [ ] Show the friend name/icon in the notifications
-[ ] Show an stop emblem when an account has errors
+[X] Show an stop emblem when an account has errors
+[ ] Show the stop emblem in the preferences dialog too
 [ ] Reestructure the application window
 [ ] Application window in a separate application
 [ ] Do dinamic panels to configure accounts (or custom)

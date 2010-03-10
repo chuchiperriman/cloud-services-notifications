@@ -1,7 +1,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
-from cloudsn.core import config, controller
+from cloudsn.core import config, controller, utils
 from cloudsn.ui import preferences
 from cloudsn.core.indicator import Indicator
 from cloudsn.const import *
@@ -55,7 +55,7 @@ class StatusIconIndicator (Indicator):
         
     def create_indicator(self, acc):
         indmenuItem = gtk.ImageMenuItem(gtk.STOCK_QUIT)
-        pix = acc.get_provider().get_icon().scale_simple(16,16,gtk.gdk.INTERP_BILINEAR)
+        pix = self.scale_pixbuf(acc.get_provider().get_icon())
         
         """
         indmenuItem.set_image(gtk.image_new_from_pixbuf(pix))
@@ -65,7 +65,8 @@ class StatusIconIndicator (Indicator):
         """
         indmenuItem = gtk.MenuItem()
         box = gtk.HBox()
-        box.pack_start(gtk.image_new_from_pixbuf(pix), False, False)
+        menu_icon = gtk.image_new_from_pixbuf(pix)
+        box.pack_start(menu_icon, False, False)
         box.pack_start(gtk.Label(acc.get_name()), False, True, 10)
         total_label = gtk.Label(("(%i)") % (acc.get_total_unread()))
         box.pack_end(total_label, False, False)
@@ -74,9 +75,18 @@ class StatusIconIndicator (Indicator):
         self.indmenu.append(indmenuItem)
         acc.indicator = indmenuItem
         acc.total_label = total_label
+        acc.menu_icon = menu_icon
     
     def update_account(self, acc):
+        #We had a previous error but now the update works.
+        if acc.error_notified:
+            acc.menu_icon.set_from_pixbuf(self.scale_pixbuf(acc.get_provider().get_icon()))
+        
         acc.total_label.set_label(("(%i)") % (acc.get_total_unread()))
+
+    def update_error(self, acc):
+        acc.menu_icon.set_from_pixbuf(self.scale_pixbuf(utils.get_account_error_pixbuf(acc)))
+        acc.total_label.set_label("")
 
     def remove_indicator(self, acc):
         self.indmenu.remove(acc.indicator)
@@ -108,4 +118,5 @@ class StatusIconIndicator (Indicator):
                 data.show_all()
                 data.popup(None, None, gtk.status_icon_position_menu,
                            3, time, self.statusIcon)
-
+    def scale_pixbuf (self, pix):
+        return pix.scale_simple(16,16,gtk.gdk.INTERP_BILINEAR)

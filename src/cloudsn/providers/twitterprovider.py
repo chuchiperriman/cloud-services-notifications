@@ -63,7 +63,7 @@ class TwitterProvider(Provider):
     def _create_dialog(self, parent):
         builder=gtk.Builder()
         builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.add_data_prefix("greader-account.ui"))
+        builder.add_from_file(config.add_data_prefix("greader.ui"))
         dialog = builder.get_object("dialog")
         dialog.set_icon(self.get_icon())
         dialog.set_transient_for(parent)

@@ -1,5 +1,5 @@
 from cloudsn.core.account import AccountCacheMails, AccountManager
-from cloudsn.core.provider import Provider
+from cloudsn.providers.providersbase import ProviderBase
 from cloudsn.core import utils
 from cloudsn.core import config
 import urllib2
@@ -8,15 +8,14 @@ import urllib
 import xml.dom.minidom
 import gtk
 
-class GReaderProvider(Provider):
+class GReaderProvider(ProviderBase):
 
     __default = None
 
     def __init__(self):
         if GReaderProvider.__default:
            raise GReaderProvider.__default
-        Provider.__init__(self, "Google Reader")
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('greader.png'))
+        ProviderBase.__init__(self, "Google Reader", "greader")
 
     @staticmethod
     def get_instance():
@@ -34,41 +33,24 @@ class GReaderProvider(Provider):
         g.refreshInfo()
         account.total_unread = g.getTotalUnread()
 
-    def _create_dialog(self, parent):
-        builder=gtk.Builder()
-        builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.add_data_prefix("greader-account.ui"))
-        dialog = builder.get_object("dialog")
-        dialog.set_icon(self.get_icon())
-        dialog.set_transient_for(parent)
-        return (builder, dialog)
-        
-    def create_account_dialog(self, account_name, parent):
-        builder, dialog = self._create_dialog(parent)
-        account = None
-        if dialog.run() == 0:
-            username = builder.get_object("username_entry").get_text()
-            password = builder.get_object("password_entry").get_text()
+    def populate_dialog(self, builder, acc):
+        self._set_text_value ("username_entry",acc["username"])
+        self._set_text_value ("password_entry", acc["password"])
+    
+    def save_from_dialog(self, builder, account_name, acc = None):
+        if not acc:
+            username = self._get_text_value ("username_entry")
+            password = self._get_text_value ("password_entry")
             props = {'name' : account_name, 'provider_name' : self.get_name(),
                 'username' : username, 'password' : password,
                 'activate_url' : "http://reader.google.com"}
-            account = self.load_account(props)
-        dialog.destroy()
-        return account
+            acc = self.load_account(props)
+        else:
+            acc["username"] = self._get_text_value ("username_entry")
+            acc["password"] = self._get_text_value ("password_entry")
         
-    def edit_account_dialog(self, acc, parent):
-        res = False
-        builder, dialog = self._create_dialog(parent)
-        builder.get_object("username_entry").set_text(acc["username"])
-        builder.get_object("password_entry").set_text(acc["password"])
-        account = None
-        if dialog.run() == 0:
-            acc["username"] = builder.get_object("username_entry").get_text()
-            acc["password"] = builder.get_object("password_entry").get_text()
-            res = True
-        dialog.destroy()
-        return res
-
+        return acc
+        
 class GreaderAtom:
 	
 	login_url = "https://www.google.com/accounts/ServiceLogin"

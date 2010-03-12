@@ -2,6 +2,6 @@
 src/cloudsn/core/controller.py
 src/cloudsn/ui/indicators/statusicon.py
 [type: gettext/glade]data/gmail-account.ui
-[type: gettext/glade]data/greader-account.ui
+[type: gettext/glade]data/greader.ui
 [type: gettext/glade]data/pop3-account.ui
 [type: gettext/glade]data/preferences.ui

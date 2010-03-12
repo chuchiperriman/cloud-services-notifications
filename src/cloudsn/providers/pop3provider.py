@@ -5,7 +5,7 @@ Based on pop3.py:
     https://code.launchpad.net/cgmail
     
 """
-from cloudsn.core.provider import Provider
+from cloudsn.providers.providersbase import ProviderBase
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core import config
 from cloudsn.core import utils
@@ -16,15 +16,14 @@ from email.Parser import Parser as EmailParser
 from email.header import decode_header
 import gtk
 
-class Pop3Provider(Provider):
+class Pop3Provider(ProviderBase):
 
     __default = None
 
     def __init__(self):
         if Pop3Provider.__default:
            raise Pop3Provider.__default
-        Provider.__init__(self, "Pop3")
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('pop3.png'))
+        ProviderBase.__init__(self, "Pop3")
 
     @staticmethod
     def get_instance():
@@ -44,44 +43,27 @@ class Pop3Provider(Provider):
                 n = Notification(mail_id, sub, fr)
                 account.notifications[mail_id] = sub
                 account.new_unread.append (n)
-        
-    def _create_dialog(self, parent):
-        builder=gtk.Builder()
-        builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.add_data_prefix("pop3-account.ui"))
-        dialog = builder.get_object("dialog")
-        dialog.set_icon(self.get_icon())
-        dialog.set_transient_for(parent)
-        return (builder, dialog)
-        
-    def create_account_dialog(self, account_name, parent):
-        builder, dialog = self._create_dialog(parent)
-        account = None
-        if dialog.run() == 0:
-            host = builder.get_object("host_entry").get_text()
-            username = builder.get_object("username_entry").get_text()
-            password = builder.get_object("password_entry").get_text()
+    
+    def populate_dialog(self, builder, acc):
+        self._set_text_value ("host_entry",acc["host"])
+        self._set_text_value ("username_entry",acc["username"])
+        self._set_text_value ("password_entry", acc["password"])
+    
+    def save_from_dialog(self, builder, account_name, acc = None):
+        if not acc:
+            host = self._get_text_value ("host_entry")
+            username = self._get_text_value ("username_entry")
+            password = self._get_text_value ("password_entry")
             props = {'name' : account_name, 'provider_name' : self.get_name(),
                 'host' : host, 'username' : username, 'password' : password}
-            account = self.load_account(props)
-        dialog.destroy()
-        return account
+            acc = self.load_account(props)
+        else:
+            acc["host"] = self._get_text_value ("host_entry")
+            acc["username"] = self._get_text_value ("username_entry")
+            acc["password"] = self._get_text_value ("password_entry")
         
-    def edit_account_dialog(self, acc, parent):
-        res = False
-        builder, dialog = self._create_dialog(parent)
-        builder.get_object("host_entry").set_text(acc["host"])
-        builder.get_object("username_entry").set_text(acc["username"])
-        builder.get_object("password_entry").set_text(acc["password"])
-        account = None
-        if dialog.run() == 0:
-            acc["host"] = builder.get_object("host_entry").get_text()
-            acc["username"] = builder.get_object("username_entry").get_text()
-            acc["password"] = builder.get_object("password_entry").get_text()
-            res = True
-        dialog.destroy()
-        return res
-
+        return acc
+        
 class PopBoxConnectionError(Exception): pass
 class PopBoxAuthError(Exception): pass
 

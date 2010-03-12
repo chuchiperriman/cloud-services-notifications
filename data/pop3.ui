@@ -2,7 +2,7 @@
 <interface>
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy project-wide -->
-  <object class="GtkDialog" id="dialog">
+  <object class="GtkDialog" id="main">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">New Google Reader Account</property>
     <property name="resizable">False</property>

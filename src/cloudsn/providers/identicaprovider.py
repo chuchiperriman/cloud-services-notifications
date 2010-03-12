@@ -11,7 +11,7 @@ class IdenticaProvider(TwitterProvider):
     def __init__(self):
         if IdenticaProvider.__default:
            raise IdenticaProvider.__default
-        TwitterProvider.__init__(self, "Identi.ca", "identica.png",
+        TwitterProvider.__init__(self, "Identi.ca", "identica",
             "http://identi.ca", "http://identi.ca/api/")
 
     @staticmethod

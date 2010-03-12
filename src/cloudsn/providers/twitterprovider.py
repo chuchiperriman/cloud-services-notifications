@@ -1,19 +1,17 @@
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
-from cloudsn.core.provider import Provider
+from cloudsn.providers.providersbase import ProviderBase
 from cloudsn.core import utils
 from cloudsn.core import config
 from cloudsn.providers import twitter
 import gtk
 
-class TwitterProvider(Provider):
+class TwitterProvider(ProviderBase):
 
     __default = None
 
-    def __init__(self, name = "Twitter", icon = "twitter.png",
-                activate_url = "http://twitter.com",
+    def __init__(self, name = "Twitter", id_provider = None, activate_url = "http://twitter.com",
                 api_url = "http://twitter.com"):
-        Provider.__init__(self, name)
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix(icon))
+        ProviderBase.__init__(self, name, id_provider)
         self.activate_url = activate_url
         self.api_url = api_url
 
@@ -27,6 +25,24 @@ class TwitterProvider(Provider):
         acc = TwitterAccount(props, self)
         acc.properties["activate_url"] = self.activate_url
         acc.last_id = -1
+        return acc
+
+    def populate_dialog(self, builder, acc):
+        self._set_text_value ("username_entry",acc["username"])
+        self._set_text_value ("password_entry", acc["password"])
+    
+    def save_from_dialog(self, builder, account_name, acc = None):
+        if not acc:
+            username = self._get_text_value ("username_entry")
+            password = self._get_text_value ("password_entry")
+            props = {'name' : account_name, 'provider_name' : self.get_name(),
+                'username' : username, 'password' : password,
+                'activate_url' : self.activate_url}
+            acc = self.load_account(props)
+        else:
+            acc["username"] = self._get_text_value ("username_entry")
+            acc["password"] = self._get_text_value ("password_entry")
+        
         return acc
         
     def update_account (self, account):
@@ -60,40 +76,7 @@ class TwitterProvider(Provider):
         account.new_unread = news;
         account.last_id = messages[0].id
 
-    def _create_dialog(self, parent):
-        builder=gtk.Builder()
-        builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.add_data_prefix("greader.ui"))
-        dialog = builder.get_object("dialog")
-        dialog.set_icon(self.get_icon())
-        dialog.set_transient_for(parent)
-        return (builder, dialog)
-        
-    def create_account_dialog(self, account_name, parent):
-        builder, dialog = self._create_dialog(parent)
-        account = None
-        if dialog.run() == 0:
-            username = builder.get_object("username_entry").get_text()
-            password = builder.get_object("password_entry").get_text()
-            props = {'name' : account_name, 'provider_name' : self.get_name(),
-                'username' : username, 'password' : password,
-                'activate_url' : self.activate_url}
-            account = self.load_account(props)
-        dialog.destroy()
-        return account
-        
-    def edit_account_dialog(self, acc, parent):
-        res = False
-        builder, dialog = self._create_dialog(parent)
-        builder.get_object("username_entry").set_text(acc["username"])
-        builder.get_object("password_entry").set_text(acc["password"])
-        account = None
-        if dialog.run() == 0:
-            acc["username"] = builder.get_object("username_entry").get_text()
-            acc["password"] = builder.get_object("password_entry").get_text()
-            res = True
-        dialog.destroy()
-        return res
+
 
 class TwitterAccount (AccountCacheMails):
 

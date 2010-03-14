@@ -1,3 +1,4 @@
+#encoding: utf-8
 import pygtk
 pygtk.require('2.0')
 import gtk
@@ -129,7 +130,8 @@ class StatusIconIndicator (Indicator):
         dialog.set_copyright (const.APP_COPYRIGHT)
         dialog.set_comments(const.APP_DESCRIPTION)
         dialog.set_website (const.APP_WEBSITE)
-        dialog.set_logo(config.get_cloudsn_icon())
+        dialog.set_logo(gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('cloudsn120.png')))
+        dialog.set_authors (["Jesús Barbero Rodríguez"])
         dialog.run()
         dialog.hide()
 

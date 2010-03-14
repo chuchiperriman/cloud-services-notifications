@@ -1,6 +1,7 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+from cloudsn import const
 from cloudsn.core import config, controller, utils
 from cloudsn.ui import preferences
 from cloudsn.core.indicator import Indicator
@@ -47,6 +48,11 @@ class StatusIconIndicator (Indicator):
         menu.append(menuItem)
         menuItem = gtk.ImageMenuItem(gtk.STOCK_PREFERENCES)
         menuItem.connect('activate', self.preferences_cb, self.statusIcon)
+        menu.append(menuItem)
+        menuItem =  gtk.SeparatorMenuItem()
+        menu.append(menuItem)
+        menuItem = gtk.ImageMenuItem(gtk.STOCK_ABOUT)
+        menuItem.connect('activate', self.about_cb, self.statusIcon)
         menu.append(menuItem)
         menuItem = gtk.ImageMenuItem(gtk.STOCK_QUIT)
         menuItem.connect('activate', self.quit_cb, self.statusIcon)
@@ -115,6 +121,17 @@ class StatusIconIndicator (Indicator):
         
     def quit_cb(self, widget, data = None):
        gtk.main_quit()
+    
+    def about_cb (self, widget, data = None):
+        dialog = gtk.AboutDialog()
+        dialog.set_name(const.APP_LONG_NAME)
+        dialog.set_version(const.APP_VERSION)
+        dialog.set_copyright (const.APP_COPYRIGHT)
+        dialog.set_comments(const.APP_DESCRIPTION)
+        dialog.set_website (const.APP_WEBSITE)
+        dialog.set_logo(config.get_cloudsn_icon())
+        dialog.run()
+        dialog.hide()
 
     def popup_menu_cb(self, widget, button, time, data = None):
         if button == 3:

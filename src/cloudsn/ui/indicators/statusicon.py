@@ -1,10 +1,9 @@
-#encoding: utf-8
 import pygtk
 pygtk.require('2.0')
 import gtk
 from cloudsn import const
 from cloudsn.core import config, controller, utils
-from cloudsn.ui import preferences
+from cloudsn.ui import preferences, about
 from cloudsn.core.indicator import Indicator
 from cloudsn.const import *
 import gettext
@@ -124,16 +123,7 @@ class StatusIconIndicator (Indicator):
        gtk.main_quit()
     
     def about_cb (self, widget, data = None):
-        dialog = gtk.AboutDialog()
-        dialog.set_name(const.APP_LONG_NAME)
-        dialog.set_version(const.APP_VERSION)
-        dialog.set_copyright (const.APP_COPYRIGHT)
-        dialog.set_comments(const.APP_DESCRIPTION)
-        dialog.set_website (const.APP_WEBSITE)
-        dialog.set_logo(gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('cloudsn120.png')))
-        dialog.set_authors (["Jesús Barbero Rodríguez"])
-        dialog.run()
-        dialog.hide()
+        about.show_about_dialog()
 
     def popup_menu_cb(self, widget, button, time, data = None):
         if button == 3:

@@ -21,6 +21,8 @@ class MainWindow:
         self.pm = provider.ProviderManager.get_instance()
         self.am = account.AccountManager.get_instance()
         self.im = indicator.IndicatorManager.get_instance()
+        self.am.connect ("account-deleted", 
+            self.account_deleted_cb)
 
     @staticmethod
     def get_instance():
@@ -36,7 +38,9 @@ class MainWindow:
             account_name = self.main_store.get_value(citer, 1)
             acc = self.am.get_account(account_name)
             return acc, citer
-
+        
+        return None, None
+    
     def __get_account_date(self, acc):
         last_update = ''
         dt = acc.get_last_update()
@@ -139,7 +143,9 @@ class MainWindow:
 
     def main_delete_button_clicked_cb(self, widget, data=None):
         acc, citer = self.get_main_account_selected()
-        
+        if not acc:
+            return
+            
         msg = (_('Are you sure you want to delete the account %s?')) % (acc.get_name());
         
         dia = gtk.MessageDialog(self.window,
@@ -149,10 +155,14 @@ class MainWindow:
                   msg)
         dia.show_all()
         if dia.run() == gtk.RESPONSE_YES:
-            print 'aceeeeeeept'
+            self.am.del_account(acc, True)
         dia.hide()
-        #self.am.del_account(acc, True)
-        #self.store.remove(citer)
+
+    def account_deleted_cb(self, widget, acc):
+        for i in range(len(self.main_store)):
+            if self.main_store[i][1] == acc.get_name():
+                del self.main_store[i]
+                break
 
     def window_delete_event_cb (self, widget, event, data=None):
         if self.dialog_only:

@@ -517,7 +517,6 @@
   <object class="GtkDialog" id="account_new_dialog">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">New Account</property>
-    <property name="resizable">False</property>
     <property name="modal">True</property>
     <property name="window_position">center</property>
     <property name="destroy_with_parent">True</property>
@@ -528,11 +527,12 @@
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">2</property>
+        <property name="spacing">30</property>
         <child>
           <object class="GtkVBox" id="vbox7">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
+            <property name="spacing">10</property>
             <child>
               <object class="GtkLabel" id="label11">
                 <property name="visible">True</property>
@@ -571,6 +571,7 @@
                   <object class="GtkComboBox" id="providers_combo">
                     <property name="visible">True</property>
                     <property name="model">providers_store</property>
+                    <signal name="changed" handler="providers_combo_changed_cb"/>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="prov_icon_cell"/>
                       <attributes>
@@ -615,16 +616,16 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="provider_info">
+          <object class="GtkVBox" id="provider_content">
             <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="hscrollbar_policy">automatic</property>
-            <property name="vscrollbar_policy">automatic</property>
+            <property name="orientation">vertical</property>
             <child>
               <placeholder/>
             </child>
           </object>
           <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -648,7 +649,7 @@
             </child>
             <child>
               <object class="GtkButton" id="button1">
-                <property name="label">gtk-add</property>
+                <property name="label">gtk-ok</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -814,8 +815,8 @@
               <object class="GtkToolButton" id="tool_preferences">
                 <property name="visible">True</property>
                 <property name="tooltip_text" translatable="yes">Show preferences</property>
-                <property name="related_action">preferences_action</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">preferences_action</property>
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
               </object>

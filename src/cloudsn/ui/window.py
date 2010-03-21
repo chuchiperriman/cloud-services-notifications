@@ -4,7 +4,7 @@ import shutil
 import gettext
 from cloudsn.core import config, provider, account, indicator
 from cloudsn import logger
-from cloudsn.ui import about
+from cloudsn.ui import about, utils
 
 STOP_RESPONSE = 1
 
@@ -14,7 +14,8 @@ class MainWindow:
 
     def __init__ (self):
         if MainWindow.__default:
-           raise MainWindow.__default
+            raise MainWindow.__default
+        self.builder = None
         self.window = None
         self.dialog_only = False
         self.config = config.SettingsController.get_instance()
@@ -50,17 +51,17 @@ class MainWindow:
         return last_update
 
     def load_window(self):
-        builder=gtk.Builder()
-        builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.add_data_prefix("preferences.ui"))
-        builder.connect_signals(self)
-        self.window=builder.get_object("main_window")
+        self.builder=gtk.Builder()
+        self.builder.set_translation_domain("cloudsn")
+        self.builder.add_from_file(config.add_data_prefix("preferences.ui"))
+        self.builder.connect_signals(self)
+        self.window=self.builder.get_object("main_window")
         self.window.connect ("delete-event", self.window_delete_event_cb)
         self.window.set_icon(config.get_cloudsn_icon())
-        self.main_account_tree = builder.get_object("main_account_tree");
-        self.main_store = builder.get_object("account_store");
-        self.providers_combo = builder.get_object("providers_combo");
-        self.providers_store = builder.get_object("providers_store");
+        self.main_account_tree = self.builder.get_object("main_account_tree");
+        self.main_store = self.builder.get_object("account_store");
+        self.providers_combo = self.builder.get_object("providers_combo");
+        self.providers_store = self.builder.get_object("providers_store");
         
         #Populate accounts
         for acc in self.am.get_accounts():
@@ -69,6 +70,7 @@ class MainWindow:
         
         #Populate providers
         for prov in self.pm.get_providers():
+            print "prov",prov.get_name()
             self.providers_store.append([prov.get_icon(), prov.get_name()])
         """
         self.minutes=builder.get_object("minutes_spin")
@@ -87,7 +89,6 @@ class MainWindow:
             self.store.append([acc.get_icon(), acc.get_name(),
                 self.__get_account_date(acc), acc.get_active()])
 
-        self.providers_combo.set_active(0)
         self.minutes.set_value (float(self.config.get_prefs()["minutes"]))
         self.max_not_spin.set_value (float(self.config.get_prefs()["max_notifications"]))
 
@@ -175,15 +176,27 @@ class MainWindow:
             self.window.hide()
     
     def new_action_activate_cb(self, widget, data=None):
-        builder=gtk.Builder()
-        builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.add_data_prefix("preferences.ui"))
-        #builder.connect_signals(self)
-        self.new_dialog = builder.get_object("account_new_dialog")
+        self.new_dialog = self.builder.get_object("account_new_dialog")
+        self.provider_content = self.builder.get_object("provider_content")
         self.new_dialog.set_transient_for(self.window)
         self.new_dialog.set_destroy_with_parent (True)
         response = self.new_dialog.run()
+        if response == 0:
+            print self.provider_content.get_children()[0]
         self.new_dialog.hide()
+        
+    def providers_combo_changed_cb(self, widget, data=None):
+        print 'changed'
+        ch = self.provider_content.get_children()
+        for c in ch:
+            self.provider_content.remove(c)
+            c.destroy()
+            
+        box = utils.create_provider_widget ([{"label": "User:", "type" : "str"},
+                {"label": "Password:", "type" : "pwd"}])
+        #box.set_parent_window (self.new_dialog)
+        self.provider_content.add(box)
+        box.show_all()
 
 def main ():
     import cloudsn.cloudsn

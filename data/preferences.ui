@@ -530,64 +530,102 @@
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <child>
-          <object class="GtkTable" id="table1">
+          <object class="GtkVBox" id="vbox7">
             <property name="visible">True</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">2</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkLabel" id="label4">
+              <object class="GtkLabel" id="label11">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Account name: </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkEntry" id="account_name_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="invisible_char">&#x25CF;</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;New Account&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
+                <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label5">
+              <object class="GtkTable" id="table1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Provider: </property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="providers_combo">
-                <property name="visible">True</property>
-                <property name="model">providers_store</property>
+                <property name="n_rows">2</property>
+                <property name="n_columns">2</property>
                 <child>
-                  <object class="GtkCellRendererPixbuf" id="prov_icon_cell"/>
-                  <attributes>
-                    <attribute name="pixbuf">0</attribute>
-                  </attributes>
+                  <object class="GtkLabel" id="label5">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Provider: </property>
+                  </object>
                 </child>
                 <child>
-                  <object class="GtkCellRendererText" id="prov_text_cell"/>
-                  <attributes>
-                    <attribute name="text">1</attribute>
-                  </attributes>
+                  <object class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="xalign">1</property>
+                    <property name="label" translatable="yes">Account name: </property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="providers_combo">
+                    <property name="visible">True</property>
+                    <property name="model">providers_store</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="prov_icon_cell"/>
+                      <attributes>
+                        <attribute name="pixbuf">0</attribute>
+                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkCellRendererText" id="prov_text_cell"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="account_name_entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
+                <property name="expand">False</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
+            <property name="expand">False</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="provider_info">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="hscrollbar_policy">automatic</property>
+            <property name="vscrollbar_policy">automatic</property>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
           </packing>
         </child>
         <child internal-child="action_area">
@@ -664,6 +702,7 @@
                       <object class="GtkImageMenuItem" id="menu_new">
                         <property name="label">gtk-new</property>
                         <property name="visible">True</property>
+                        <property name="related_action">new_action</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -775,8 +814,8 @@
               <object class="GtkToolButton" id="tool_preferences">
                 <property name="visible">True</property>
                 <property name="tooltip_text" translatable="yes">Show preferences</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">preferences_action</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
               </object>
@@ -871,6 +910,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Add a new account</property>
+                    <property name="related_action">new_action</property>
                     <property name="use_stock">True</property>
                   </object>
                   <packing>
@@ -961,5 +1001,9 @@
   <object class="GtkAction" id="quit_action">
     <property name="stock_id">gtk-quit</property>
     <signal name="activate" handler="quit_action_activate_cb"/>
+  </object>
+  <object class="GtkAction" id="new_action">
+    <property name="stock_id">gtk-new</property>
+    <signal name="activate" handler="new_action_activate_cb"/>
   </object>
 </interface>

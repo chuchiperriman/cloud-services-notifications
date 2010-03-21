@@ -59,11 +59,17 @@ class MainWindow:
         self.window.set_icon(config.get_cloudsn_icon())
         self.main_account_tree = builder.get_object("main_account_tree");
         self.main_store = builder.get_object("account_store");
+        self.providers_combo = builder.get_object("providers_combo");
+        self.providers_store = builder.get_object("providers_store");
         
         #Populate accounts
         for acc in self.am.get_accounts():
             self.main_store.append([acc.get_icon(), acc.get_name(),
                 self.__get_account_date(acc), acc.get_active()])
+        
+        #Populate providers
+        for prov in self.pm.get_providers():
+            self.providers_store.append([prov.get_icon(), prov.get_name()])
         """
         self.minutes=builder.get_object("minutes_spin")
         self.max_not_spin=builder.get_object("max_not_spin")
@@ -71,14 +77,12 @@ class MainWindow:
         self.store = builder.get_object("account_store");
         self.account_tree = builder.get_object("account_treeview");
         self.dialog_new = builder.get_object("account_new_dialog");
-        self.providers_combo = builder.get_object("providers_combo");
-        self.providers_store = builder.get_object("providers_store");
+        
         self.account_name_entry = builder.get_object("account_name_entry");
         self.startup_check = builder.get_object("startup_check")
         self.indicator_combo = builder.get_object("indicator_combo")
         self.indicators_store = builder.get_object("indicators_store");
-        for prov in self.pm.get_providers():
-            self.providers_store.append([prov.get_icon(), prov.get_name()])
+        
         for acc in self.am.get_accounts():
             self.store.append([acc.get_icon(), acc.get_name(),
                 self.__get_account_date(acc), acc.get_active()])
@@ -169,6 +173,17 @@ class MainWindow:
             gtk.main_quit()
         else:
             self.window.hide()
+    
+    def new_action_activate_cb(self, widget, data=None):
+        builder=gtk.Builder()
+        builder.set_translation_domain("cloudsn")
+        builder.add_from_file(config.add_data_prefix("preferences.ui"))
+        #builder.connect_signals(self)
+        self.new_dialog = builder.get_object("account_new_dialog")
+        self.new_dialog.set_transient_for(self.window)
+        self.new_dialog.set_destroy_with_parent (True)
+        response = self.new_dialog.run()
+        self.new_dialog.hide()
 
 def main ():
     import cloudsn.cloudsn

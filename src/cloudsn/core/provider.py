@@ -19,6 +19,8 @@ class Provider:
         return self.name
     def get_icon (self):
         return self.icon
+    def validate(self, widget):
+        return True
     def create_account_dialog(self, account_name, parent_window):
         """ Returns the new created account"""
         return None

@@ -2,6 +2,7 @@ from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
+from cloudsn.ui.utils import create_provider_widget, get_widget_by_label
 from xml.sax.handler import ContentHandler
 from xml import sax
 import gtk
@@ -16,6 +17,12 @@ class ProviderBase(Provider):
             self.id_provider = name
         self.id_provider = self.id_provider.lower()
         self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix(self.id_provider + '.png'))
+
+
+class ProviderGtkBuilder(ProviderBase):
+
+    def __init__(self, name,id_provider = None):
+        ProviderBase.__init__(self, name, id_provider)
         self._builder = None
 
     def _create_dialog(self, parent):
@@ -23,41 +30,44 @@ class ProviderBase(Provider):
         self._builder.set_translation_domain("cloudsn")
         self._builder.add_from_file(config.add_data_prefix(self.id_provider + ".ui"))
         dialog = self._builder.get_object("main")
-        dialog.set_transient_for(parent)
         self._builder.connect_signals(self)
-        dialog.set_icon(self.get_icon())
         return dialog
     
     def populate_dialog(self, builder, acc):
         raise NotImplementedError("The provider must implement this method")
     
-    def save_from_dialog(self, builder, account_name, acc = None):
-        """ 
-        Must return the new Account if acc is None or the modified account
-        """
-        raise NotImplementedError("The provider must implement this method")
-    
-    def create_account_dialog(self, account_name, parent):
-        dialog = self._create_dialog(parent)
-        account = None
-        if dialog.run() == 0:
-            account = self.save_from_dialog(self._builder, account_name)
-        dialog.destroy()
-        return account
+    def get_account_data_widget (self, account=None):
+        box = self._create_dialog(parent).get_child()
+        if account:
+            self.populate_dialog(self.builder, account)
         
-    def edit_account_dialog(self, acc, parent):
-        res = False
-        dialog = self._create_dialog(parent)
-        self.populate_dialog (self._builder, acc)
-        if dialog.run() == 0:
-            acc = self.save_from_dialog(self._builder, acc.get_name(), acc)
-            res = True
-        dialog.destroy()
-        return res
-
     def _get_text_value (self, widget_name):
         return self._builder.get_object(widget_name).get_text()
 
     def _set_text_value (self, widget_name, value):
         return self._builder.get_object(widget_name).set_text(value)
+
+
+class ProviderUtilsBuilder(ProviderBase):
+
+    def __init__(self, name,id_provider = None):
+        ProviderBase.__init__(self, name, id_provider)
+        self.box=None
+
+    def get_dialog_def(self):
+        raise NotImplementedError("The provider must implement this method")
+    
+    def populate_dialog(widget, account):
+        raise NotImplementedError("The provider must implement this method")
+    
+    def get_account_data_widget (self, account=None):
+        self.box = create_provider_widget (self.get_dialog_def())
+        if account:
+            self.populate_dialog(self.box, account)
+        return self.box
         
+    def _get_text_value (self, label):
+        return get_widget_by_label(self.box, label).get_text()
+
+    def _set_text_value (self, label, value):
+        return get_widget_by_label(self.box, label).set_text(value)

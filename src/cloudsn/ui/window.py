@@ -177,24 +177,59 @@ class MainWindow:
     
     def new_action_activate_cb(self, widget, data=None):
         self.new_dialog = self.builder.get_object("account_new_dialog")
+        account_name_entry = self.builder.get_object("account_name_entry");
         self.provider_content = self.builder.get_object("provider_content")
         self.new_dialog.set_transient_for(self.window)
         self.new_dialog.set_destroy_with_parent (True)
-        response = self.new_dialog.run()
-        if response == 0:
-            print self.provider_content.get_children()[0]
+        end = False
+        while not end:
+            response = self.new_dialog.run()
+            if response == 0:
+                try:
+                    #TODO Control the children correctly and the name
+                    if len(self.provider_content.get_children())==0:
+                        raise Exception(_("You must select a provider and fill the data"))
+
+                    acc_name = account_name_entry.get_text()
+                    if acc_name == '':
+                        raise Exception(_("You must fill the account name"))
+                    
+                    custom_widget = self.provider_content.get_children()[0]
+                    citer = self.providers_combo.get_active_iter()
+                    provider_name = self.providers_store.get_value (citer, 1)
+                    provider = self.pm.get_provider(provider_name)
+                    
+                    acc = provider.create_account(acc_name, custom_widget)
+                    self.am.add_account(acc)
+                    self.am.save_account(acc)
+                    self.main_store.append([acc.get_icon(),
+                            acc.get_name(),self.__get_account_date(acc),
+                            acc.get_active()])
+                    end = True
+                except Exception, e:
+                    logger.error ('Error adding a new account: ' + str(e))
+                    md = gtk.MessageDialog(self.window,
+                        gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
+                        gtk.BUTTONS_CLOSE,
+                        _('Error adding a new account: ') + str(e))
+                    md.run()
+                    md.destroy()
+            else:
+                end = True
+            
         self.new_dialog.hide()
         
     def providers_combo_changed_cb(self, widget, data=None):
-        print 'changed'
         ch = self.provider_content.get_children()
         for c in ch:
             self.provider_content.remove(c)
             c.destroy()
-            
-        box = utils.create_provider_widget ([{"label": "User:", "type" : "str"},
-                {"label": "Password:", "type" : "pwd"}])
-        #box.set_parent_window (self.new_dialog)
+        
+        citer = self.providers_combo.get_active_iter()
+        provider_name = self.providers_store.get_value (citer, 1)
+        provider = self.pm.get_provider(provider_name)
+        
+        box =  provider.get_account_data_widget()
         self.provider_content.add(box)
         box.show_all()
 

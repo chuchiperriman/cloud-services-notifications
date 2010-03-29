@@ -19,11 +19,29 @@ class Provider:
         return self.name
     def get_icon (self):
         return self.icon
+<<<<<<< HEAD:src/cloudsn/core/provider.py
     def validate(self, widget):
         return True
+=======
+    def get_account_data_widget (self, account=None):
+        """ 
+            If account == None is a new account
+            Returns a widget and it will be inserted into the new account dialog
+        """
+        return None
+    def create_account(self, account_name, widget):
+        """
+            Must return the new created account or raise an exception if there
+            is an error validating the data
+        """
+        raise NotImplementedError("The provider must implement this method!!")
+        
+    #TODO Remove the old function
+>>>>>>> 861cfc1b80e7ff1b1f896844718d5a1f33aa1ede:src/cloudsn/core/provider.py
     def create_account_dialog(self, account_name, parent_window):
         """ Returns the new created account"""
         return None
+    #TODO Remove the old function
     def edit_account_dialog(self, acc, parent_window):
         """ Returns True if the account has been changed"""
         return False

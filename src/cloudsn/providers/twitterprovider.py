@@ -1,6 +1,7 @@
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.providers.providersbase import ProviderBase
 from cloudsn.core import utils
+from cloudsn.ui.utils import create_provider_widget, get_widget_by_label
 from cloudsn.core import config
 from cloudsn.providers import twitter
 from cloudsn import logger
@@ -26,6 +27,33 @@ class TwitterProvider(ProviderBase):
         acc = TwitterAccount(props, self)
         acc.properties["activate_url"] = self.activate_url
         acc.last_id = -1
+        return acc
+
+    def get_account_data_widget (self, account=None):
+        
+        if account:
+            #TODO set the account data in the widgets
+            user = 'aa'
+            password = 'bb'
+        else:
+            user = ''
+            password = ''
+            
+        box = create_provider_widget ([{"label": "User", "type" : "str",
+                                        "value": user},
+                {"label": "Password", "type" : "pwd","value": password}])
+        
+        return box
+
+    def create_account(self, account_name, widget):
+        username = get_widget_by_label (widget,"User").get_text()
+        password = get_widget_by_label (widget,"Password").get_text()
+        if username=='' or password=='':
+            raise Exception(_("The user name and the password are mandatory"))
+        props = {'name' : account_name, 'provider_name' : self.get_name(),
+            'username' : username, 'password' : password,
+            'activate_url' : self.activate_url}
+        acc = self.load_account(props)
         return acc
 
     def populate_dialog(self, builder, acc):

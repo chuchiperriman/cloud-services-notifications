@@ -5,10 +5,11 @@ from datetime import datetime
 import gettext
 
 class Notification:
-    def __init__(self, id = None, message = None, sender = None):
+    def __init__(self, id = None, message = None, sender = None, icon = None):
         self.id = id
         self.sender = sender
         self.message = message
+        self.icon = icon
 
 class Account:
     def __init__ (self, properties, provider):

@@ -33,9 +33,9 @@ Milestone 0.6.0
 ===============
 * GUI time...
 - Twitter/Identi.ca:
-    [ ] Select to use the profile avatar or the default icon in the indicator
-    [ ] Select to use the message avatar or the default icon in notifications
-    [ ] Show the friend name/icon in the notifications
+    [X] Select to use the profile avatar or the default icon in the indicator
+    [X] Select to use the message avatar or the default icon in notifications
+    [X] Show the friend name/icon in the notifications
 [X] Show an stop emblem when an account has errors
 [X] Show the stop emblem in the preferences dialog too
 [ ] Create the about dialog

@@ -4,6 +4,7 @@ from cloudsn.core import utils
 from cloudsn.ui.utils import create_provider_widget, get_widget_by_label
 from cloudsn.core import config
 from cloudsn.providers import twitter
+from cloudsn import logger
 import gtk
 
 class TwitterProvider(ProviderUtilsBuilder):
@@ -74,16 +75,26 @@ class TwitterProvider(ProviderUtilsBuilder):
             for m in messages:
                 if m.id not in account.notifications:
                     account.notifications[m.id] = m.id
-                    news.append (Notification(m.id, m.text, m.user.screen_name))
+                    news.append (Notification(m.id, m.text, m.user.screen_name,
+                                 self.get_message_icon(m)))
         else:
             #If it is the fist update, show the last message only
             account.notifications[messages[0].id] = messages[0].id
-            news.append (Notification(messages[0].id, messages[0].text, messages[0].user.screen_name))
-        
+            news.append (Notification(messages[0].id, messages[0].text,
+                         messages[0].user.screen_name,
+                         self.get_message_icon(messages[0])))
+            
         account.new_unread = news;
         account.last_id = messages[0].id
 
-
+    def get_message_icon(self,m):
+        icon = None
+        try:
+            icon = utils.download_image_to_pixbuf(m.user.profile_image_url)
+        except Exception, e:
+            logger.exception("Error loading the user avatar",e)
+            
+        return icon
 
 class TwitterAccount (AccountCacheMails):
 

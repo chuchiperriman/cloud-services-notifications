@@ -4,6 +4,8 @@ import os
 import subprocess
 from email.header import decode_header
 from cloudsn.core import config
+import tempfile
+import urllib2
 
 def show_url(url):
     """Open any @url with default viewer"""
@@ -52,6 +54,26 @@ def get_account_error_pixbuf (acc):
     error = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('error.png'))
     error.composite(original, 10, 10, 22, 22, 10, 10, 1.0, 1.0, gtk.gdk.INTERP_HYPER, 220)
     return original
+
+def download_image_to_tmp(url):
+    filename = url.replace('http://', '0_')
+    filename = filename.replace('/', '_')
+    fullname = os.path.join(tempfile.gettempdir(), filename)
+
+    if os.path.exists(fullname):
+        return fullname
+        
+    f = urllib2.urlopen(url).read()
+
+    fich = open(fullname, 'w+')
+    fich.write(f)
+    fich.close()
+    
+    return fullname
+
+def download_image_to_pixbuf(url):
+    path = download_image_to_tmp(url)
+    return gtk.gdk.pixbuf_new_from_file(path)
 
 if __name__ == "__main__":
     print get_default_mail_reader()

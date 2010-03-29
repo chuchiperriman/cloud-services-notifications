@@ -152,9 +152,13 @@ class Controller (gobject.GObject):
                     
                 if len(nots) > 0 and len(nots) <= max_notifications:
                     for n in nots:
-                        notification.notify(acc.get_name(), 
+                        if n.icon:
+                            icon = n.icon
+                        else:
+                            icon = acc.get_icon()
+                        notification.notify(acc.get_name() + ": " + n.sender, 
                             n.message,
-                            acc.get_icon())
+                            icon)
 
             self.emit("account-checked", acc)
         except notification.NotificationError, ne:

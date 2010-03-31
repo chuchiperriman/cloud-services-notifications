@@ -38,7 +38,7 @@ Milestone 0.6.0
     [X] Show the friend name/icon in the notifications
 [X] Show an stop emblem when an account has errors
 [X] Show the stop emblem in the preferences dialog too
-[ ] Create the about dialog
+[X] Create the about dialog
 [ ] Reestructure the application window
 [ ] Do dinamic panels to configure accounts (or custom)
 

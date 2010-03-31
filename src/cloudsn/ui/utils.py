@@ -10,6 +10,8 @@ def create_provider_widget(fields):
         if f["type"] == "pwd":
             entry = gtk.Entry()
             entry.set_visibility(False)
+        elif f["type"] == "check":
+            entry = gtk.CheckButton()
         else:
             entry = gtk.Entry()
 

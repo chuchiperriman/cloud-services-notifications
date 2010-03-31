@@ -71,3 +71,9 @@ class ProviderUtilsBuilder(ProviderBase):
 
     def _set_text_value (self, label, value):
         return get_widget_by_label(self.box, label).set_text(value)
+    
+    def _get_check_value (self, label):
+        return get_widget_by_label(self.box, label).get_active()
+
+    def _set_check_value (self, label, value):
+        return get_widget_by_label(self.box, label).set_active(value)

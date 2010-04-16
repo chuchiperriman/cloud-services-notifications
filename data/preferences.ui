@@ -927,6 +927,7 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="tooltip_text" translatable="yes">Edit the selected account</property>
+                    <property name="related_action">edit_action</property>
                     <property name="use_stock">True</property>
                   </object>
                   <packing>
@@ -1006,5 +1007,9 @@
   <object class="GtkAction" id="new_action">
     <property name="stock_id">gtk-new</property>
     <signal name="activate" handler="new_action_activate_cb"/>
+  </object>
+  <object class="GtkAction" id="edit_action">
+    <property name="stock_id">gtk-edit</property>
+    <signal name="activate" handler="edit_action_activate_cb"/>
   </object>
 </interface>

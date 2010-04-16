@@ -49,6 +49,15 @@ class MainWindow:
             last_update = dt.strftime("%Y-%m-%d %H:%M:%S")
 
         return last_update
+    
+    def select_provider_combo (self, providers_combo, name):
+        #Select the provider and disable item
+        i=0
+        for row in providers_combo.get_model():
+            if row[1] == name:
+                providers_combo.set_active (i)
+                break
+            i += 1
 
     def load_window(self):
         self.builder=gtk.Builder()
@@ -179,6 +188,7 @@ class MainWindow:
         self.new_dialog = self.builder.get_object("account_new_dialog")
         account_name_entry = self.builder.get_object("account_name_entry");
         self.provider_content = self.builder.get_object("provider_content")
+        self.provider_content.account = None
         self.new_dialog.set_transient_for(self.window)
         self.new_dialog.set_destroy_with_parent (True)
         end = False
@@ -217,7 +227,38 @@ class MainWindow:
                 end = True
             
         self.new_dialog.hide()
+    
+    def edit_action_activate_cb(self, widget, data=None):
+        acc, citer = self.get_main_account_selected()
         
+        if not acc:
+            return
+        
+        self.new_dialog = self.builder.get_object("account_new_dialog")
+        account_name_entry = self.builder.get_object("account_name_entry");
+        account_name_entry.set_text(acc.get_name())
+        self.provider_content = self.builder.get_object("provider_content")
+        self.provider_content.account = acc
+        self.new_dialog.set_transient_for(self.window)
+        self.new_dialog.set_destroy_with_parent (True)
+        
+        #Select the provider and disable item
+        providers_combo = self.builder.get_object("providers_combo")
+        
+        self.select_provider_combo (providers_combo, acc.get_provider().get_name())
+        
+        providers_combo.set_sensitive (False)
+        
+        end = False
+        while not end:
+            response = self.new_dialog.run()
+            if response == 0:
+                end = True
+            else:
+                end = True
+            
+        self.new_dialog.hide()
+    
     def providers_combo_changed_cb(self, widget, data=None):
         ch = self.provider_content.get_children()
         for c in ch:
@@ -227,8 +268,8 @@ class MainWindow:
         citer = self.providers_combo.get_active_iter()
         provider_name = self.providers_store.get_value (citer, 1)
         provider = self.pm.get_provider(provider_name)
-        
-        box =  provider.get_account_data_widget()
+
+        box =  provider.get_account_data_widget(self.provider_content.account)
         self.provider_content.add(box)
         box.show_all()
 

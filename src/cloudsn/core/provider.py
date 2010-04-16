@@ -21,7 +21,7 @@ class Provider:
         return self.icon
     def get_account_data_widget (self, account=None):
         """ 
-            If account == None is a new account
+            If account == None is a new account if not then editing
             Returns a widget and it will be inserted into the new account dialog
         """
         return None

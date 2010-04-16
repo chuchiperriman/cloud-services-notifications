@@ -37,7 +37,7 @@ class TwitterProvider(ProviderUtilsBuilder):
         self._set_text_value ("User",acc["username"])
         self._set_text_value ("Password", acc["password"])
     
-    def set_account_data_from_widget(self, account_name, widget, account):
+    def set_account_data_from_widget(self, account_name, widget, account=None):
         username = self._get_text_value ("User")
         password = self._get_text_value ("Password")
         if username=='' or password=='':

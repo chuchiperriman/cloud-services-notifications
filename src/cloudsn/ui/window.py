@@ -186,7 +186,6 @@ class MainWindow:
             response = self.new_dialog.run()
             if response == 0:
                 try:
-                    #TODO Control the children correctly and the name
                     if len(self.provider_content.get_children())==0:
                         raise Exception(_("You must select a provider and fill the data"))
 
@@ -199,7 +198,7 @@ class MainWindow:
                     provider_name = self.providers_store.get_value (citer, 1)
                     provider = self.pm.get_provider(provider_name)
                     
-                    acc = provider.create_account(acc_name, custom_widget)
+                    acc = provider.set_account_data_from_widget(acc_name, custom_widget)
                     self.am.add_account(acc)
                     self.am.save_account(acc)
                     self.main_store.append([acc.get_icon(),

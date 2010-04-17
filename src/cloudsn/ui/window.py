@@ -237,6 +237,8 @@ class MainWindow:
         self.new_dialog = self.builder.get_object("account_new_dialog")
         account_name_entry = self.builder.get_object("account_name_entry");
         account_name_entry.set_text(acc.get_name())
+        #TODO the name cannot be modified by the moment
+        account_name_entry.set_sensitive (False)
         self.provider_content = self.builder.get_object("provider_content")
         self.provider_content.account = acc
         self.new_dialog.set_transient_for(self.window)
@@ -253,7 +255,24 @@ class MainWindow:
         while not end:
             response = self.new_dialog.run()
             if response == 0:
-                end = True
+                try:
+                    acc_name = account_name_entry.get_text()
+                    if acc_name == '':
+                        raise Exception(_("You must fill the account name"))
+                    
+                    custom_widget = self.provider_content.get_children()[0]
+                    
+                    acc = acc.get_provider().set_account_data_from_widget(acc_name, custom_widget, acc)
+                    self.am.save_account(acc)
+                    end = True
+                except Exception, e:
+                    logger.error ('Error edditing an account: ' + str(e))
+                    md = gtk.MessageDialog(self.window,
+                        gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
+                        gtk.BUTTONS_CLOSE,
+                        _('Error adding a new account: ') + str(e))
+                    md.run()
+                    md.destroy()
             else:
                 end = True
             

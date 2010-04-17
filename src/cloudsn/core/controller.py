@@ -45,9 +45,11 @@ class Controller (gobject.GObject):
         self.am = account.AccountManager.get_instance()
         self.am.connect("account-added", self._account_added_cb)
         self.am.connect("account-deleted", self._account_deleted_cb)
+        self.am.connect("account-changed", self._account_changed_cb)
         self.am.connect("account-active-changed", self._account_active_cb)
         self.am.load_accounts()
         self.accounts_checking = []
+        self.nm = networkmanager.NetworkManager()
 
     @staticmethod
     def get_instance():
@@ -72,7 +74,10 @@ class Controller (gobject.GObject):
             self.update_account(acc)
         else:
             self.im.get_indicator().remove_indicator(acc)
-    
+
+    def _account_changed_cb (self, am, acc):
+        self.update_account(acc)
+        
     def _settings_changed(self, config, section, key, value):
         if section == "preferences" and key == "minutes":
             self._update_interval()
@@ -184,7 +189,6 @@ class Controller (gobject.GObject):
 
     def _start_idle(self):
         try:
-            self.nm = networkmanager.NetworkManager()
             self.nm.set_statechange_callback(self.on_nm_state_changed)
             self.update_accounts()
             self._update_interval()

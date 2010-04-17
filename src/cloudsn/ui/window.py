@@ -60,6 +60,8 @@ class MainWindow:
             i += 1
 
     def load_window(self):
+        from cloudsn.core.controller import Controller
+        
         self.builder=gtk.Builder()
         self.builder.set_translation_domain("cloudsn")
         self.builder.add_from_file(config.add_data_prefix("preferences.ui"))
@@ -79,43 +81,7 @@ class MainWindow:
         
         #Populate providers
         for prov in self.pm.get_providers():
-            print "prov",prov.get_name()
             self.providers_store.append([prov.get_icon(), prov.get_name()])
-        """
-        self.minutes=builder.get_object("minutes_spin")
-        self.max_not_spin=builder.get_object("max_not_spin")
-        #tests
-        self.store = builder.get_object("account_store");
-        self.account_tree = builder.get_object("account_treeview");
-        self.dialog_new = builder.get_object("account_new_dialog");
-        
-        self.account_name_entry = builder.get_object("account_name_entry");
-        self.startup_check = builder.get_object("startup_check")
-        self.indicator_combo = builder.get_object("indicator_combo")
-        self.indicators_store = builder.get_object("indicators_store");
-        
-        for acc in self.am.get_accounts():
-            self.store.append([acc.get_icon(), acc.get_name(),
-                self.__get_account_date(acc), acc.get_active()])
-
-        self.minutes.set_value (float(self.config.get_prefs()["minutes"]))
-        self.max_not_spin.set_value (float(self.config.get_prefs()["max_notifications"]))
-
-        self.window.set_icon(config.get_cloudsn_icon())
-        self.dialog_new.set_icon(config.get_cloudsn_icon())
-
-        if os.path.exists(config.get_startup_file_path()):
-            self.startup_check.set_active(True)
-        else:
-            self.startup_check.set_active(False)
-        #Populate indicator combo
-        i=0
-        indicator_name = self.config.get_prefs()["indicator"]
-        for indi in self.im.get_indicators():
-            self.indicators_store.append([indi.get_name()])
-            if indi.get_name() == indicator_name:
-                self.indicator_combo.set_active(i)
-            i+=1
 
         #Update the last check date
         Controller.get_instance().connect ("account-checked", 
@@ -123,25 +89,10 @@ class MainWindow:
         
         Controller.get_instance().connect ("account-check-error", 
             self.__on_account_check_error_cb)
-        """
+        
     def run(self):
-        if self.window is None:
-            self.load_window()
-
+        self.load_window()
         self.window.show()
-        """
-        self.config.set_pref ("minutes", self.minutes.get_value())
-        self.config.set_pref ("max_notifications", self.max_not_spin.get_value())
-        iiter = self.indicator_combo.get_active_iter()
-        if iiter:
-            self.config.set_pref ("indicator", self.indicators_store.get_value(iiter,0))
-        self.config.save_prefs()
-        self.window.destroy()
-        self.window = None
-        if self.dialog_only == False and result == STOP_RESPONSE:
-            gtk.main_quit()
-        return result
-        """
 
     def preferences_action_activate_cb (self, widget, data=None):
         self.pref_dialog = self.builder.get_object("preferences_dialog")
@@ -320,6 +271,10 @@ class MainWindow:
             
         self.new_dialog.hide()
     
+    def update_all_action_activate_cb (self, widget, data=None):
+        from cloudsn.core.controller import Controller
+        Controller.get_instance().update_accounts()
+        
     def providers_combo_changed_cb(self, widget, data=None):
         ch = self.provider_content.get_children()
         for c in ch:
@@ -333,6 +288,18 @@ class MainWindow:
         box =  provider.get_account_data_widget(self.provider_content.account)
         self.provider_content.add(box)
         box.show_all()
+
+    def __on_account_checked_cb(self, widget, acc):
+        for row in self.main_store:
+            if row[1] == acc.get_name():
+                row[0] = acc.get_icon()
+                row[2] = self.__get_account_date(acc)
+
+    def __on_account_check_error_cb(self, widget, acc):
+        for row in self.store:
+            if row[1] == acc.get_name():
+                row[0] = acc.get_icon()
+                row[2] = self.__get_account_date(acc)
 
 def main ():
     import cloudsn.cloudsn

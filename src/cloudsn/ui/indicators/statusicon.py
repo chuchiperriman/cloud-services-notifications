@@ -3,7 +3,7 @@ pygtk.require('2.0')
 import gtk
 from cloudsn import const
 from cloudsn.core import config, controller, utils
-from cloudsn.ui import preferences, about
+from cloudsn.ui import window, about
 from cloudsn.core.indicator import Indicator
 from cloudsn.const import *
 import gettext
@@ -104,8 +104,8 @@ class StatusIconIndicator (Indicator):
         acc.total_label = None
         
     def preferences_cb(self, widget, acc = None):
-        prefs = preferences.Preferences.get_instance()
-        prefs.run()
+        win = window.MainWindow.get_instance()
+	win.run()
     
     def update_accounts_cb(self, widget, acc = None):
         c = controller.Controller.get_instance()

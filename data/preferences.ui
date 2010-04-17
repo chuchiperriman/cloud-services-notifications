@@ -59,12 +59,15 @@
             <child>
               <object class="GtkVBox" id="vbox1">
                 <property name="visible">True</property>
+                <property name="spacing">10</property>
                 <child>
                   <object class="GtkHBox" id="hbox1">
                     <property name="visible">True</property>
+                    <property name="spacing">10</property>
                     <child>
                       <object class="GtkVBox" id="vbox2">
                         <property name="visible">True</property>
+                        <property name="spacing">5</property>
                         <child>
                           <object class="GtkLabel" id="label1">
                             <property name="visible">True</property>
@@ -121,6 +124,7 @@
                     <child>
                       <object class="GtkVBox" id="vbox4">
                         <property name="visible">True</property>
+                        <property name="spacing">5</property>
                         <child>
                           <object class="GtkLabel" id="label9">
                             <property name="visible">True</property>
@@ -226,7 +230,6 @@
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="on_startup_check_toggled"/>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -562,6 +565,7 @@
               <object class="GtkToolButton" id="tool_update">
                 <property name="visible">True</property>
                 <property name="tooltip_text" translatable="yes">Update all accounts</property>
+                <property name="related_action">update_all_action</property>
                 <property name="label" translatable="yes">toolbutton4</property>
                 <property name="use_underline">True</property>
                 <property name="stock_id">gtk-refresh</property>
@@ -779,5 +783,9 @@
   <object class="GtkAction" id="edit_action">
     <property name="stock_id">gtk-edit</property>
     <signal name="activate" handler="edit_action_activate_cb"/>
+  </object>
+  <object class="GtkAction" id="update_all_action">
+    <property name="stock_id">gtk-refresh</property>
+    <signal name="activate" handler="update_all_action_activate_cb"/>
   </object>
 </interface>

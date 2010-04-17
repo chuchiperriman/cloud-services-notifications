@@ -18,12 +18,12 @@ class MainWindow:
         self.builder = None
         self.window = None
         self.dialog_only = False
+        self.pref_dialog = None
         self.config = config.SettingsController.get_instance()
         self.pm = provider.ProviderManager.get_instance()
         self.am = account.AccountManager.get_instance()
         self.im = indicator.IndicatorManager.get_instance()
-        self.am.connect ("account-deleted", 
-            self.account_deleted_cb)
+        self.am.connect ("account-deleted", self.account_deleted_cb)
 
     @staticmethod
     def get_instance():
@@ -144,8 +144,50 @@ class MainWindow:
         """
 
     def preferences_action_activate_cb (self, widget, data=None):
-        print 'aaaa'
-
+        self.pref_dialog = self.builder.get_object("preferences_dialog")
+        self.pref_dialog.set_transient_for(self.window)
+        self.pref_dialog.set_destroy_with_parent (True)
+        indicator_combo = self.builder.get_object("indicator_combo")
+        indicators_store = self.builder.get_object("indicators_store");
+        minutes=self.builder.get_object("minutes_spin")
+        max_not_spin=self.builder.get_object("max_not_spin")
+        startup_check = self.builder.get_object("startup_check")
+        
+        minutes.set_value (float(self.config.get_prefs()["minutes"]))
+        max_not_spin.set_value (float(self.config.get_prefs()["max_notifications"]))
+        if os.path.exists(config.get_startup_file_path()):
+            startup_check.set_active(True)
+        else:
+            startup_check.set_active(False)
+        #Populate indicator combo
+        i=0
+        indicator_name = self.config.get_prefs()["indicator"]
+        for indi in self.im.get_indicators():
+            indicators_store.append([indi.get_name()])
+            if indi.get_name() == indicator_name:
+                indicator_combo.set_active(i)
+            i+=1
+        response = self.pref_dialog.run()
+        self.pref_dialog.hide()
+        self.config.set_pref ("minutes", minutes.get_value())
+        self.config.set_pref ("max_notifications", max_not_spin.get_value())
+        iiter = indicator_combo.get_active_iter()
+        if iiter:
+            self.config.set_pref ("indicator", indicators_store.get_value(iiter,0))
+        
+        #Check startup checkbox
+        if startup_check.get_active():
+            if not os.path.exists(config.get_startup_file_path()):
+                if not os.path.exists(config.get_startup_file_dir()):
+                    os.makedirs(config.get_startup_file_dir())
+                shutil.copyfile(config.add_data_prefix("cloudsn.desktop"),
+                    config.get_startup_file_path())
+        else:
+            if os.path.exists(config.get_startup_file_path()):
+                os.remove (config.get_startup_file_path())
+            
+        self.config.save_prefs()
+        
     def about_action_activate_cb (self, widget, data=None):
         about.show_about_dialog()
 
@@ -266,11 +308,11 @@ class MainWindow:
                     self.am.save_account(acc)
                     end = True
                 except Exception, e:
-                    logger.error ('Error edditing an account: ' + str(e))
+                    logger.error ('Error editing an account: ' + str(e))
                     md = gtk.MessageDialog(self.window,
                         gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
                         gtk.BUTTONS_CLOSE,
-                        _('Error adding a new account: ') + str(e))
+                        _('Error editing an account: ') + str(e))
                     md.run()
                     md.destroy()
             else:

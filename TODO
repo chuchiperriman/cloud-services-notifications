@@ -31,7 +31,7 @@ Milestone 0.6.0
 [X] Create the about dialog
 [ ] Reestructure the application window
 	[X] Update the selected account
-	[ ] Start and stop the daemon (checker)
+	[X] Start and stop the daemon (checker)
 	[X] Enable account (de)activation
 [X] Do dinamic panels to configure accounts (or custom)
 [X] Bug checking gmail labels, It doesn't check the inbox

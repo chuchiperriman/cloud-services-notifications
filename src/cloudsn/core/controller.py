@@ -1,3 +1,4 @@
+# -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 from cloudsn.core.provider import Provider, ProviderManager
 from cloudsn.core import account, config, networkmanager, notification, utils, indicator
 from cloudsn.ui import preferences
@@ -85,6 +86,10 @@ class Controller (gobject.GObject):
     def _update_interval(self):
         old = self.interval
         self.interval = int(float(self.config.get_prefs()["minutes"]) * 60)
+        
+        if not self.get_active():
+            return
+        
         if self.timeout_id < 0:
             self.timeout_id = gobject.timeout_add_seconds(self.interval,
                                 self.update_accounts, None)
@@ -101,7 +106,21 @@ class Controller (gobject.GObject):
         else:
             logger.debug("Network disconnected")
     
+    def set_active(self, active):
+        if active and not self.get_active():
+            self.timeout_id = gobject.timeout_add_seconds(self.interval,
+                                self.update_accounts, None)
+        elif not active and self.get_active():
+            self.timeout_id = -1
+            gobject.source_remove(self.timeout_id)
+            
+    
+    def get_active(self):
+        return self.timeout_id > -1
+    
     def update_account(self, acc):
+        if not self.get_active():
+            return
         """acc=None will check all accounts"""
         if self.nm.offline():
             logger.warn ("The network is not connected, the account cannot be updated")
@@ -183,6 +202,8 @@ class Controller (gobject.GObject):
         logger.debug("Ending checker")
         
     def update_accounts(self, data=None):
+        if not self.get_active():
+            return True
         self.update_account(None)
         #For the timeout_add_seconds
         return True
@@ -190,8 +211,8 @@ class Controller (gobject.GObject):
     def _start_idle(self):
         try:
             self.nm.set_statechange_callback(self.on_nm_state_changed)
+            self.set_active (True)
             self.update_accounts()
-            self._update_interval()
             self.started = True
         except Exception, e:
             logger.exception ("Error starting the application: %s", e)

@@ -74,6 +74,7 @@ class MainWindow:
         self.main_store = self.builder.get_object("account_store");
         self.providers_combo = self.builder.get_object("providers_combo");
         self.providers_store = self.builder.get_object("providers_store");
+        self.play_button = self.builder.get_object("tool_play");
         
         #Populate accounts
         for acc in self.am.get_accounts():
@@ -91,10 +92,23 @@ class MainWindow:
         Controller.get_instance().connect ("account-check-error", 
             self.__on_account_check_error_cb)
         
+        self.set_play_active (Controller.get_instance().get_active())
+        
     def run(self):
         self.load_window()
         self.window.show()
 
+    def set_play_active(self, active):
+        self.play_button.set_active(active)
+        if active:
+            self.play_button.set_stock_id(gtk.STOCK_MEDIA_PAUSE)
+            self.play_button.set_tooltip_text(
+                _("Press to pause the checker daemon"))
+        else:
+            self.play_button.set_stock_id(gtk.STOCK_MEDIA_PLAY)
+            self.play_button.set_tooltip_text(
+                _("Press to start the checker daemon"))
+    
     def preferences_action_activate_cb (self, widget, data=None):
         self.pref_dialog = self.builder.get_object("preferences_dialog")
         self.pref_dialog.set_transient_for(self.window)
@@ -171,6 +185,11 @@ class MainWindow:
         acc, citer = self.get_main_account_selected()
         if acc:
             Controller.get_instance().update_account(acc)
+    
+    def tool_play_toggled_cb (self, widget, data=None):
+        from cloudsn.core.controller import Controller
+        self.set_play_active(widget.get_active())
+        Controller.get_instance().set_active(widget.get_active())
     
     def account_deleted_cb(self, widget, acc):
         for i in range(len(self.main_store)):

@@ -1,3 +1,4 @@
+# -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 """
 Based on pop3.py:
 
@@ -5,7 +6,7 @@ Based on pop3.py:
     https://code.launchpad.net/cgmail
     
 """
-from cloudsn.providers.providersbase import ProviderBase
+from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core import config
 from cloudsn.core import utils
@@ -16,14 +17,14 @@ from email.Parser import Parser as EmailParser
 from email.header import decode_header
 import gtk
 
-class Pop3Provider(ProviderBase):
+class Pop3Provider(ProviderUtilsBuilder):
 
     __default = None
 
     def __init__(self):
         if Pop3Provider.__default:
            raise Pop3Provider.__default
-        ProviderBase.__init__(self, "Pop3")
+        ProviderUtilsBuilder.__init__(self, "Pop3")
 
     @staticmethod
     def get_instance():
@@ -43,27 +44,34 @@ class Pop3Provider(ProviderBase):
                 n = Notification(mail_id, sub, fr)
                 account.notifications[mail_id] = sub
                 account.new_unread.append (n)
+
+    def get_dialog_def (self):
+        return [{"label": "Host", "type" : "str"},
+                {"label": "User", "type" : "str"},
+                {"label": "Password", "type" : "pwd"}]
     
-    def populate_dialog(self, builder, acc):
-        self._set_text_value ("host_entry",acc["host"])
-        self._set_text_value ("username_entry",acc["username"])
-        self._set_text_value ("password_entry", acc["password"])
+    def populate_dialog(self, widget, acc):
+        self._set_text_value ("Host",acc["host"])
+        self._set_text_value ("User",acc["username"])
+        self._set_text_value ("Password", acc["password"])
     
-    def save_from_dialog(self, builder, account_name, acc = None):
-        if not acc:
-            host = self._get_text_value ("host_entry")
-            username = self._get_text_value ("username_entry")
-            password = self._get_text_value ("password_entry")
+    def set_account_data_from_widget(self, account_name, widget, account=None):
+        host = self._get_text_value ("Host")
+        username = self._get_text_value ("User")
+        password = self._get_text_value ("Password")
+        if username=='' or password=='':
+            raise Exception(_("The host, user name and the password are mandatory"))
+        
+        if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
                 'host' : host, 'username' : username, 'password' : password}
-            acc = self.load_account(props)
+            account = self.load_account(props)
         else:
-            acc["host"] = self._get_text_value ("host_entry")
-            acc["username"] = self._get_text_value ("username_entry")
-            acc["password"] = self._get_text_value ("password_entry")
-        
-        return acc
-        
+            account["host"] = host
+            account["username"] = username
+            account["password"] = password
+        return account
+
 class PopBoxConnectionError(Exception): pass
 class PopBoxAuthError(Exception): pass
 

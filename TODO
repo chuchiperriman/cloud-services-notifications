@@ -9,18 +9,8 @@ Milestone 0.X.0
 
 Milestone 0.X.0
 ===============
-* Twitter time
-[ ] Study and add Twitter support
-[ ] Control the screensaver. If it is active don't show notifications
-	and show it when the user gets active again.
-[ ] Reimplement the logging
-[ ] Creating new account sometimes are not shown in the indicator (created a
-	new bug in launchpad for libindicate)
-
-Milestone 0.X.0
-===============
 [ ] Add IMAP folders support
-[ ] Add Imap SSL and port configuration
+[X] Add Imap SSL and port configuration
 [ ] Add POP3 SSL and port configuration
 [ ] Configure when notify the GReader feeds (if > 30 or if 10 new feeds...)
 
@@ -40,7 +30,10 @@ Milestone 0.6.0
 [X] Show the stop emblem in the preferences dialog too
 [X] Create the about dialog
 [ ] Reestructure the application window
-[ ] Do dinamic panels to configure accounts (or custom)
+	[X] Update the selected account
+	[ ] Start and stop the daemon (checker)
+	[ ] Enable account (de)activation
+[X] Do dinamic panels to configure accounts (or custom)
 [X] Bug checking gmail labels, It doesn't check the inbox
 
 

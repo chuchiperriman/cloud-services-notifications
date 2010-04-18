@@ -166,6 +166,12 @@ class MainWindow:
             self.am.del_account(acc, True)
         dia.hide()
 
+    def main_update_button_clicked_cb(self, widget, data=None):
+        from cloudsn.core.controller import Controller
+        acc, citer = self.get_main_account_selected()
+        if acc:
+            Controller.get_instance().update_account(acc)
+    
     def account_deleted_cb(self, widget, acc):
         for i in range(len(self.main_store)):
             if self.main_store[i][1] == acc.get_name():

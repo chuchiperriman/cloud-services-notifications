@@ -1,3 +1,4 @@
+# -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 """
 Based on imap.py:
 
@@ -5,7 +6,7 @@ Based on imap.py:
     https://code.launchpad.net/cgmail
     
 """
-from cloudsn.core.provider import Provider
+from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core import config
 from cloudsn.core import utils
@@ -13,13 +14,13 @@ import imaplib
 from email.Parser import HeaderParser
 import gtk
 
-class ImapProvider(Provider):
+class ImapProvider(ProviderUtilsBuilder):
     __default = None
 
     def __init__(self):
         if ImapProvider.__default:
            raise ImapProvider.__default
-        Provider.__init__(self, "Imap")
+        ProviderUtilsBuilder.__init__(self, "Imap")
         self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('imap.png'))
 
     @staticmethod
@@ -42,51 +43,43 @@ class ImapProvider(Provider):
                 account.notifications[mail_id] = sub
                 account.new_unread.append (n)
 
-    def _create_dialog(self, parent):
-        builder=gtk.Builder()
-        builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.add_data_prefix("imap-account.ui"))
-        dialog = builder.get_object("dialog")
-        dialog.set_icon(self.get_icon())
-        dialog.set_transient_for(parent)
-        return (builder, dialog)
-
-    def create_account_dialog(self, account_name, parent):
-        builder, dialog = self._create_dialog(parent)
-        account = None
-        if dialog.run() == 0:
-            host = builder.get_object("host_entry").get_text()
-            username = builder.get_object("username_entry").get_text()
-            password = builder.get_object("password_entry").get_text()
-            #TODO check valid values
-            port = int(builder.get_object("port_entry").get_text())
-            ssl = builder.get_object("ssl_check").get_active()
+    def get_dialog_def (self):
+        return [{"label": "Host", "type" : "str"},
+                {"label": "User", "type" : "str"},
+                {"label": "Password", "type" : "pwd"},
+                {"label": "Port", "type" : "str"},
+                {"label": "Use SSL", "type" : "check"}]
+    
+    def populate_dialog(self, widget, acc):
+        self._set_text_value ("Host",acc["host"])
+        self._set_text_value ("User",acc["username"])
+        self._set_text_value ("Password", acc["password"])
+        self._set_text_value ("Port",str(acc["port"]))
+        self._set_check_value ("Use SSL",bool(acc["ssl"]))
+    
+    def set_account_data_from_widget(self, account_name, widget, account=None):
+        host = self._get_text_value ("Host")
+        username = self._get_text_value ("User")
+        password = self._get_text_value ("Password")
+        port = self._get_text_value ("Port")
+        ssl = self._get_check_value("Use SSL")
+        if host=='' or username=='' or password=='':
+            raise Exception(_("The host, user name and the password are mandatory"))
+        
+        #TODO check valid values
+        if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
                 'host' : host, 'username' : username, 'password' : password,
                 'port' : port, 'ssl' : ssl}
             account = self.load_account(props)
-        dialog.destroy()
+        else:
+            account["host"] = host
+            account["username"] = username
+            account["password"] = password
+            account["port"] = int(port)
+            account["ssl"] = ssl
         return account
-
-    def edit_account_dialog(self, acc, parent):
-        res = False
-        builder, dialog = self._create_dialog(parent)
-        builder.get_object("host_entry").set_text(acc["host"])
-        builder.get_object("username_entry").set_text(acc["username"])
-        builder.get_object("password_entry").set_text(acc["password"])
-        builder.get_object("port_entry").set_text(str(acc["port"]))
-        builder.get_object("ssl_check").set_active(utils.get_boolean(acc["ssl"]))
-        account = None
-        if dialog.run() == 0:
-            acc["host"] = builder.get_object("host_entry").get_text()
-            acc["username"] = builder.get_object("username_entry").get_text()
-            acc["password"] = builder.get_object("password_entry").get_text()
-            acc["port"] = int(builder.get_object("port_entry").get_text())
-            acc["ssl"] = builder.get_object("ssl_check").get_active()
-            res = True
-        dialog.destroy()
-        return res
-
+        
 class ImapBoxConnectionError(Exception): pass
 class ImapBoxAuthError(Exception): pass
 

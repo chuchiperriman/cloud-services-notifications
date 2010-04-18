@@ -59,7 +59,7 @@ class Pop3Provider(ProviderUtilsBuilder):
         host = self._get_text_value ("Host")
         username = self._get_text_value ("User")
         password = self._get_text_value ("Password")
-        if username=='' or password=='':
+        if host=='' or username=='' or password=='':
             raise Exception(_("The host, user name and the password are mandatory"))
         
         if not account:

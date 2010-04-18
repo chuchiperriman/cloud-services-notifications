@@ -1,3 +1,4 @@
+# -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 from cloudsn.core import config, utils
 from cloudsn import logger
 import gobject
@@ -131,6 +132,7 @@ class AccountManager (gobject.GObject):
 
     def set_account_active (self, acc, active):
         if acc.get_active() != active:
+            acc.error_notified = False
             acc.set_active(active)
             self.emit("account-active-changed", acc)
             self.save_account(acc)
@@ -154,6 +156,7 @@ class AccountManager (gobject.GObject):
             acc.last_update = datetime.now()
 
     def save_account(self, acc):
+        acc.error_notified = False
         self.sc.set_account_config (acc)
         self.sc.save_accounts()
         self.emit("account-changed", acc)

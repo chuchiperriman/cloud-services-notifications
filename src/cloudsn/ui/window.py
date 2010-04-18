@@ -184,6 +184,14 @@ class MainWindow:
         self.provider_content.account = None
         self.new_dialog.set_transient_for(self.window)
         self.new_dialog.set_destroy_with_parent (True)
+        account_name_entry.set_text("")
+        account_name_entry.set_sensitive (True)
+        self.providers_combo.set_sensitive (True)
+        self.providers_combo.set_active(-1)
+        for c in self.provider_content.get_children():
+            if c:
+                self.provider_content.remove(c)
+                c.destroy()
         end = False
         while not end:
             response = self.new_dialog.run()
@@ -222,6 +230,7 @@ class MainWindow:
         self.new_dialog.hide()
     
     def edit_action_activate_cb(self, widget, data=None):
+        
         acc, citer = self.get_main_account_selected()
         
         if not acc:
@@ -239,7 +248,7 @@ class MainWindow:
         
         #Select the provider and disable item
         providers_combo = self.builder.get_object("providers_combo")
-        
+        providers_combo.set_active(-1)
         self.select_provider_combo (providers_combo, acc.get_provider().get_name())
         
         providers_combo.set_sensitive (False)
@@ -282,6 +291,8 @@ class MainWindow:
             c.destroy()
         
         citer = self.providers_combo.get_active_iter()
+        if not citer:
+            return
         provider_name = self.providers_store.get_value (citer, 1)
         provider = self.pm.get_provider(provider_name)
 
@@ -296,7 +307,7 @@ class MainWindow:
                 row[2] = self.__get_account_date(acc)
 
     def __on_account_check_error_cb(self, widget, acc):
-        for row in self.store:
+        for row in self.main_store:
             if row[1] == acc.get_name():
                 row[0] = acc.get_icon()
                 row[2] = self.__get_account_date(acc)

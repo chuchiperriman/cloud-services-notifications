@@ -1,5 +1,5 @@
 from cloudsn.core.account import AccountCacheMails, AccountManager
-from cloudsn.providers.providersbase import ProviderBase
+from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core import utils
 from cloudsn.core import config
 import urllib2
@@ -8,14 +8,14 @@ import urllib
 import xml.dom.minidom
 import gtk
 
-class GReaderProvider(ProviderBase):
+class GReaderProvider(ProviderUtilsBuilder):
 
     __default = None
 
     def __init__(self):
         if GReaderProvider.__default:
            raise GReaderProvider.__default
-        ProviderBase.__init__(self, "Google Reader", "greader")
+        ProviderUtilsBuilder.__init__(self, "Google Reader", "greader")
 
     @staticmethod
     def get_instance():
@@ -33,23 +33,29 @@ class GReaderProvider(ProviderBase):
         g.refreshInfo()
         account.total_unread = g.getTotalUnread()
 
-    def populate_dialog(self, builder, acc):
-        self._set_text_value ("username_entry",acc["username"])
-        self._set_text_value ("password_entry", acc["password"])
+    def get_dialog_def (self):
+        return [{"label": "User", "type" : "str"},
+                {"label": "Password", "type" : "pwd"}]
     
-    def save_from_dialog(self, builder, account_name, acc = None):
-        if not acc:
-            username = self._get_text_value ("username_entry")
-            password = self._get_text_value ("password_entry")
+    def populate_dialog(self, widget, acc):
+        self._set_text_value ("User",acc["username"])
+        self._set_text_value ("Password", acc["password"])
+    
+    def set_account_data_from_widget(self, account_name, widget, account=None):
+        username = self._get_text_value ("User")
+        password = self._get_text_value ("Password")
+        if username=='' or password=='':
+            raise Exception(_("The user name and the password are mandatory"))
+        
+        if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
                 'username' : username, 'password' : password,
                 'activate_url' : "http://reader.google.com"}
-            acc = self.load_account(props)
+            account = self.load_account(props)
         else:
-            acc["username"] = self._get_text_value ("username_entry")
-            acc["password"] = self._get_text_value ("password_entry")
-        
-        return acc
+            account["username"] = username
+            account["password"] = password
+        return account
         
 class GreaderAtom:
 	

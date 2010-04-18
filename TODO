@@ -41,6 +41,7 @@ Milestone 0.6.0
 [X] Create the about dialog
 [ ] Reestructure the application window
 [ ] Do dinamic panels to configure accounts (or custom)
+[X] Bug checking gmail labels, It doesn't check the inbox
 
 
 

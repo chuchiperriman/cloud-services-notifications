@@ -1,3 +1,4 @@
+# -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 from cloudsn.core.account import Account
 
 class Provider:

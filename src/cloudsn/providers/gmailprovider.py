@@ -39,6 +39,9 @@ class GMailProvider(Provider):
         else:
             labels = [None]
         
+        if 'inbox' not in labels:
+            labels.append('inbox')
+        
         for label in labels:
             g = GmailAtom (account["username"], account["password"], label)
             g.refreshInfo()
@@ -74,18 +77,6 @@ class GMailProvider(Provider):
         siter = self.labels_store.get_iter((int(path), ))
         self.labels_store.set_value(siter, 0, new_text)
         
-    def _create_dialog(self, parent):
-        builder=gtk.Builder()
-        builder.set_translation_domain("cloudsn")
-        builder.add_from_file(config.add_data_prefix("gmail-account.ui"))
-        dialog = builder.get_object("gmail_dialog")
-        dialog.set_transient_for(parent)
-        self.labels_store = builder.get_object("labels_store")
-        self.labels_treeview = builder.get_object("labels_treeview")
-        builder.connect_signals(self)
-        dialog.set_icon(self.get_icon())
-        return (builder, dialog)
-    
     def __get_labels(self):
         labels = []
         def add(model, path, siter, labels):
@@ -97,40 +88,41 @@ class GMailProvider(Provider):
             labels_string += label + ","
         return labels_string[:len(labels_string)-1]
     
-    def create_account_dialog(self, account_name, parent):
-        builder, dialog = self._create_dialog(parent)
-        account = None
-        if dialog.run() == 0:
-            username = builder.get_object("username_entry").get_text()
-            password = builder.get_object("password_entry").get_text()
+    def get_account_data_widget (self, account=None):
+        self.builder=gtk.Builder()
+        self.builder.set_translation_domain("cloudsn")
+        self.builder.add_from_file(config.add_data_prefix("gmail-account.ui"))
+        box = self.builder.get_object("container")
+        self.labels_store = self.builder.get_object("labels_store")
+        self.labels_treeview = self.builder.get_object("labels_treeview")
+        self.builder.connect_signals(self)
+        if account:
+            self.builder.get_object("username_entry").set_text(account["username"])
+            self.builder.get_object("password_entry").set_text(account["password"])
+            labels = [l.strip() for l in account["labels"].split(",")]
+            for label in labels:
+                if label != '':
+                    siter = self.labels_store.append()
+                    self.labels_store.set_value(siter, 0, label)
+        return box
+        
+    def set_account_data_from_widget(self, account_name, widget, account=None):
+        if not account:
+            username = self.builder.get_object("username_entry").get_text()
+            password = self.builder.get_object("password_entry").get_text()
             props = {"name" : account_name, "provider_name" : self.get_name(),
                 "username" : username, "password" : password, 
                 "activate_url" : "http://gmail.google.com",
                 "labels" : self.__get_labels()}
             account = AccountCacheMails(props, self)
             account.notifications = {}
-        dialog.destroy()
+        else:
+            account["username"] = self.builder.get_object("username_entry").get_text()
+            account["password"] = self.builder.get_object("password_entry").get_text()
+            account["labels"] = self.__get_labels()
+            
         return account
         
-    def edit_account_dialog(self, acc, parent):
-        res = False
-        builder, dialog = self._create_dialog(parent)
-        builder.get_object("username_entry").set_text(acc["username"])
-        builder.get_object("password_entry").set_text(acc["password"])
-        labels = [l.strip() for l in acc["labels"].split(",")]
-        for label in labels:
-            if label != '':
-                siter = self.labels_store.append()
-                self.labels_store.set_value(siter, 0, label)
-        account = None
-        if dialog.run() == 0:
-            acc["username"] = builder.get_object("username_entry").get_text()
-            acc["password"] = builder.get_object("password_entry").get_text()
-            acc["labels"] = self.__get_labels()
-            res = True
-        dialog.destroy()
-        return res
-
 # Auxiliar structure
 class Mail:
     mail_id=""

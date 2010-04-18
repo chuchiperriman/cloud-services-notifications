@@ -184,6 +184,13 @@ class MainWindow:
         else:
             self.window.hide()
     
+    def active_cell_toggled_cb(self, cell, path, data=None):
+        active = not self.main_store[path][3]
+        self.main_store[path][3] = active
+        account_name = self.main_store[path][1]
+        acc = self.am.get_account(account_name)
+        self.am.set_account_active(acc, active)
+    
     def new_action_activate_cb(self, widget, data=None):
         self.new_dialog = self.builder.get_object("account_new_dialog")
         account_name_entry = self.builder.get_object("account_name_entry");

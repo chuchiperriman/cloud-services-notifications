@@ -8,13 +8,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-20 00:31+0200\n"
+"POT-Creation-Date: 2010-04-20 00:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/cloudsn/cloudsn.py:36
+msgid "Error starting cloudsn"
+msgstr ""
+
+#: ../src/cloudsn/core/account.py:18
+msgid ""
+"Error loading account configuration: The name property is mandatory, check "
+"your configuration"
+msgstr ""
+
+#: ../src/cloudsn/core/account.py:124
+#, python-format
+msgid "The account %s already exists"
+msgstr ""
 
 #: ../src/cloudsn/core/controller.py:35
 msgid "Another instance is already running, quitting."
@@ -36,6 +51,39 @@ msgstr ""
 #: ../src/cloudsn/core/controller.py:221
 #, python-format
 msgid "Error starting the application: %s"
+msgstr ""
+
+#: ../src/cloudsn/core/config.py:30
+msgid "Can't find the cloudsn data directory"
+msgstr ""
+
+#: ../src/cloudsn/ui/window.py:106
+msgid "Press to pause the checker daemon"
+msgstr ""
+
+#: ../src/cloudsn/ui/window.py:110
+msgid "Press to start the checker daemon"
+msgstr ""
+
+#: ../src/cloudsn/ui/window.py:171
+#, python-format
+msgid "Are you sure you want to delete the account %s?"
+msgstr ""
+
+#: ../src/cloudsn/ui/window.py:234
+msgid "You must select a provider and fill the data"
+msgstr ""
+
+#: ../src/cloudsn/ui/window.py:238 ../src/cloudsn/ui/window.py:296
+msgid "You must fill the account name"
+msgstr ""
+
+#: ../src/cloudsn/ui/window.py:257
+msgid "Error adding a new account: "
+msgstr ""
+
+#: ../src/cloudsn/ui/window.py:308
+msgid "Error editing an account: "
 msgstr ""
 
 #: ../src/cloudsn/ui/indicators/statusicon.py:31

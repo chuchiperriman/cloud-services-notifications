@@ -1,5 +1,9 @@
 [encoding: UTF-8]
+src/cloudsn/cloudsn.py
+src/cloudsn/core/account.py
 src/cloudsn/core/controller.py
+src/cloudsn/core/config.py
+src/cloudsn/ui/window.py
 src/cloudsn/ui/indicators/statusicon.py
 [type: gettext/glade]data/gmail-account.ui
 [type: gettext/glade]data/preferences.ui

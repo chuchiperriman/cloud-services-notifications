@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-20 00:45+0200\n"
+"POT-Creation-Date: 2010-04-20 01:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -115,93 +115,109 @@ msgid "<b>New Account</b>"
 msgstr ""
 
 #: ../data/preferences.ui.h:2
-msgid "Account name: "
+msgid "Account Name"
 msgstr ""
 
 #: ../data/preferences.ui.h:3
-msgid "Add a new account"
+msgid "Account name: "
 msgstr ""
 
 #: ../data/preferences.ui.h:4
-msgid "By account: "
+msgid "Active"
 msgstr ""
 
 #: ../data/preferences.ui.h:5
-msgid "Check interval"
+msgid "Add a new account"
 msgstr ""
 
 #: ../data/preferences.ui.h:6
-msgid "Delete the selected account"
+msgid "By account: "
 msgstr ""
 
 #: ../data/preferences.ui.h:7
-msgid "Edit the selected account"
+msgid "Check interval"
 msgstr ""
 
 #: ../data/preferences.ui.h:8
-msgid "General"
+msgid "Delete the selected account"
 msgstr ""
 
 #: ../data/preferences.ui.h:9
-msgid "Indicate status with: "
+msgid "Edit the selected account"
 msgstr ""
 
 #: ../data/preferences.ui.h:10
-msgid "Maximum notifications"
+msgid "General"
 msgstr ""
 
 #: ../data/preferences.ui.h:11
-msgid "Minutes: "
+msgid "Icon"
 msgstr ""
 
 #: ../data/preferences.ui.h:12
-msgid "New Account"
+msgid "Indicate status with: "
 msgstr ""
 
 #: ../data/preferences.ui.h:13
-msgid "Preferences"
+msgid "Last Update"
 msgstr ""
 
 #: ../data/preferences.ui.h:14
-msgid "Provider: "
+msgid "Maximum notifications"
 msgstr ""
 
 #: ../data/preferences.ui.h:15
-msgid "Run application on startup"
+msgid "Minutes: "
 msgstr ""
 
 #: ../data/preferences.ui.h:16
-msgid "Show preferences"
+msgid "New Account"
 msgstr ""
 
 #: ../data/preferences.ui.h:17
-msgid "Stop/Play"
+msgid "Preferences"
 msgstr ""
 
 #: ../data/preferences.ui.h:18
-msgid "Update"
+msgid "Provider: "
 msgstr ""
 
 #: ../data/preferences.ui.h:19
-msgid "Update all accounts"
+msgid "Run application on startup"
 msgstr ""
 
 #: ../data/preferences.ui.h:20
-msgid "Update the selected account"
+msgid "Show preferences"
 msgstr ""
 
 #: ../data/preferences.ui.h:21
-msgid "_Edit"
+msgid "Stop/Play"
 msgstr ""
 
 #: ../data/preferences.ui.h:22
-msgid "_FIle"
+msgid "Update"
 msgstr ""
 
 #: ../data/preferences.ui.h:23
-msgid "_Help"
+msgid "Update all accounts"
 msgstr ""
 
 #: ../data/preferences.ui.h:24
+msgid "Update the selected account"
+msgstr ""
+
+#: ../data/preferences.ui.h:25
+msgid "_Edit"
+msgstr ""
+
+#: ../data/preferences.ui.h:26
+msgid "_FIle"
+msgstr ""
+
+#: ../data/preferences.ui.h:27
+msgid "_Help"
+msgstr ""
+
+#: ../data/preferences.ui.h:28
 msgid "toolbutton3"
 msgstr ""

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-20 00:45+0200\n"
-"PO-Revision-Date: 2010-04-20 00:48+0200\n"
+"POT-Creation-Date: 2010-04-20 01:10+0200\n"
+"PO-Revision-Date: 2010-04-20 01:10+0200\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
 "Language-Team: Español <kupfer-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -117,94 +117,110 @@ msgid "<b>New Account</b>"
 msgstr "<b>Nueva cuenta</b>"
 
 #: ../data/preferences.ui.h:2
+msgid "Account Name"
+msgstr "Nombre de cuenta"
+
+#: ../data/preferences.ui.h:3
 msgid "Account name: "
 msgstr "Nombre de cuenta: "
 
-#: ../data/preferences.ui.h:3
+#: ../data/preferences.ui.h:4
+msgid "Active"
+msgstr "Activo"
+
+#: ../data/preferences.ui.h:5
 msgid "Add a new account"
 msgstr "Añadir una nueva cuenta"
 
-#: ../data/preferences.ui.h:4
+#: ../data/preferences.ui.h:6
 msgid "By account: "
 msgstr "Por cuenta: "
 
-#: ../data/preferences.ui.h:5
+#: ../data/preferences.ui.h:7
 msgid "Check interval"
 msgstr "Intervalo de chequeo"
 
-#: ../data/preferences.ui.h:6
+#: ../data/preferences.ui.h:8
 msgid "Delete the selected account"
 msgstr "Borrar la cuenta seleccionada"
 
-#: ../data/preferences.ui.h:7
+#: ../data/preferences.ui.h:9
 msgid "Edit the selected account"
 msgstr "Editar la cuenta seleccionada"
 
-#: ../data/preferences.ui.h:8
+#: ../data/preferences.ui.h:10
 msgid "General"
 msgstr "General"
 
-#: ../data/preferences.ui.h:9
+#: ../data/preferences.ui.h:11
+msgid "Icon"
+msgstr "Icono"
+
+#: ../data/preferences.ui.h:12
 msgid "Indicate status with: "
 msgstr "Indicar el estado con: "
 
-#: ../data/preferences.ui.h:10
+#: ../data/preferences.ui.h:13
+msgid "Last Update"
+msgstr "Última actualización"
+
+#: ../data/preferences.ui.h:14
 msgid "Maximum notifications"
 msgstr "Notificaciones Máximas"
 
-#: ../data/preferences.ui.h:11
+#: ../data/preferences.ui.h:15
 msgid "Minutes: "
 msgstr "Minutos: "
 
-#: ../data/preferences.ui.h:12
+#: ../data/preferences.ui.h:16
 msgid "New Account"
 msgstr "Nueva cuenta"
 
-#: ../data/preferences.ui.h:13
+#: ../data/preferences.ui.h:17
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../data/preferences.ui.h:14
+#: ../data/preferences.ui.h:18
 msgid "Provider: "
 msgstr "Proveedor: "
 
-#: ../data/preferences.ui.h:15
+#: ../data/preferences.ui.h:19
 msgid "Run application on startup"
 msgstr "Lanzar aplicación al iniciar"
 
-#: ../data/preferences.ui.h:16
+#: ../data/preferences.ui.h:20
 msgid "Show preferences"
 msgstr "Mostrar preferencias"
 
-#: ../data/preferences.ui.h:17
+#: ../data/preferences.ui.h:21
 msgid "Stop/Play"
 msgstr "Parar/Arrancar"
 
-#: ../data/preferences.ui.h:18
+#: ../data/preferences.ui.h:22
 msgid "Update"
 msgstr "Actualizar"
 
-#: ../data/preferences.ui.h:19
+#: ../data/preferences.ui.h:23
 msgid "Update all accounts"
 msgstr "Actualizar todas las cuentas"
 
-#: ../data/preferences.ui.h:20
+#: ../data/preferences.ui.h:24
 msgid "Update the selected account"
 msgstr "Actualizar la cuenta seleccionada"
 
-#: ../data/preferences.ui.h:21
+#: ../data/preferences.ui.h:25
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../data/preferences.ui.h:22
+#: ../data/preferences.ui.h:26
 msgid "_FIle"
 msgstr "_Archivo"
 
-#: ../data/preferences.ui.h:23
+#: ../data/preferences.ui.h:27
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: ../data/preferences.ui.h:24
+#: ../data/preferences.ui.h:28
 msgid "toolbutton3"
 msgstr "toolbutton3"
 
@@ -222,9 +238,3 @@ msgstr "toolbutton3"
 
 #~ msgid "Cloud Services Notifications"
 #~ msgstr "Notificaciones de servicios en la nube"
-
-#~ msgid "Account Name"
-#~ msgstr "Nombre de cuenta"
-
-#~ msgid "Icon"
-#~ msgstr "Icono"

@@ -611,7 +611,7 @@
                     <property name="search_column">1</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="active_column">
-                        <property name="title">Active</property>
+                        <property name="title" translatable="yes">Active</property>
                         <child>
                           <object class="GtkCellRendererToggle" id="active_cell">
                             <signal name="toggled" handler="active_cell_toggled_cb"/>
@@ -624,7 +624,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="icon_column">
-                        <property name="title">Icon</property>
+                        <property name="title" translatable="yes">Icon</property>
                         <child>
                           <object class="GtkCellRendererPixbuf" id="icon_cell1"/>
                           <attributes>
@@ -635,7 +635,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="name_column">
-                        <property name="title">Account Name</property>
+                        <property name="title" translatable="yes">Account Name</property>
                         <child>
                           <object class="GtkCellRendererText" id="name_cell1"/>
                           <attributes>
@@ -646,7 +646,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="last_update_column">
-                        <property name="title">Last Update</property>
+                        <property name="title" translatable="yes">Last Update</property>
                         <child>
                           <object class="GtkCellRendererText" id="last_update_cell1"/>
                           <attributes>

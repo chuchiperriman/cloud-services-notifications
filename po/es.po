@@ -8,46 +8,45 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-22 00:30+0100\n"
-"PO-Revision-Date: 2010-02-08 00:54+0100\n"
+"POT-Creation-Date: 2010-04-20 00:31+0200\n"
+"PO-Revision-Date: 2010-04-20 00:35+0200\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
 "Language-Team: Español <kupfer-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cloudsn/core/controller.py:33
+#: ../src/cloudsn/core/controller.py:35
 msgid "Another instance is already running, quitting."
 msgstr "Hay otra instancia arrancada, Saliendo."
 
-#: ../src/cloudsn/core/controller.py:138
+#: ../src/cloudsn/core/controller.py:174
 msgid "New messages: "
 msgstr "Mensajes nuevos: "
 
-#: ../src/cloudsn/core/controller.py:155
+#: ../src/cloudsn/core/controller.py:194
 #, python-format
 msgid "Error checking account %s"
 msgstr "Error comprobando la cuenta %s"
 
-#: ../src/cloudsn/core/controller.py:177
+#: ../src/cloudsn/core/controller.py:220
 msgid "Application Error"
 msgstr "Error de aplicación"
 
-#: ../src/cloudsn/core/controller.py:178
+#: ../src/cloudsn/core/controller.py:221
 #, python-format
 msgid "Error starting the application: %s"
 msgstr "Error iniciando la aplicación: %s"
 
-#: ../src/cloudsn/ui/indicators/statusicon.py:30
+#: ../src/cloudsn/ui/indicators/statusicon.py:31
 msgid "Status Icon"
 msgstr "Icono de estado"
 
-#: ../src/cloudsn/ui/indicators/statusicon.py:45
+#: ../src/cloudsn/ui/indicators/statusicon.py:46
 msgid "Update accounts"
 msgstr "Actualizar cuentas"
 
-#: ../data/gmail-account.ui.h:1 ../data/greader-account.ui.h:1
-#: ../data/pop3-account.ui.h:1
+#: ../data/gmail-account.ui.h:1
 msgid "<b>Account information</b>"
 msgstr "<b>Información de cuentas</b>"
 
@@ -56,74 +55,123 @@ msgid "<b>Labels to check</b>"
 msgstr "<b>Etiquetas a comprobar</b>"
 
 #: ../data/gmail-account.ui.h:3
-msgid "New GMail Account"
-msgstr "Nueva cuenta de GMail"
-
-#: ../data/gmail-account.ui.h:4 ../data/greader-account.ui.h:3
-#: ../data/pop3-account.ui.h:3
 msgid "Password: "
 msgstr "Contraseña: "
 
-#: ../data/gmail-account.ui.h:5 ../data/greader-account.ui.h:4
-#: ../data/pop3-account.ui.h:5
+#: ../data/gmail-account.ui.h:4
 msgid "Username: "
 msgstr "Nombre de usuario: "
 
-#: ../data/greader-account.ui.h:2 ../data/pop3-account.ui.h:2
-msgid "New Google Reader Account"
-msgstr "Nueva cuenta de Google Reader"
-
-#: ../data/pop3-account.ui.h:4
-msgid "Pop3 Server: "
-msgstr "Servidor Pop3: "
-
 #: ../data/preferences.ui.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>Nueva cuenta</b>"
+
+#: ../data/preferences.ui.h:2
 msgid "Account name: "
 msgstr "Nombre de cuenta: "
 
-#: ../data/preferences.ui.h:2
-msgid "Accounts"
-msgstr "Cuentas"
-
 #: ../data/preferences.ui.h:3
+msgid "Add a new account"
+msgstr "Añadir una nueva cuenta"
+
+#: ../data/preferences.ui.h:4
+msgid "By account: "
+msgstr "Por cuenta: "
+
+#: ../data/preferences.ui.h:5
 msgid "Check interval"
 msgstr "Intervalo de chequeo"
 
-#: ../data/preferences.ui.h:4
+#: ../data/preferences.ui.h:6
+msgid "Delete the selected account"
+msgstr "Borrar la cuenta seleccionada"
+
+#: ../data/preferences.ui.h:7
+msgid "Edit the selected account"
+msgstr "Editar la cuenta seleccionada"
+
+#: ../data/preferences.ui.h:8
 msgid "General"
 msgstr "General"
 
-#: ../data/preferences.ui.h:5
+#: ../data/preferences.ui.h:9
 msgid "Indicate status with: "
 msgstr "Indicar el estado con: "
 
-#: ../data/preferences.ui.h:6
+#: ../data/preferences.ui.h:10
+msgid "Maximum notifications"
+msgstr "Notificaciones Máximas"
+
+#: ../data/preferences.ui.h:11
 msgid "Minutes: "
 msgstr "Minutos: "
 
-#: ../data/preferences.ui.h:7
+#: ../data/preferences.ui.h:12
 msgid "New Account"
 msgstr "Nueva cuenta"
 
-#: ../data/preferences.ui.h:8
+#: ../data/preferences.ui.h:13
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../data/preferences.ui.h:9
-msgid "Press to stop the service: "
-msgstr "Presione para parar el servicio: "
-
-#: ../data/preferences.ui.h:10
+#: ../data/preferences.ui.h:14
 msgid "Provider: "
 msgstr "Proveedor: "
 
-#: ../data/preferences.ui.h:11
+#: ../data/preferences.ui.h:15
 msgid "Run application on startup"
 msgstr "Lanzar aplicación al iniciar"
 
-#: ../data/preferences.ui.h:12
-msgid "Update all accounts:  "
-msgstr "Actualizar todas las cuentas: "
+#: ../data/preferences.ui.h:16
+msgid "Show preferences"
+msgstr "Mostrar preferencias"
+
+#: ../data/preferences.ui.h:17
+msgid "Stop/Play"
+msgstr "Parar/Arrancar"
+
+#: ../data/preferences.ui.h:18
+msgid "Update"
+msgstr "Actualizar"
+
+#: ../data/preferences.ui.h:19
+msgid "Update all accounts"
+msgstr "Actualizar todas las cuentas"
+
+#: ../data/preferences.ui.h:20
+msgid "Update the selected account"
+msgstr "Actualizar la cuenta seleccionada"
+
+#: ../data/preferences.ui.h:21
+msgid "_Edit"
+msgstr "_Editar"
+
+#: ../data/preferences.ui.h:22
+msgid "_FIle"
+msgstr "_Archivo"
+
+#: ../data/preferences.ui.h:23
+msgid "_Help"
+msgstr "Ay_uda"
+
+#: ../data/preferences.ui.h:24
+msgid "toolbutton3"
+msgstr "toolbutton3"
+
+#~ msgid "New GMail Account"
+#~ msgstr "Nueva cuenta de GMail"
+
+#~ msgid "New Google Reader Account"
+#~ msgstr "Nueva cuenta de Google Reader"
+
+#~ msgid "Pop3 Server: "
+#~ msgstr "Servidor Pop3: "
+
+#~ msgid "Accounts"
+#~ msgstr "Cuentas"
+
+#~ msgid "Press to stop the service: "
+#~ msgstr "Presione para parar el servicio: "
 
 #~ msgid "Cloud Services Notifications"
 #~ msgstr "Notificaciones de servicios en la nube"
@@ -133,6 +181,3 @@ msgstr "Actualizar todas las cuentas: "
 
 #~ msgid "Icon"
 #~ msgstr "Icono"
-
-#~ msgid "Last Update"
-#~ msgstr "Última actualización"

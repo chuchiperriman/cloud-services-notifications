@@ -466,7 +466,7 @@
             <child>
               <object class="GtkMenuItem" id="menuitem1">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Archivo</property>
+                <property name="label" translatable="yes">_FIle</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu1">
@@ -487,7 +487,7 @@
             <child>
               <object class="GtkMenuItem" id="menuitem2">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">_Editar</property>
+                <property name="label" translatable="yes">_Edit</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu2">
@@ -508,7 +508,7 @@
             <child>
               <object class="GtkMenuItem" id="menuitem4">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Ay_uda</property>
+                <property name="label" translatable="yes">_Help</property>
                 <property name="use_underline">True</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu3">
@@ -538,9 +538,9 @@
             <child>
               <object class="GtkToggleToolButton" id="tool_play">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">toolbutton1</property>
+                <property name="use_action_appearance">True</property>
+                <property name="label" translatable="yes">Stop/Play</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-media-play</property>
                 <signal name="toggled" handler="tool_play_toggled_cb"/>
               </object>
               <packing>
@@ -553,9 +553,9 @@
                 <property name="visible">True</property>
                 <property name="tooltip_text" translatable="yes">Update all accounts</property>
                 <property name="related_action">update_all_action</property>
-                <property name="label" translatable="yes">toolbutton4</property>
+                <property name="use_action_appearance">True</property>
+                <property name="label" translatable="yes">Update</property>
                 <property name="use_underline">True</property>
-                <property name="stock_id">gtk-refresh</property>
               </object>
               <packing>
                 <property name="expand">False</property>

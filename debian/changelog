@@ -1,3 +1,18 @@
+cloudsn (0.5.8) karmic; urgency=low
+
+  * GUI time...:
+    * Reestructure the application window
+  * Twitter/Identi.ca:
+    * Select to use the profile avatar or the default icon in the indicator
+    * Select to use the message avatar or the default icon in notifications
+    * Show the friend name/icon in the notifications
+  * Misc:
+    * Show an stop emblem when an account has errors
+    * You can start and stop the daemon (checker)
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Tue, 20 Apr 2010 00:15:00 +0100
+ 
 cloudsn (0.4.0) unstable; urgency=low
 
   * gmail: Added additional labels checking

@@ -3,7 +3,7 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 from cloudsn.core import config, utils
-from cloudsn.ui import preferences
+from cloudsn.ui import window
 from cloudsn.core.indicator import Indicator
 import indicate
 from cloudsn.const import *
@@ -56,8 +56,9 @@ class IndicatorApplet (Indicator):
         acc.indicator = None
 
     def on_server_display_cb(self, server):
-        prefs = preferences.Preferences.get_instance()
-        prefs.run()
+	win = window.MainWindow.get_instance()
+        win.run()
+
     def on_indicator_display_cb(self, indicator):
         indicator.account.activate ()
         

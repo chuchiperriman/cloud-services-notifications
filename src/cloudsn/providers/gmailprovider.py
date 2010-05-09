@@ -36,16 +36,14 @@ class GMailProvider(Provider):
         labels = []
         if 'labels' in account.get_properties():
             labels += [l.strip() for l in account["labels"].split(",")]
-        else:
-            labels = [None]
         
-        if 'inbox' not in labels:
+        if 'inbox' not in labels and '' not in labels:
             labels.append('inbox')
         
         for label in labels:
             g = GmailAtom (account["username"], account["password"], label)
             g.refreshInfo()
-            
+
             for mail in g.get_mails():
                 notifications[mail.mail_id] = mail
                 if mail.mail_id not in account.notifications:

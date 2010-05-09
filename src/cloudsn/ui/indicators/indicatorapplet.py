@@ -30,7 +30,7 @@ class IndicatorApplet (Indicator):
     def create_indicator(self, acc):
         indicator = indicate.Indicator()
         indicator.set_property("name", acc.get_name())
-        indicator.set_property_time("time", time())
+        #indicator.set_property_time("time", time())
         indicator.set_property_int("count", acc.get_total_unread())
         indicator.set_property_icon("icon", acc.get_icon())
         indicator.show()
@@ -55,10 +55,10 @@ class IndicatorApplet (Indicator):
     def remove_indicator(self, acc):
         acc.indicator = None
 
-    def on_server_display_cb(self, server):
+    def on_server_display_cb(self, server, timestamp=None):
 	win = window.MainWindow.get_instance()
         win.run()
 
-    def on_indicator_display_cb(self, indicator):
+    def on_indicator_display_cb(self, indicator, timestamp=None):
         indicator.account.activate ()
         

@@ -91,10 +91,13 @@ class Controller (gobject.GObject):
             return
         
         if self.timeout_id < 0:
+            logger.debug("new source: "+str(self.timeout_id))
             self.timeout_id = gobject.timeout_add_seconds(self.interval,
                                 self.update_accounts, None)
         elif self.interval != old:
+            logger.debug("removed source: "+str(self.timeout_id))
             gobject.source_remove(self.timeout_id)
+            logger.debug("restart source: "+str(self.timeout_id))
             self.timeout_id = gobject.timeout_add_seconds(self.interval,
                                 self.update_accounts, None)
         
@@ -110,9 +113,11 @@ class Controller (gobject.GObject):
         if active and not self.get_active():
             self.timeout_id = gobject.timeout_add_seconds(self.interval,
                                 self.update_accounts, None)
+            logger.debug("activated source: "+str(self.timeout_id))
         elif not active and self.get_active():
-            self.timeout_id = -1
             gobject.source_remove(self.timeout_id)
+            logger.debug("deactivated source "+str(self.timeout_id))
+            self.timeout_id = -1
             
     
     def get_active(self):

@@ -1,3 +1,12 @@
+cloudsn (0.5.10) lucid; urgency=low
+
+  * Clicks on the new indicator-applet working
+  * Fixed bug starting/stoping the daemon
+  * Fixed bug in gmail notifications
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Tue, 15 May 2010 12:23:00 +0100
+
 cloudsn (0.5.8) karmic; urgency=low
 
   * GUI time...:

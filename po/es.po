@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-20 01:10+0200\n"
+"POT-Creation-Date: 2010-05-22 17:01+0200\n"
 "PO-Revision-Date: 2010-04-20 01:10+0200\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
-"Language-Team: Español <kupfer-list@gnome.org>\n"
+"Language-Team: Español <chuchiperriman@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -34,23 +34,23 @@ msgid "The account %s already exists"
 msgstr "La cuenta %s ya existe"
 
 #: ../src/cloudsn/core/controller.py:35
-msgid "Another instance is already running, quitting."
-msgstr "Hay otra instancia arrancada, Saliendo."
+msgid "Another instance is already running, close it first."
+msgstr "Hay otra instancia arrancada, ciérrela primero."
 
-#: ../src/cloudsn/core/controller.py:174
+#: ../src/cloudsn/core/controller.py:179
 msgid "New messages: "
 msgstr "Mensajes nuevos: "
 
-#: ../src/cloudsn/core/controller.py:194
+#: ../src/cloudsn/core/controller.py:199
 #, python-format
 msgid "Error checking account %s"
 msgstr "Error comprobando la cuenta %s"
 
-#: ../src/cloudsn/core/controller.py:220
+#: ../src/cloudsn/core/controller.py:225
 msgid "Application Error"
 msgstr "Error de aplicación"
 
-#: ../src/cloudsn/core/controller.py:221
+#: ../src/cloudsn/core/controller.py:226
 #, python-format
 msgid "Error starting the application: %s"
 msgstr "Error iniciando la aplicación: %s"
@@ -67,24 +67,24 @@ msgstr "Presione para parar el servicio de chequeo"
 msgid "Press to start the checker daemon"
 msgstr "Presione para iniciar el servicio de chequeo"
 
-#: ../src/cloudsn/ui/window.py:171
+#: ../src/cloudsn/ui/window.py:174
 #, python-format
 msgid "Are you sure you want to delete the account %s?"
 msgstr "¿Está seguro que desea eliminar la cuenta %s?"
 
-#: ../src/cloudsn/ui/window.py:234
+#: ../src/cloudsn/ui/window.py:237
 msgid "You must select a provider and fill the data"
 msgstr "Debe seleccionar un proveedor y rellenar los datos"
 
-#: ../src/cloudsn/ui/window.py:238 ../src/cloudsn/ui/window.py:296
+#: ../src/cloudsn/ui/window.py:241 ../src/cloudsn/ui/window.py:299
 msgid "You must fill the account name"
 msgstr "Debe rellenar el nombre de cuenta"
 
-#: ../src/cloudsn/ui/window.py:257
+#: ../src/cloudsn/ui/window.py:260
 msgid "Error adding a new account: "
 msgstr "Error añadiendo una cuenta nueva: "
 
-#: ../src/cloudsn/ui/window.py:308
+#: ../src/cloudsn/ui/window.py:311
 msgid "Error editing an account: "
 msgstr "Error editando una cuenta: "
 

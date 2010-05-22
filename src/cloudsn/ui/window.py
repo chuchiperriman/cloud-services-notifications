@@ -158,11 +158,14 @@ class MainWindow:
         about.show_about_dialog()
 
     def quit_action_activate_cb (self, widget, data=None):
+        gtk.main_quit()
+
+    def close_action_activate_cb (self, widget, data=None):
         if self.dialog_only:
             gtk.main_quit()
         else:
             self.window.hide()
-
+    
     def main_delete_button_clicked_cb(self, widget, data=None):
         acc, citer = self.get_main_account_selected()
         if not acc:

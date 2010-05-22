@@ -32,7 +32,7 @@ class Controller (gobject.GObject):
         try:
             fcntl.lockf(self.fp, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except IOError:
-            message = _("Another instance is already running, quitting.")
+            message = _("Another instance is already running, close it first.")
             logger.warn (message)
             print message
             sys.exit(-1)

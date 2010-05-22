@@ -44,7 +44,7 @@ class Account:
         return utils.get_boolean(self.properties["active"])
 
     def set_active(self, active):
-        self.properties["active"] = bool(active)
+        self.properties["active"] = utils.get_boolean(active)
 
     def get_last_update (self):
         return self.last_update

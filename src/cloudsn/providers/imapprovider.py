@@ -55,7 +55,7 @@ class ImapProvider(ProviderUtilsBuilder):
         self._set_text_value ("User",acc["username"])
         self._set_text_value ("Password", acc["password"])
         self._set_text_value ("Port",str(acc["port"]))
-        self._set_check_value ("Use SSL",bool(acc["ssl"]))
+        self._set_check_value ("Use SSL",utils.get_boolean(acc["ssl"]))
     
     def set_account_data_from_widget(self, account_name, widget, account=None):
         host = self._get_text_value ("Host")

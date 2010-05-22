@@ -8,7 +8,6 @@ from cloudsn.core.indicator import Indicator
 import indicate
 from cloudsn.const import *
 from cloudsn import logger
-from time import time
 
 class IndicatorApplet (Indicator):
 
@@ -30,8 +29,7 @@ class IndicatorApplet (Indicator):
     def create_indicator(self, acc):
         indicator = indicate.Indicator()
         indicator.set_property("name", acc.get_name())
-        #indicator.set_property_time("time", time())
-        indicator.set_property_int("count", acc.get_total_unread())
+        indicator.set_property("count", str(acc.get_total_unread()))
         indicator.set_property_icon("icon", acc.get_icon())
         indicator.show()
         indicator.connect("user-display", self.on_indicator_display_cb)
@@ -44,13 +42,13 @@ class IndicatorApplet (Indicator):
         if acc.is_error_icon:
             acc.indicator.set_property_icon("icon", acc.get_icon())
             acc.is_error_icon = False
-        acc.indicator.set_property_int("count", acc.get_total_unread())
+        acc.indicator.set_property("count", str(acc.get_total_unread()))
 
     def update_error(self, acc):
         if not acc.is_error_icon:
             acc.indicator.set_property_icon("icon", acc.get_icon())
             acc.is_error_icon = True
-        acc.indicator.set_property_int("count", 0)
+        acc.indicator.set_property("count", str(0))
         
     def remove_indicator(self, acc):
         acc.indicator = None

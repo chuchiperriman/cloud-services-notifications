@@ -1,3 +1,13 @@
+cloudsn (0.5.12) lucid; urgency=low
+
+  * Added a quit menu item and close menu item to close the window or
+    quit the application.
+  * #579615: Shows unread items in indicator applet
+  * #579624: IMAP provider now works without SSL
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sat, 22 May 2010 17:14:00 +0100
+
 cloudsn (0.5.10) lucid; urgency=low
 
   * Clicks on the new indicator-applet working

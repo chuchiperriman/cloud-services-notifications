@@ -29,7 +29,7 @@ Milestone 0.6.0
 [X] Show an stop emblem when an account has errors
 [X] Show the stop emblem in the preferences dialog too
 [X] Create the about dialog
-[ ] Reestructure the application window
+[X] Reestructure the application window
 	[X] Update the selected account
 	[X] Start and stop the daemon (checker)
 	[X] Enable account (de)activation

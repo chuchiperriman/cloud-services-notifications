@@ -38,6 +38,7 @@ class Pop3Provider(ProviderUtilsBuilder):
     def update_account (self, account):
         g = PopBox (account["username"], account["password"], account["host"])
         account.new_unread = []
+        account.notifications = {}
         mails = g.get_mails()
         for mail_id, sub, fr in mails:
             if mail_id not in account.notifications:

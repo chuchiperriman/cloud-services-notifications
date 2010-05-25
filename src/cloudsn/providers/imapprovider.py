@@ -33,9 +33,9 @@ class ImapProvider(ProviderUtilsBuilder):
         return AccountCacheMails(props, self)
     
     def update_account (self, account):
-        #TODO Check port, ssl etc correctly
         g = ImapBox (account["host"], account["username"], account["password"], account["port"], account["ssl"])
         account.new_unread = []
+        account.notifications = {}
         mails = g.get_mails()
         for mail_id, sub, fr in mails:
             if mail_id not in account.notifications:
@@ -140,8 +140,3 @@ class ImapBox:
 		self.mbox.logout()
 		return mails
 
-
-if __name__ == "__main__":
-	i = ImapBox("", "", "", 993, True)
-	print 'aaa'
-	print i.get_mails()

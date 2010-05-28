@@ -27,7 +27,16 @@ class GMailProvider(Provider):
 
     def load_account(self, props):
         acc = AccountCacheMails(props, self)
-        acc.properties["activate_url"] = "http://gmail.google.com"
+        
+        #Hack for gmail domains like mail.quiter.com
+        user, tmp, domain = acc.properties['username'].partition('@')
+
+        if domain and domain != "gmail.com":
+            activate_url = "https://mail.google.com/a/" + domain
+        else:
+            activate_url = "https://mail.google.com/a/" 
+
+        acc.properties["activate_url"] = activate_url
         return acc
         
     def update_account (self, account):

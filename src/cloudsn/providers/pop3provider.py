@@ -33,10 +33,16 @@ class Pop3Provider(ProviderUtilsBuilder):
         return Pop3Provider.__default
 
     def load_account(self, props):
-        return AccountCacheMails(props, self)
+        acc = AccountCacheMails(props, self)
+        if not "port" in acc:
+            acc["port"] = 110
+        if not "ssl" in acc:
+            acc["ssl"] = False
+        return acc
             
     def update_account (self, account):
-        g = PopBox (account["username"], account["password"], account["host"])
+        g = PopBox (account["username"], account["password"], 
+            account["host"], account["port"], account["ssl"])
         account.new_unread = []
         account.notifications = {}
         mails = g.get_mails()
@@ -49,37 +55,44 @@ class Pop3Provider(ProviderUtilsBuilder):
     def get_dialog_def (self):
         return [{"label": "Host", "type" : "str"},
                 {"label": "User", "type" : "str"},
-                {"label": "Password", "type" : "pwd"}]
+                {"label": "Password", "type" : "pwd"},
+                {"label": "Port", "type" : "str"},
+                {"label": "Use SSL", "type" : "check"}]
     
     def populate_dialog(self, widget, acc):
         self._set_text_value ("Host",acc["host"])
         self._set_text_value ("User",acc["username"])
         self._set_text_value ("Password", acc["password"])
+        self._set_text_value ("Port",str(acc["port"]))
+        self._set_check_value ("Use SSL",utils.get_boolean(acc["ssl"]))
     
     def set_account_data_from_widget(self, account_name, widget, account=None):
         host = self._get_text_value ("Host")
         username = self._get_text_value ("User")
         password = self._get_text_value ("Password")
+        port = self._get_text_value ("Port")
+        ssl = self._get_check_value("Use SSL")
         if host=='' or username=='' or password=='':
             raise Exception(_("The host, user name and the password are mandatory"))
         
         if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
-                'host' : host, 'username' : username, 'password' : password}
+                'host' : host, 'username' : username, 'password' : password,
+                'port' : port, 'ssl' : ssl}
             account = self.load_account(props)
         else:
             account["host"] = host
             account["username"] = username
             account["password"] = password
+            account["port"] = int(port)
+            account["ssl"] = ssl
         return account
 
 class PopBoxConnectionError(Exception): pass
 class PopBoxAuthError(Exception): pass
 
 class PopBox:
-    #TODO Set the port and ssl correctly
-    #def __init__(self, user, password, host, port = 110, ssl = False):
-    def __init__(self, user, password, host, port = 995, ssl = True):
+    def __init__(self, user, password, host, port = 110, ssl = False):
         self.user = user
         self.password = password
         self.host = host

@@ -30,7 +30,10 @@ class Account:
 
     def __setitem__(self, key, value):
         self.properties[key] = value
-
+    
+    def __contains__(self, key):
+        return key in self.properties
+        
     def get_properties(self):
         return self.properties
     

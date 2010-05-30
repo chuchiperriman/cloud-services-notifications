@@ -37,11 +37,11 @@ class GReaderProvider(ProviderUtilsBuilder):
         new_count = g.getTotalUnread() - account.total_unread
         if new_count > 1:
             news.append(Notification('', 
-                '%d unread news' % (new_count),
+                _('%d unread news') % (new_count),
                 ''))
         elif new_count == 1:
             news.append(Notification('', 
-                '%d unread new' % (new_count),
+                _('%d unread new') % (new_count),
                 ''))
         
         account.new_unread = news;

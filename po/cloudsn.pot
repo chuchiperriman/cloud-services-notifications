@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-22 17:01+0200\n"
+"POT-Creation-Date: 2010-05-30 16:16+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid ""
 "your configuration"
 msgstr ""
 
-#: ../src/cloudsn/core/account.py:124
+#: ../src/cloudsn/core/account.py:127
 #, python-format
 msgid "The account %s already exists"
 msgstr ""
@@ -65,24 +65,24 @@ msgstr ""
 msgid "Press to start the checker daemon"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:174
+#: ../src/cloudsn/ui/window.py:175
 #, python-format
 msgid "Are you sure you want to delete the account %s?"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:237
+#: ../src/cloudsn/ui/window.py:238
 msgid "You must select a provider and fill the data"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:241 ../src/cloudsn/ui/window.py:299
+#: ../src/cloudsn/ui/window.py:242 ../src/cloudsn/ui/window.py:300
 msgid "You must fill the account name"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:260
+#: ../src/cloudsn/ui/window.py:261
 msgid "Error adding a new account: "
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:311
+#: ../src/cloudsn/ui/window.py:312
 msgid "Error editing an account: "
 msgstr ""
 
@@ -92,6 +92,20 @@ msgstr ""
 
 #: ../src/cloudsn/ui/indicators/statusicon.py:46
 msgid "Update accounts"
+msgstr ""
+
+#: ../src/cloudsn/providers/greaderprovider.py:40
+#, python-format
+msgid "%d unread news"
+msgstr ""
+
+#: ../src/cloudsn/providers/greaderprovider.py:44
+#, python-format
+msgid "%d unread new"
+msgstr ""
+
+#: ../src/cloudsn/providers/greaderprovider.py:63
+msgid "The user name and the password are mandatory"
 msgstr ""
 
 #: ../data/gmail-account.ui.h:1

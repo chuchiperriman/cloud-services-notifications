@@ -5,5 +5,6 @@ src/cloudsn/core/controller.py
 src/cloudsn/core/config.py
 src/cloudsn/ui/window.py
 src/cloudsn/ui/indicators/statusicon.py
+src/cloudsn/providers/greaderprovider.py
 [type: gettext/glade]data/gmail-account.ui
 [type: gettext/glade]data/preferences.ui

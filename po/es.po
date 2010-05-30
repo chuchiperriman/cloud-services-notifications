@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-22 17:01+0200\n"
+"POT-Creation-Date: 2010-05-30 16:16+0200\n"
 "PO-Revision-Date: 2010-04-20 01:10+0200\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
 "Language-Team: Español <chuchiperriman@gmail.com>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Error cargando la configuración de la cuenta: La propiedad \"name\" es "
 "obligatoria, revise la configuración"
 
-#: ../src/cloudsn/core/account.py:124
+#: ../src/cloudsn/core/account.py:127
 #, python-format
 msgid "The account %s already exists"
 msgstr "La cuenta %s ya existe"
@@ -67,24 +67,24 @@ msgstr "Presione para parar el servicio de chequeo"
 msgid "Press to start the checker daemon"
 msgstr "Presione para iniciar el servicio de chequeo"
 
-#: ../src/cloudsn/ui/window.py:174
+#: ../src/cloudsn/ui/window.py:175
 #, python-format
 msgid "Are you sure you want to delete the account %s?"
 msgstr "¿Está seguro que desea eliminar la cuenta %s?"
 
-#: ../src/cloudsn/ui/window.py:237
+#: ../src/cloudsn/ui/window.py:238
 msgid "You must select a provider and fill the data"
 msgstr "Debe seleccionar un proveedor y rellenar los datos"
 
-#: ../src/cloudsn/ui/window.py:241 ../src/cloudsn/ui/window.py:299
+#: ../src/cloudsn/ui/window.py:242 ../src/cloudsn/ui/window.py:300
 msgid "You must fill the account name"
 msgstr "Debe rellenar el nombre de cuenta"
 
-#: ../src/cloudsn/ui/window.py:260
+#: ../src/cloudsn/ui/window.py:261
 msgid "Error adding a new account: "
 msgstr "Error añadiendo una cuenta nueva: "
 
-#: ../src/cloudsn/ui/window.py:311
+#: ../src/cloudsn/ui/window.py:312
 msgid "Error editing an account: "
 msgstr "Error editando una cuenta: "
 
@@ -95,6 +95,20 @@ msgstr "Icono de estado"
 #: ../src/cloudsn/ui/indicators/statusicon.py:46
 msgid "Update accounts"
 msgstr "Actualizar cuentas"
+
+#: ../src/cloudsn/providers/greaderprovider.py:40
+#, python-format
+msgid "%d unread news"
+msgstr "%d noticias sin leer"
+
+#: ../src/cloudsn/providers/greaderprovider.py:44
+#, python-format
+msgid "%d unread new"
+msgstr "%d mensaje sin leer"
+
+#: ../src/cloudsn/providers/greaderprovider.py:63
+msgid "The user name and the password are mandatory"
+msgstr "El nombre de usuario y la contraseña son obligatorios"
 
 #: ../data/gmail-account.ui.h:1
 msgid "<b>Account information</b>"

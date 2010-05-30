@@ -128,6 +128,7 @@ class MainWindow:
         #Populate indicator combo
         i=0
         indicator_name = self.config.get_prefs()["indicator"]
+        indicators_store.clear()
         for indi in self.im.get_indicators():
             indicators_store.append([indi.get_name()])
             if indi.get_name() == indicator_name:

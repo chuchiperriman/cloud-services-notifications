@@ -1,3 +1,13 @@
+cloudsn (0.5.14) lucid; urgency=low
+
+  * #585031: Fixed Pop3 and IMAP message count
+  * #586953: Added Pop3 SSL configuration
+  * #587040: Fixed errors in the indicators list
+  * #587317: GReader shows notifications when new items
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 30 May 2010 21:37:00 +0100
+
 cloudsn (0.5.12) lucid; urgency=low
 
   * Added a quit menu item and close menu item to close the window or

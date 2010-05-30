@@ -1,5 +1,5 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
-from cloudsn.core.account import AccountCacheMails, AccountManager
+from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core import utils
 from cloudsn.core import config
@@ -32,6 +32,20 @@ class GReaderProvider(ProviderUtilsBuilder):
     def update_account (self, account):
         g = GreaderAtom (account["username"], account["password"])
         g.refreshInfo()
+        
+        news = []
+        new_count = g.getTotalUnread() - account.total_unread
+        if new_count > 1:
+            news.append(Notification('', 
+                '%d unread news' % (new_count),
+                ''))
+        elif new_count == 1:
+            news.append(Notification('', 
+                '%d unread new' % (new_count),
+                ''))
+        
+        account.new_unread = news;
+        
         account.total_unread = g.getTotalUnread()
 
     def get_dialog_def (self):

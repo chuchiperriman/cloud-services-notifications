@@ -44,13 +44,14 @@ class Pop3Provider(ProviderUtilsBuilder):
         g = PopBox (account["username"], account["password"], 
             account["host"], account["port"], account["ssl"])
         account.new_unread = []
-        account.notifications = {}
+        notifications = {}
         mails = g.get_mails()
         for mail_id, sub, fr in mails:
+            notifications[mail_id] = sub
             if mail_id not in account.notifications:
                 n = Notification(mail_id, sub, fr)
-                account.notifications[mail_id] = sub
                 account.new_unread.append (n)
+        account.notifications = notifications
 
     def get_dialog_def (self):
         return [{"label": "Host", "type" : "str"},

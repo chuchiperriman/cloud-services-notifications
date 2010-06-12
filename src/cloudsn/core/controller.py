@@ -171,7 +171,8 @@ class Controller (gobject.GObject):
             while gtk.events_pending():
                 gtk.main_iteration(False)
                 
-            if acc.get_provider().has_notifications():
+            if acc.get_provider().has_notifications() and \
+                    acc.get_show_notifications():
                 nots = acc.get_new_unread_notifications()
                 message = None
                 if len(nots) > max_notifications:

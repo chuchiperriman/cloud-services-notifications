@@ -24,6 +24,8 @@ class Account:
         self.error_notified = False
         if 'active' not in self.properties:
             self.properties["active"] = True
+        if 'show_notifications' not in self.properties:
+            self.properties["show_notifications"] = True
         
     def __getitem__(self, key):
         return self.properties[key]
@@ -42,6 +44,12 @@ class Account:
 
     def get_provider (self):
         return self.provider
+
+    def get_show_notifications(self):
+        return utils.get_boolean(self.properties["show_notifications"])
+        
+    def set_show_notifications(self, show_notifications):
+        self.properties["show_notifications"] = utils.get_boolean(show_notifications)
         
     def get_active (self):
         return utils.get_boolean(self.properties["active"])

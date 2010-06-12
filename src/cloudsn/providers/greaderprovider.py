@@ -50,26 +50,31 @@ class GReaderProvider(ProviderUtilsBuilder):
 
     def get_dialog_def (self):
         return [{"label": "User", "type" : "str"},
-                {"label": "Password", "type" : "pwd"}]
+                {"label": "Password", "type" : "pwd"},
+                {"label": "Show notifications", "type" : "check"}]
     
     def populate_dialog(self, widget, acc):
         self._set_text_value ("User",acc["username"])
         self._set_text_value ("Password", acc["password"])
+        self._set_check_value("Show notifications", acc["show_notifications"])
     
     def set_account_data_from_widget(self, account_name, widget, account=None):
         username = self._get_text_value ("User")
         password = self._get_text_value ("Password")
+        show_notifications = self._get_check_value("Show notifications")
         if username=='' or password=='':
             raise Exception(_("The user name and the password are mandatory"))
         
         if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
                 'username' : username, 'password' : password,
+                'show_notifications' : show_notifications,
                 'activate_url' : "http://reader.google.com"}
             account = self.load_account(props)
         else:
             account["username"] = username
             account["password"] = password
+            account["show_notifications"] = show_notifications
         return account
         
 class GreaderAtom:

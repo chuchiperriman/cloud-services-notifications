@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 16:16+0200\n"
+"POT-Creation-Date: 2010-06-13 13:58+0200\n"
 "PO-Revision-Date: 2010-04-20 01:10+0200\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
 "Language-Team: Español <chuchiperriman@gmail.com>\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Error cargando la configuración de la cuenta: La propiedad \"name\" es "
 "obligatoria, revise la configuración"
 
-#: ../src/cloudsn/core/account.py:127
+#: ../src/cloudsn/core/account.py:135
 #, python-format
 msgid "The account %s already exists"
 msgstr "La cuenta %s ya existe"
@@ -37,20 +37,20 @@ msgstr "La cuenta %s ya existe"
 msgid "Another instance is already running, close it first."
 msgstr "Hay otra instancia arrancada, ciérrela primero."
 
-#: ../src/cloudsn/core/controller.py:179
+#: ../src/cloudsn/core/controller.py:180
 msgid "New messages: "
 msgstr "Mensajes nuevos: "
 
-#: ../src/cloudsn/core/controller.py:199
+#: ../src/cloudsn/core/controller.py:200
 #, python-format
 msgid "Error checking account %s"
 msgstr "Error comprobando la cuenta %s"
 
-#: ../src/cloudsn/core/controller.py:225
+#: ../src/cloudsn/core/controller.py:226
 msgid "Application Error"
 msgstr "Error de aplicación"
 
-#: ../src/cloudsn/core/controller.py:226
+#: ../src/cloudsn/core/controller.py:227
 #, python-format
 msgid "Error starting the application: %s"
 msgstr "Error iniciando la aplicación: %s"
@@ -106,7 +106,7 @@ msgstr "%d noticias sin leer"
 msgid "%d unread new"
 msgstr "%d mensaje sin leer"
 
-#: ../src/cloudsn/providers/greaderprovider.py:63
+#: ../src/cloudsn/providers/greaderprovider.py:66
 msgid "The user name and the password are mandatory"
 msgstr "El nombre de usuario y la contraseña son obligatorios"
 
@@ -227,7 +227,7 @@ msgid "_Edit"
 msgstr "_Editar"
 
 #: ../data/preferences.ui.h:26
-msgid "_FIle"
+msgid "_File"
 msgstr "_Archivo"
 
 #: ../data/preferences.ui.h:27

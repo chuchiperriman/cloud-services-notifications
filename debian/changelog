@@ -1,3 +1,13 @@
+cloudsn (0.5.16) lucid; urgency=low
+
+  * New cloudsn icons thanks to Pedro Gauna!!
+  * Fixed #579611: Added draw-attention to the indicator applet
+  * Fixed #590461: Do show notifications configurable by account (GReader).
+  * Fixed bugs with IMAP and POP3 count.
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 13 Jun 2010 13:50:00 +0100
+ 
 cloudsn (0.5.14) lucid; urgency=low
 
   * #585031: Fixed Pop3 and IMAP message count

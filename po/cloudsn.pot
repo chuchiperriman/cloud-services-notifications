@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-30 16:16+0200\n"
+"POT-Creation-Date: 2010-06-13 13:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid ""
 "your configuration"
 msgstr ""
 
-#: ../src/cloudsn/core/account.py:127
+#: ../src/cloudsn/core/account.py:135
 #, python-format
 msgid "The account %s already exists"
 msgstr ""
@@ -35,20 +35,20 @@ msgstr ""
 msgid "Another instance is already running, close it first."
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:179
+#: ../src/cloudsn/core/controller.py:180
 msgid "New messages: "
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:199
+#: ../src/cloudsn/core/controller.py:200
 #, python-format
 msgid "Error checking account %s"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:225
+#: ../src/cloudsn/core/controller.py:226
 msgid "Application Error"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:226
+#: ../src/cloudsn/core/controller.py:227
 #, python-format
 msgid "Error starting the application: %s"
 msgstr ""
@@ -104,7 +104,7 @@ msgstr ""
 msgid "%d unread new"
 msgstr ""
 
-#: ../src/cloudsn/providers/greaderprovider.py:63
+#: ../src/cloudsn/providers/greaderprovider.py:66
 msgid "The user name and the password are mandatory"
 msgstr ""
 
@@ -225,7 +225,7 @@ msgid "_Edit"
 msgstr ""
 
 #: ../data/preferences.ui.h:26
-msgid "_FIle"
+msgid "_File"
 msgstr ""
 
 #: ../data/preferences.ui.h:27

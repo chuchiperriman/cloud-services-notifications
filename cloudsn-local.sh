@@ -1,1 +1,1 @@
-PYTHONPATH=src/ ./cloudsn
+PYTHONPATH=$PYTHONPATH:src/ ./cloudsn

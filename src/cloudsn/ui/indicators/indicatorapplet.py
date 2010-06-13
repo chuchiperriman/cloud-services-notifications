@@ -1,8 +1,9 @@
+# -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 #!/usr/bin/python
 import pygtk
 pygtk.require('2.0')
 import gtk
-from cloudsn.core import config, utils
+from cloudsn.core import config, utils, account
 from cloudsn.ui import window
 from cloudsn.core.indicator import Indicator
 import indicate
@@ -11,6 +12,9 @@ from cloudsn import logger
 
 class IndicatorApplet (Indicator):
 
+    def __init__(self):
+        self.am = account.AccountManager.get_instance()
+        
     def get_name(self):
         return _("Indicator Applet")
 
@@ -42,6 +46,10 @@ class IndicatorApplet (Indicator):
         if acc.is_error_icon:
             acc.indicator.set_property_icon("icon", acc.get_icon())
             acc.is_error_icon = False
+        else:
+            if len(acc.get_new_unread_notifications()) > 0:
+                acc.indicator.set_property('draw-attention', 'true')
+
         acc.indicator.set_property("count", str(acc.get_total_unread()))
 
     def update_error(self, acc):
@@ -54,9 +62,12 @@ class IndicatorApplet (Indicator):
         acc.indicator = None
 
     def on_server_display_cb(self, server, timestamp=None):
-	win = window.MainWindow.get_instance()
+        for acc in self.am.get_accounts():
+            acc.indicator.set_property('draw-attention', 'false')
+	    win = window.MainWindow.get_instance()
         win.run()
-
+    
     def on_indicator_display_cb(self, indicator, timestamp=None):
+        indicator.set_property('draw-attention', 'false')
         indicator.account.activate ()
         

@@ -63,7 +63,8 @@ class IndicatorApplet (Indicator):
 
     def on_server_display_cb(self, server, timestamp=None):
         for acc in self.am.get_accounts():
-            acc.indicator.set_property('draw-attention', 'false')
+            if acc.get_active() and acc.indicator:
+                acc.indicator.set_property('draw-attention', 'false')
 	    win = window.MainWindow.get_instance()
         win.run()
     

@@ -1,0 +1,238 @@
+# ITALIAN TRADUCTION.
+# Copyright (C) 2010
+# This file is distributed under the same license as the PACKAGE package.
+# Stefano Candori <stefano.candori@gmail.com>, 2010.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.5.17\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-06-13 13:58+0200\n"
+"PO-Revision-Date: 2010-06-16 15:04+0200\n"
+"Last-Translator: Stefano Candori <stefano.candori@gmail.com>\n"
+"Language-Team: Italian <stefano.candori@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/cloudsn/cloudsn.py:36
+msgid "Error starting cloudsn"
+msgstr "Errore all'avvio di cloudsn"
+
+#: ../src/cloudsn/core/account.py:18
+msgid ""
+"Error loading account configuration: The name property is mandatory, check "
+"your configuration"
+msgstr "Errore al caricamento delle configurazioni dell'account: La proprietà \"nome\" è necessaria,"
+" controlla la tua configurazione"
+
+#: ../src/cloudsn/core/account.py:135
+#, python-format
+msgid "The account %s already exists"
+msgstr "L'account %s esiste già"
+
+#: ../src/cloudsn/core/controller.py:35
+msgid "Another instance is already running, close it first."
+msgstr "Un'altra istanza è già in esecuzione, chiudila prima."
+
+#: ../src/cloudsn/core/controller.py:180
+msgid "New messages: "
+msgstr "Nuovi messaggi: "
+
+#: ../src/cloudsn/core/controller.py:200
+#, python-format
+msgid "Error checking account %s"
+msgstr "Errore controllando l'account %s"
+
+#: ../src/cloudsn/core/controller.py:226
+msgid "Application Error"
+msgstr "Errore dell'applicazione"
+
+#: ../src/cloudsn/core/controller.py:227
+#, python-format
+msgid "Error starting the application: %s"
+msgstr "Errore all'avvio dell'applicazione: %s"
+
+#: ../src/cloudsn/core/config.py:30
+msgid "Can't find the cloudsn data directory"
+msgstr "Impossibile trovare la cartella dati cloudsn"
+
+#: ../src/cloudsn/ui/window.py:106
+msgid "Press to pause the checker daemon"
+msgstr "Clicca per mettere in pausa il demone di controllo"
+
+#: ../src/cloudsn/ui/window.py:110
+msgid "Press to start the checker daemon"
+msgstr "Clicca per avviare il demone di controllo"
+
+#: ../src/cloudsn/ui/window.py:175
+#, python-format
+msgid "Are you sure you want to delete the account %s?"
+msgstr "Sei sicuro di cancellare l'account %s"
+
+#: ../src/cloudsn/ui/window.py:238
+msgid "You must select a provider and fill the data"
+msgstr "Devi selezionare un provider e inserire i dati"
+
+#: ../src/cloudsn/ui/window.py:242 ../src/cloudsn/ui/window.py:300
+msgid "You must fill the account name"
+msgstr "Devi riempire il campo nome account"
+
+#: ../src/cloudsn/ui/window.py:261
+msgid "Error adding a new account: "
+msgstr "Errore aggiungendo un nuovo account:"
+
+#: ../src/cloudsn/ui/window.py:312
+msgid "Error editing an account: "
+msgstr "Errore modificando un account:"
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:31
+msgid "Status Icon"
+msgstr "Icona di stato"
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:46
+msgid "Update accounts"
+msgstr "Aggiorna gli accounts"
+
+#: ../src/cloudsn/providers/greaderprovider.py:40
+#, python-format
+msgid "%d unread news"
+msgstr "%d notizie da leggere"
+
+#: ../src/cloudsn/providers/greaderprovider.py:44
+#, python-format
+msgid "%d unread new"
+msgstr "%d notizie da leggere"
+
+#: ../src/cloudsn/providers/greaderprovider.py:66
+msgid "The user name and the password are mandatory"
+msgstr "Il nome utente e la password sono obbligatorie"
+
+#: ../data/gmail-account.ui.h:1
+msgid "<b>Account information</b>"
+msgstr "<b>Informazioni Account</b>"
+
+#: ../data/gmail-account.ui.h:2
+msgid "<b>Labels to check</b>"
+msgstr "<b>Etichette da controllare</b>"
+
+#: ../data/gmail-account.ui.h:3
+msgid "Password: "
+msgstr "Password: "
+
+#: ../data/gmail-account.ui.h:4
+msgid "Username: "
+msgstr "Nome utente: "
+
+#: ../data/preferences.ui.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>Nuovo account</b>"
+
+#: ../data/preferences.ui.h:2
+msgid "Account Name"
+msgstr "Nome Utente"
+
+#: ../data/preferences.ui.h:3
+msgid "Account name: "
+msgstr "Nome Utente"
+
+#: ../data/preferences.ui.h:4
+msgid "Active"
+msgstr "Attiva"
+
+#: ../data/preferences.ui.h:5
+msgid "Add a new account"
+msgstr "Aggiungi un nuovo account"
+
+#: ../data/preferences.ui.h:6
+msgid "By account: "
+msgstr "Per account: "
+
+#: ../data/preferences.ui.h:7
+msgid "Check interval"
+msgstr "Intervallo di aggiornamento:"
+
+#: ../data/preferences.ui.h:8
+msgid "Delete the selected account"
+msgstr "Cancella l'account selezionato"
+
+#: ../data/preferences.ui.h:9
+msgid "Edit the selected account"
+msgstr "Modifica l'account selezionato"
+
+#: ../data/preferences.ui.h:10
+msgid "General"
+msgstr "Generale"
+
+#: ../data/preferences.ui.h:11
+msgid "Icon"
+msgstr "Icona"
+
+#: ../data/preferences.ui.h:12
+msgid "Indicate status with: "
+msgstr "Indica lo stato con: "
+
+#: ../data/preferences.ui.h:13
+msgid "Last Update"
+msgstr "Ultimo Aggiornamento"
+
+#: ../data/preferences.ui.h:14
+msgid "Maximum notifications"
+msgstr "Numero di notifiche massimo"
+
+#: ../data/preferences.ui.h:15
+msgid "Minutes: "
+msgstr "Minuti: "
+
+#: ../data/preferences.ui.h:16
+msgid "New Account"
+msgstr "Nuovo Account"
+
+#: ../data/preferences.ui.h:17
+msgid "Preferences"
+msgstr "Preferenze"
+
+#: ../data/preferences.ui.h:18
+msgid "Provider: "
+msgstr "Provider: "
+
+#: ../data/preferences.ui.h:19
+msgid "Run application on startup"
+msgstr "Esegui l'applicazione all'avvio"
+
+#: ../data/preferences.ui.h:20
+msgid "Show preferences"
+msgstr "Mostra le preferenze"
+
+#: ../data/preferences.ui.h:21
+msgid "Stop/Play"
+msgstr "Ferma/Riproduci"
+
+#: ../data/preferences.ui.h:22
+msgid "Update"
+msgstr "Aggiorna"
+
+#: ../data/preferences.ui.h:23
+msgid "Update all accounts"
+msgstr "Aggiorna tutti gli accounts"
+
+#: ../data/preferences.ui.h:24
+msgid "Update the selected account"
+msgstr "Aggiorna l'account selezionato"
+
+#: ../data/preferences.ui.h:25
+msgid "_Edit"
+msgstr "_Modifica"
+
+#: ../data/preferences.ui.h:26
+msgid "_File"
+msgstr "_File"
+
+#: ../data/preferences.ui.h:27
+msgid "_Help"
+msgstr "_Aiuto"
+
+#: ../data/preferences.ui.h:28
+msgid "toolbutton3"
+msgstr "toolbutton3"

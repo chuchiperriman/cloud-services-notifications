@@ -1,8 +1,10 @@
 from cloudsn import logger
+from datetime import datetime
 
 notifications = []
 disable = True
 notifying = False
+last_notify = tstart = datetime.now()
 
 try:
     import pynotify
@@ -16,23 +18,33 @@ except Exception, e:
 
 def notify_closed_cb (n, data=None):
     global notifications, notifying
-    
     notifying = False
-    notifications.remove (n)
+    if n in notifications:
+        notifications.remove (n)
     n = None
     notify_process()
 
 def notify_process ():
-    global notifications, notifying
+    global notifications, notifying, last_notify
 
-    if notifying == True or len(notifications) == 0:
-        return
+    if len(notifications) == 0:
+        return;
+        
+    if notifying == True:
+        #See Bug #622021 on gnome
+        diff = datetime.now() - last_notify
+        if diff.seconds > 30:
+            logger.debug("30 seconds from the last notification, reactivating")
+            notifying = False
+        else:
+            return
         
     n = notifications[0]
     n.connect("closed", notify_closed_cb)
     n.show()
     
     notifying= True
+    last_notify = datetime.now()
 
 def notify (title, message, icon = None):
     if disable == True:

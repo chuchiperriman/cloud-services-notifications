@@ -27,7 +27,7 @@ class IndicatorApplet (Indicator):
             self.server.show()
             logger.debug("Indicator server created")
         else:
-            #TODO Discable the indicators
+            #TODO Disable the indicators
             logger.debug("deactivate Not implemented")
 
     def create_indicator(self, acc):
@@ -50,6 +50,9 @@ class IndicatorApplet (Indicator):
             if len(acc.get_new_unread_notifications()) > 0:
                 acc.indicator.set_property('draw-attention', 'true')
 
+        if acc.get_total_unread() < 1:
+            acc.indicator.set_property('draw-attention', 'false')
+            
         acc.indicator.set_property("count", str(acc.get_total_unread()))
 
     def update_error(self, acc):

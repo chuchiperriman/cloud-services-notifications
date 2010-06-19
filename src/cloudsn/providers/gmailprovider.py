@@ -106,11 +106,12 @@ class GMailProvider(Provider):
         if account:
             self.builder.get_object("username_entry").set_text(account["username"])
             self.builder.get_object("password_entry").set_text(account["password"])
-            labels = [l.strip() for l in account["labels"].split(",")]
-            for label in labels:
-                if label != '':
-                    siter = self.labels_store.append()
-                    self.labels_store.set_value(siter, 0, label)
+            if 'labels' in account.get_properties():
+                labels = [l.strip() for l in account["labels"].split(",")]
+                for label in labels:
+                    if label != '':
+                        siter = self.labels_store.append()
+                        self.labels_store.set_value(siter, 0, label)
         return box
         
     def set_account_data_from_widget(self, account_name, widget, account=None):

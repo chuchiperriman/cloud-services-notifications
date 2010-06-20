@@ -1,3 +1,10 @@
+cloudsn (0.5.20) lucid; urgency=low
+
+  * Fixed #596542 : Error in it.po file charset
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 20 Jun 2010 12:28:00 +0100
+
 cloudsn (0.5.18) lucid; urgency=low
 
   * Fixed #593471: Clean draw-attention when the account messages are 0

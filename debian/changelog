@@ -1,3 +1,13 @@
+cloudsn (0.5.18) lucid; urgency=low
+
+  * Fixed #593471: Clean draw-attention when the account messages are 0
+  * Fixed #589777: There is a bug in libnotify #622021
+  * Fixed #593354: error showing the main appication with indicator-applet
+  * Added italian translation
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 20 Jun 2010 12:28:00 +0100
+
 cloudsn (0.5.16) lucid; urgency=low
 
   * New cloudsn icons thanks to Pedro Gauna!!

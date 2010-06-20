@@ -1,6 +1,6 @@
 # ITALIAN TRADUCTION.
 # Copyright (C) 2010
-# This file is distributed under the same license as the PACKAGE package.
+# This file is distributed under the same license as the cloudsn package.
 # Stefano Candori <stefano.candori@gmail.com>, 2010.
 #
 #, fuzzy

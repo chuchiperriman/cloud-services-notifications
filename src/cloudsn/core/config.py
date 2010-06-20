@@ -65,7 +65,11 @@ class SettingsController(gobject.GObject):
     CONFIG_ACCOUNTS = CONFIG_HOME + '/accounts'
 
     __default_prefs = {
-        "preferences" : {"minutes" : 10, "indicator" : '', "max_notifications" : 3}
+        "preferences" : {
+            "minutes" : 10,
+            "indicator" : '', 
+            "max_notifications" : 3,
+            "keyring" : ''}
     }
 
     def __init__(self):

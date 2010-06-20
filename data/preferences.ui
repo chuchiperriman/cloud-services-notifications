@@ -224,6 +224,44 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkHBox" id="hbox3">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Password manager: </property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkComboBox" id="keyring_combo">
+                        <property name="visible">True</property>
+                        <property name="model">keyring_store</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkCheckButton" id="startup_check">
                     <property name="label" translatable="yes">Run application on startup</property>
                     <property name="visible">True</property>
@@ -234,7 +272,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
               </object>
@@ -453,6 +491,12 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkListStore" id="keyring_store">
+    <columns>
+      <!-- column-name name -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkWindow" id="main_window">
     <property name="window_position">center</property>
     <property name="default_width">441</property>
@@ -625,7 +669,7 @@
                     <property name="search_column">1</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="active_column">
-                        <property name="title" translatable="yes">Active</property>
+                        <property name="title">Active</property>
                         <child>
                           <object class="GtkCellRendererToggle" id="active_cell">
                             <signal name="toggled" handler="active_cell_toggled_cb"/>
@@ -638,7 +682,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="icon_column">
-                        <property name="title" translatable="yes">Icon</property>
+                        <property name="title">Icon</property>
                         <child>
                           <object class="GtkCellRendererPixbuf" id="icon_cell1"/>
                           <attributes>
@@ -649,7 +693,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="name_column">
-                        <property name="title" translatable="yes">Account Name</property>
+                        <property name="title">Account Name</property>
                         <child>
                           <object class="GtkCellRendererText" id="name_cell1"/>
                           <attributes>
@@ -660,7 +704,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="last_update_column">
-                        <property name="title" translatable="yes">Last Update</property>
+                        <property name="title">Last Update</property>
                         <child>
                           <object class="GtkCellRendererText" id="last_update_cell1"/>
                           <attributes>

@@ -1,9 +1,13 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 import base64
+import gettext
 from ..keyring import Keyring
 
 class Base64Keyring(Keyring):
 
+    def get_name(self):
+        return _("Base64 encoding")
+        
     def has_credentials(self, acc):
         if "keyring_name" in acc.get_properties() and \
             acc["keyring_name"] == "base64":

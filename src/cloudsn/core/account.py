@@ -1,5 +1,5 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
-from cloudsn.core import config, utils
+from cloudsn.core import config, utils, keyring
 from cloudsn import logger
 import gobject
 from datetime import datetime

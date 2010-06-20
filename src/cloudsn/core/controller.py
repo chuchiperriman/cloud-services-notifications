@@ -1,7 +1,6 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 from cloudsn.core.provider import Provider, ProviderManager
 from cloudsn.core import account, config, networkmanager, notification, utils, indicator
-from cloudsn.ui import preferences
 from cloudsn import logger
 from time import time
 import gtk

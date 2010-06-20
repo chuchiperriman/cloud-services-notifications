@@ -3,7 +3,7 @@ import gtk
 import os
 import shutil
 import gettext
-from cloudsn.core import config, provider, account, indicator
+from cloudsn.core import config, provider, account, indicator, keyring
 from cloudsn import logger
 from cloudsn.ui import about, utils
 
@@ -24,6 +24,7 @@ class MainWindow:
         self.pm = provider.ProviderManager.get_instance()
         self.am = account.AccountManager.get_instance()
         self.im = indicator.IndicatorManager.get_instance()
+        self.km = keyring.KeyringManager.get_instance()
         self.am.connect ("account-deleted", self.account_deleted_cb)
 
     @staticmethod
@@ -115,6 +116,8 @@ class MainWindow:
         self.pref_dialog.set_destroy_with_parent (True)
         indicator_combo = self.builder.get_object("indicator_combo")
         indicators_store = self.builder.get_object("indicators_store");
+        keyring_combo = self.builder.get_object("keyring_combo")
+        keyring_store = self.builder.get_object("keyring_store");
         minutes=self.builder.get_object("minutes_spin")
         max_not_spin=self.builder.get_object("max_not_spin")
         startup_check = self.builder.get_object("startup_check")
@@ -134,6 +137,15 @@ class MainWindow:
             if indi.get_name() == indicator_name:
                 indicator_combo.set_active(i)
             i+=1
+        i=0
+        keyring_name = self.config.get_prefs()["keyring"]
+        keyring_store.clear()
+        for k in self.km.get_managers():
+            print k.get_name()
+            keyring_store.append([k.get_name()])
+            if k.get_name() == keyring_name:
+                keyring_combo.set_active(i)
+            i+=1
         response = self.pref_dialog.run()
         self.pref_dialog.hide()
         self.config.set_pref ("minutes", minutes.get_value())
@@ -141,6 +153,9 @@ class MainWindow:
         iiter = indicator_combo.get_active_iter()
         if iiter:
             self.config.set_pref ("indicator", indicators_store.get_value(iiter,0))
+        iiter = keyring_combo.get_active_iter()
+        if iiter:
+            self.config.set_pref ("keyring", keyring_store.get_value(iiter,0))
         
         #Check startup checkbox
         if startup_check.get_active():

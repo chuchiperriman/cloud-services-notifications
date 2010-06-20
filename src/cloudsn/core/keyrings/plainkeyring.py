@@ -1,7 +1,11 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 from ..keyring import Keyring
+import gettext
 
 class PlainKeyring(Keyring):
+    
+    def get_name(self):
+        return _("Plain text")
 
     def has_credentials(self, acc):
         if not "keyring_name" in acc.get_properties():

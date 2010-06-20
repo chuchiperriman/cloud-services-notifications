@@ -1,24 +1,20 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Spanish translation.
+# Copyright (C) 2010
+# This file is distributed under the same license as the cloudsn package.
+# Jesús Barbero Rodríguez <chuchiperriman@gmail.com>, 2010.
 # Jesús Barbero Rodríguez <chuchiperriman@gmail.com>, 2010.
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-13 13:58+0200\n"
+"POT-Creation-Date: 2010-06-21 01:22+0200\n"
 "PO-Revision-Date: 2010-04-20 01:10+0200\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
 "Language-Team: Español <chuchiperriman@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#: ../src/cloudsn/cloudsn.py:36
-msgid "Error starting cloudsn"
-msgstr "Error iniciando cloudsn"
 
 #: ../src/cloudsn/core/account.py:18
 msgid ""
@@ -237,6 +233,9 @@ msgstr "Ay_uda"
 #: ../data/preferences.ui.h:28
 msgid "toolbutton3"
 msgstr "toolbutton3"
+
+#~ msgid "Error starting cloudsn"
+#~ msgstr "Error iniciando cloudsn"
 
 #~ msgid "New GMail Account"
 #~ msgstr "Nueva cuenta de GMail"

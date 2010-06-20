@@ -33,7 +33,8 @@ def start ():
         cr.start()
     except Exception, e:
         logger.exception("Error starting cloudsn: %s", e)
-        notification.notify (_("Error starting cloudsn"),
+        #We not traduce this notification because the problem can be gettext
+        notification.notify ("Error starting cloudsn",
                             str(e),
                             utils.get_error_pixbuf())
 

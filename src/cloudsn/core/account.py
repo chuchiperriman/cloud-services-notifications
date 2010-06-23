@@ -177,6 +177,7 @@ class AccountManager (gobject.GObject):
         acc.error_notified = False
         self.sc.set_account_config (acc)
         if acc.use_keyring:
+            acc["keyring_name"] = self.km.get_manager().get_id()
             self.km.get_manager().store_credentials(acc)
         self.sc.save_accounts()
         self.emit("account-changed", acc)

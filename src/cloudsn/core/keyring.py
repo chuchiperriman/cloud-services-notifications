@@ -3,6 +3,9 @@ from cloudsn.core import config
 
 class Keyring(object):
     
+    def get_id(self):
+        raise Exception("You must configure the keyring id")
+    
     def get_name(self):
         return None
 
@@ -39,7 +42,7 @@ class KeyringManager:
         #self.__add_manager (Base64Keyring())
         configured_name = self.config.get_prefs()["keyring"]
         for m in self.managers:
-            if m.get_name() == configured_name:
+            if m.get_id() == configured_name:
                 self.current = m
                 break
         if not self.current:

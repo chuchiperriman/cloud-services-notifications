@@ -5,6 +5,9 @@ import gettext
 
 class PlainKeyring(Keyring):
     
+    def get_id(self):
+        return "plain"
+    
     def get_name(self):
         return _("Plain text")
 
@@ -15,7 +18,6 @@ class PlainKeyring(Keyring):
     def store_credentials(self, acc):
         logger.debug("Storing plain credentials for account: %s" % (acc.get_name()))
         self.__check_valid(acc)
-        acc["keyring_name"] = self.get_name()
 
     def __check_valid(self, acc):
         #If there is no configuration, the keyring is plain

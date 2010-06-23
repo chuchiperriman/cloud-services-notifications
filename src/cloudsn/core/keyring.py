@@ -6,9 +6,6 @@ class Keyring(object):
     def get_name(self):
         return None
 
-    def has_credentials(self, acc):
-        return False
-
     def load_credentials(self, acc):
         """
         Get the account info and set the user and password
@@ -38,8 +35,8 @@ class KeyringManager:
         self.config = config.SettingsController.get_instance()
         from keyrings.plainkeyring import PlainKeyring
         self.__add_manager (PlainKeyring())
-        from keyrings.base64keyring import Base64Keyring
-        self.__add_manager (Base64Keyring())
+        #from keyrings.base64keyring import Base64Keyring
+        #self.__add_manager (Base64Keyring())
         configured_name = self.config.get_prefs()["keyring"]
         for m in self.managers:
             if m.get_name() == configured_name:

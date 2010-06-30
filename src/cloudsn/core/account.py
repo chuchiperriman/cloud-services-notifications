@@ -22,7 +22,6 @@ class Account:
         self.total_unread = 0
         self.last_update = None
         self.error_notified = False
-        self.use_keyring = True
         if 'active' not in self.properties:
             self.properties["active"] = True
         if 'show_notifications' not in self.properties:
@@ -46,6 +45,12 @@ class Account:
     def get_provider (self):
         return self.provider
 
+    def get_credentials(self):
+        return keyring.get_keyring().get_credentials(self)
+        
+    def set_credentials(self, credentials):
+        keyring.get_keyring().store_credentials(self, credentials)
+        
     def get_show_notifications(self):
         return utils.get_boolean(self.properties["show_notifications"])
         
@@ -114,7 +119,6 @@ class AccountManager (gobject.GObject):
         self.accounts = {}
         self.sc = config.SettingsController.get_instance()
         self.pm = ProviderManager.get_instance()
-        self.km = keyring.KeyringManager.get_instance()
 
     @staticmethod
     def get_instance():
@@ -128,8 +132,6 @@ class AccountManager (gobject.GObject):
             provider = self.pm.get_provider(conf['provider_name'])
             if provider:
                 acc = provider.load_account (conf)
-                if acc.use_keyring:
-                    self.km.get_manager().load_credentials(acc)
                 self.add_account(acc)
             else:
                 logger.error("Error in account %s: The provider %s doesn't exists" % (conf['name'], conf['provider_name']))
@@ -162,8 +164,7 @@ class AccountManager (gobject.GObject):
         del self.accounts[account.get_name()]
         if complete:
             self.sc.del_account_config(account.get_name())
-            if acc.use_keyring:
-                self.km.get_manager().remove_credentials(account)
+            keyring.get_keyring().remove_credentials(account)
             self.sc.save_accounts()
             
         self.emit("account-deleted", account)
@@ -176,8 +177,6 @@ class AccountManager (gobject.GObject):
     def save_account(self, acc):
         acc.error_notified = False
         self.sc.set_account_config (acc)
-        if acc.use_keyring:
-            acc["keyring_name"] = self.km.get_manager().get_id()
-            self.km.get_manager().store_credentials(acc)
+        keyring.get_keyring().store_credentials(acc, acc.get_credentials())
         self.sc.save_accounts()
         self.emit("account-changed", acc)

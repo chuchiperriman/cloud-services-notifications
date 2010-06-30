@@ -29,7 +29,7 @@ class GMailProvider(Provider):
         acc = AccountCacheMails(props, self)
         
         #Hack for gmail domains like mail.quiter.com
-        user, tmp, domain = acc.properties['username'].partition('@')
+        user, tmp, domain = acc.get_credentials().username.partition('@')
 
         if domain and domain != "gmail.com":
             activate_url = "https://mail.google.com/a/" + domain
@@ -50,7 +50,8 @@ class GMailProvider(Provider):
             labels.append('inbox')
         
         for label in labels:
-            g = GmailAtom (account["username"], account["password"], label)
+            credentials = account.get_credentials()
+            g = GmailAtom (credentials.username, credentials.password, label)
             g.refreshInfo()
 
             for mail in g.get_mails():
@@ -104,8 +105,9 @@ class GMailProvider(Provider):
         self.labels_treeview = self.builder.get_object("labels_treeview")
         self.builder.connect_signals(self)
         if account:
-            self.builder.get_object("username_entry").set_text(account["username"])
-            self.builder.get_object("password_entry").set_text(account["password"])
+            credentials = account.get_credentials()
+            self.builder.get_object("username_entry").set_text(credentials.username)
+            self.builder.get_object("password_entry").set_text(credentials.password)
             if 'labels' in account.get_properties():
                 labels = [l.strip() for l in account["labels"].split(",")]
                 for label in labels:
@@ -122,6 +124,8 @@ class GMailProvider(Provider):
                 "username" : username, "password" : password, 
                 "activate_url" : "http://gmail.google.com",
                 "labels" : self.__get_labels()}
+            credentials = Credentials(username, password)
+            account.set_credentials(credentials)
             account = AccountCacheMails(props, self)
             account.notifications = {}
         else:

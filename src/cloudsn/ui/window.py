@@ -141,7 +141,7 @@ class MainWindow:
         keyring_id = self.config.get_prefs()["keyring"]
         keyring_store.clear()
         for k in self.km.get_managers():
-            keyring_store.append([k.get_name()])
+            keyring_store.append([k.get_name(), k.get_id()])
             if k.get_id() == keyring_id:
                 keyring_combo.set_active(i)
             i+=1
@@ -153,10 +153,16 @@ class MainWindow:
         if iiter:
             self.config.set_pref ("indicator", indicators_store.get_value(iiter,0))
         iiter = keyring_combo.get_active_iter()
-        #TODO Use the id, not the name
-        #if iiter:
-        #    self.config.set_pref ("keyring", keyring_store.get_value(iiter,0))
         
+        selected = keyring_store.get_value(iiter,1)
+        for m in self.km.get_managers():
+            logger.debug("selected %s, current %s" % (selected, m.get_id()))
+            if m.get_id() == selected:
+                self.km.set_manager(m)
+                break
+                
+        self.config.set_pref ("keyring", selected)
+                
         #Check startup checkbox
         if startup_check.get_active():
             if not os.path.exists(config.get_startup_file_path()):

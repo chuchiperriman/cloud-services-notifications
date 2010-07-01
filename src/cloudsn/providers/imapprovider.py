@@ -8,6 +8,7 @@ Based on imap.py:
 """
 from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
+from cloudsn.core.keyring import Credentials
 from cloudsn.core import config
 from cloudsn.core import utils
 import imaplib
@@ -53,7 +54,7 @@ class ImapProvider(ProviderUtilsBuilder):
                 {"label": "Use SSL", "type" : "check"}]
     
     def populate_dialog(self, widget, acc):
-        credentials = account.get_credentials()
+        credentials = acc.get_credentials()
         self._set_text_value ("Host",acc["host"])
         self._set_text_value ("User", credentials.username)
         self._set_text_value ("Password", credentials.password)

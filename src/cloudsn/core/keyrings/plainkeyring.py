@@ -19,7 +19,6 @@ class PlainKeyring(Keyring):
         logger.debug("Storing plain credentials for account: %s" % (acc.get_name()))
         acc["username"] = credentials.username
         acc["password"] = credentials.password
-        self.__check_valid(acc)
         
     def get_credentials(self, acc):
         self.__check_valid(acc)

@@ -1,6 +1,7 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
+from cloudsn.core.keyring import Credentials
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config

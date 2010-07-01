@@ -1,6 +1,7 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.providers.providersbase import ProviderUtilsBuilder
+from cloudsn.core.keyring import Credentials
 from cloudsn.core import utils
 from cloudsn.core import config
 import urllib2
@@ -55,7 +56,7 @@ class GReaderProvider(ProviderUtilsBuilder):
                 {"label": "Show notifications", "type" : "check"}]
     
     def populate_dialog(self, widget, acc):
-        credentials = account.get_credentials()
+        credentials = acc.get_credentials()
         self._set_text_value ("User", credentials.username)
         self._set_text_value ("Password", credentials.password)
         self._set_check_value("Show notifications", acc["show_notifications"])

@@ -17,7 +17,6 @@ class Base64Keyring(Keyring):
         acc["password"] = None
         
     def store_credentials(self, acc, credentials):
-        self.__check_valid(acc)
         try:
             logger.debug("Storing base64 credentials for account: %s" % (acc.get_name()))
             acc["username"] = base64.encodestring(credentials.username)

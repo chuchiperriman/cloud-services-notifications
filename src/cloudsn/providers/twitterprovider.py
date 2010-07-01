@@ -1,5 +1,6 @@
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.providers.providersbase import ProviderUtilsBuilder
+from cloudsn.core.keyring import Credentials
 from cloudsn.core import utils
 from cloudsn.ui.utils import create_provider_widget, get_widget_by_label
 from cloudsn.core import config
@@ -34,7 +35,7 @@ class TwitterProvider(ProviderUtilsBuilder):
                 {"label": "Password", "type" : "pwd"}]
     
     def populate_dialog(self, widget, acc):
-        credentials = account.get_credentials()
+        credentials = acc.get_credentials()
         self._set_text_value ("User",credentials.username)
         self._set_text_value ("Password", credentials.password)
     

@@ -30,7 +30,8 @@ class GReaderProvider(ProviderUtilsBuilder):
         return acc
         
     def update_account (self, account):
-        g = GreaderAtom (account["username"], account["password"])
+        credentials = account.get_credentials()
+        g = GreaderAtom (credentials.username, credentials.password)
         g.refreshInfo()
         
         news = []
@@ -54,8 +55,9 @@ class GReaderProvider(ProviderUtilsBuilder):
                 {"label": "Show notifications", "type" : "check"}]
     
     def populate_dialog(self, widget, acc):
-        self._set_text_value ("User",acc["username"])
-        self._set_text_value ("Password", acc["password"])
+        credentials = account.get_credentials()
+        self._set_text_value ("User", credentials.username)
+        self._set_text_value ("Password", credentials.password)
         self._set_check_value("Show notifications", acc["show_notifications"])
     
     def set_account_data_from_widget(self, account_name, widget, account=None):
@@ -72,8 +74,8 @@ class GReaderProvider(ProviderUtilsBuilder):
                 'activate_url' : "http://reader.google.com"}
             account = self.load_account(props)
         else:
-            account["username"] = username
-            account["password"] = password
+            credentials = Credentials(username, password)
+            account.set_credentials(credentials)
             account["show_notifications"] = show_notifications
         return account
         

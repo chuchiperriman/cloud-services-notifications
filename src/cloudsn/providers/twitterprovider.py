@@ -34,8 +34,9 @@ class TwitterProvider(ProviderUtilsBuilder):
                 {"label": "Password", "type" : "pwd"}]
     
     def populate_dialog(self, widget, acc):
-        self._set_text_value ("User",acc["username"])
-        self._set_text_value ("Password", acc["password"])
+        credentials = account.get_credentials()
+        self._set_text_value ("User",credentials.username)
+        self._set_text_value ("Password", credentials.password)
     
     def set_account_data_from_widget(self, account_name, widget, account=None):
         username = self._get_text_value ("User")
@@ -45,18 +46,17 @@ class TwitterProvider(ProviderUtilsBuilder):
         
         if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
-                'username' : username, 'password' : password,
                 'activate_url' : self.activate_url}
             account = self.load_account(props)
-        else:
-            account["username"] = username
-            account["password"] = password
+            
+        account.set_credentials(Credentials(username, password))
+        
         return account
 
     def update_account (self, account):
-        
-        api = twitter.Api(username=account['username'],
-            password=account['password'],
+        credentials = account.get_credentials()
+        api = twitter.Api(username=credentials.username,
+            password=credentials.password,
             base_url=self.api_url)
         #base_url="identi.ca/api/"
 

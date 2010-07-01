@@ -69,14 +69,15 @@ class GReaderProvider(ProviderUtilsBuilder):
         
         if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
-                'username' : username, 'password' : password,
                 'show_notifications' : show_notifications,
                 'activate_url' : "http://reader.google.com"}
             account = self.load_account(props)
         else:
-            credentials = Credentials(username, password)
-            account.set_credentials(credentials)
             account["show_notifications"] = show_notifications
+            
+        credentials = Credentials(username, password)
+        account.set_credentials(credentials)
+        
         return account
         
 class GreaderAtom:

@@ -121,17 +121,15 @@ class GMailProvider(Provider):
             username = self.builder.get_object("username_entry").get_text()
             password = self.builder.get_object("password_entry").get_text()
             props = {"name" : account_name, "provider_name" : self.get_name(),
-                "username" : username, "password" : password, 
                 "activate_url" : "http://gmail.google.com",
                 "labels" : self.__get_labels()}
-            credentials = Credentials(username, password)
-            account.set_credentials(credentials)
             account = AccountCacheMails(props, self)
             account.notifications = {}
         else:
-            account["username"] = self.builder.get_object("username_entry").get_text()
-            account["password"] = self.builder.get_object("password_entry").get_text()
             account["labels"] = self.__get_labels()
+            
+        credentials = Credentials(username, password)
+        account.set_credentials(credentials)
             
         return account
         

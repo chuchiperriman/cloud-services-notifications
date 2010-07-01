@@ -33,7 +33,8 @@ class ImapProvider(ProviderUtilsBuilder):
         return AccountCacheMails(props, self)
     
     def update_account (self, account):
-        g = ImapBox (account["host"], account["username"], account["password"], account["port"], account["ssl"])
+        credentials = account.get_credentials()
+        g = ImapBox (account["host"], credentials.username, credentials.password, account["port"], account["ssl"])
         account.new_unread = []
         notifications = {}
         mails = g.get_mails()
@@ -52,9 +53,10 @@ class ImapProvider(ProviderUtilsBuilder):
                 {"label": "Use SSL", "type" : "check"}]
     
     def populate_dialog(self, widget, acc):
+        credentials = account.get_credentials()
         self._set_text_value ("Host",acc["host"])
-        self._set_text_value ("User",acc["username"])
-        self._set_text_value ("Password", acc["password"])
+        self._set_text_value ("User", credentials.username)
+        self._set_text_value ("Password", credentials.password)
         self._set_text_value ("Port",str(acc["port"]))
         self._set_check_value ("Use SSL",utils.get_boolean(acc["ssl"]))
     
@@ -70,15 +72,13 @@ class ImapProvider(ProviderUtilsBuilder):
         #TODO check valid values
         if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
-                'host' : host, 'username' : username, 'password' : password,
-                'port' : port, 'ssl' : ssl}
+                'host' : host, 'port' : port, 'ssl' : ssl}
             account = self.load_account(props)
         else:
             account["host"] = host
-            account["username"] = username
-            account["password"] = password
             account["port"] = int(port)
             account["ssl"] = ssl
+        account.set_credentials(Credentials(username, password))
         return account
         
 class ImapBoxConnectionError(Exception): pass

@@ -1,3 +1,10 @@
+cloudsn (0.6.0) lucid; urgency=low
+
+  * Stable release
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 29 Jul 2010 01:41:00 +0100
+
 cloudsn (0.5.20) lucid; urgency=low
 
   * Fixed #596542 : Error in it.po file charset

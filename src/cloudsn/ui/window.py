@@ -326,11 +326,11 @@ class MainWindow:
                     self.am.save_account(acc)
                     end = True
                 except Exception, e:
-                    logger.error ('Error editing an account: ' + str(e))
+                    logger.exception ('Error editing the account: %s', e)
                     md = gtk.MessageDialog(self.window,
                         gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
                         gtk.BUTTONS_CLOSE,
-                        _('Error editing an account: ') + str(e))
+                        _('Error editing the account: ') + str(e))
                     md.run()
                     md.destroy()
             else:

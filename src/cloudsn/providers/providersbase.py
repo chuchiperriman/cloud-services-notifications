@@ -77,4 +77,5 @@ class ProviderUtilsBuilder(ProviderBase):
         return get_widget_by_label(self.box, label).get_active()
 
     def _set_check_value (self, label, value):
-        return get_widget_by_label(self.box, label).set_active(value)
+        return get_widget_by_label(self.box, label).set_active(utils.get_boolean(value))
+        

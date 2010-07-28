@@ -12,8 +12,8 @@ class PlainKeyring(Keyring):
         return _("Plain text")
 
     def remove_credentials(self, acc):
-        acc["username"] = None
-        acc["password"] = None
+        del(acc["username"])
+        del(acc["password"])
         
     def store_credentials(self, acc, credentials):
         logger.debug("Storing plain credentials for account: %s" % (acc.get_name()))

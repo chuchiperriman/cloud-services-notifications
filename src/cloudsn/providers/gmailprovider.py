@@ -5,6 +5,7 @@ from cloudsn.core.keyring import Credentials
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
+from cloudsn import logger
 from xml.sax.handler import ContentHandler
 from xml import sax
 import gtk
@@ -30,13 +31,18 @@ class GMailProvider(Provider):
         acc = AccountCacheMails(props, self)
         
         #Hack for gmail domains like mail.quiter.com
-        user, tmp, domain = acc.get_credentials().username.partition('@')
+        #TODO check this when the user change the configuration too
+        domain = None
+        try:
+            user, tmp, domain = acc.get_credentials().username.partition('@')
+        except Exception, e:
+            logger.exception("Cannot load credentials for account "+acc.get_name()+", continue: %s", e)
 
         if domain and domain != "gmail.com":
             activate_url = "https://mail.google.com/a/" + domain
         else:
-            activate_url = "https://mail.google.com/a/" 
-
+            activate_url = "https://mail.google.com/a/"
+            
         acc.properties["activate_url"] = activate_url
         return acc
         
@@ -49,9 +55,9 @@ class GMailProvider(Provider):
         
         if 'inbox' not in labels and '' not in labels:
             labels.append('inbox')
-        
+
+        credentials = account.get_credentials()
         for label in labels:
-            credentials = account.get_credentials()
             g = GmailAtom (credentials.username, credentials.password, label)
             g.refreshInfo()
 
@@ -106,7 +112,7 @@ class GMailProvider(Provider):
         self.labels_treeview = self.builder.get_object("labels_treeview")
         self.builder.connect_signals(self)
         if account:
-            credentials = account.get_credentials()
+            credentials = account.get_credentials_save()
             self.builder.get_object("username_entry").set_text(credentials.username)
             self.builder.get_object("password_entry").set_text(credentials.password)
             if 'labels' in account.get_properties():
@@ -118,9 +124,9 @@ class GMailProvider(Provider):
         return box
         
     def set_account_data_from_widget(self, account_name, widget, account=None):
+        username = self.builder.get_object("username_entry").get_text()
+        password = self.builder.get_object("password_entry").get_text()
         if not account:
-            username = self.builder.get_object("username_entry").get_text()
-            password = self.builder.get_object("password_entry").get_text()
             props = {"name" : account_name, "provider_name" : self.get_name(),
                 "activate_url" : "http://gmail.google.com",
                 "labels" : self.__get_labels()}

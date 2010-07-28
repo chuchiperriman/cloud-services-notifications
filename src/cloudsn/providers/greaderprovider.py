@@ -56,10 +56,15 @@ class GReaderProvider(ProviderUtilsBuilder):
                 {"label": "Show notifications", "type" : "check"}]
     
     def populate_dialog(self, widget, acc):
-        credentials = acc.get_credentials()
+        credentials = acc.get_credentials_save()
         self._set_text_value ("User", credentials.username)
         self._set_text_value ("Password", credentials.password)
-        self._set_check_value("Show notifications", acc["show_notifications"])
+        if "show_notifications" in acc:
+            show_notifications = acc["show_notifications"]
+        else:
+            show_notifications = True
+            
+        self._set_check_value("Show notifications", show_notifications)
     
     def set_account_data_from_widget(self, account_name, widget, account=None):
         username = self._get_text_value ("User")

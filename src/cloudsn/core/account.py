@@ -36,6 +36,9 @@ class Account:
     def __contains__(self, key):
         return key in self.properties
         
+    def __delitem__(self, key):
+        del(self.properties[key])
+        
     def get_properties(self):
         return self.properties
     
@@ -47,7 +50,12 @@ class Account:
 
     def get_credentials(self):
         return keyring.get_keyring().get_credentials(self)
-        
+    def get_credentials_save(self):
+        try:
+            return keyring.get_keyring().get_credentials(self)
+        except Exception, e:
+            return keyring.Credentials("","")
+            
     def set_credentials(self, credentials):
         keyring.get_keyring().store_credentials(self, credentials)
         
@@ -131,8 +139,12 @@ class AccountManager (gobject.GObject):
         for conf in accs_conf.values():
             provider = self.pm.get_provider(conf['provider_name'])
             if provider:
-                acc = provider.load_account (conf)
-                self.add_account(acc)
+                try:
+                    acc = provider.load_account (conf)
+                    self.add_account(acc)
+                except Exception, e:
+                    logger.exception("Cannot load the account "+conf["name"]+": %s", e)
+                    
             else:
                 logger.error("Error in account %s: The provider %s doesn't exists" % (conf['name'], conf['provider_name']))
     
@@ -180,3 +192,13 @@ class AccountManager (gobject.GObject):
         keyring.get_keyring().store_credentials(acc, acc.get_credentials())
         self.sc.save_accounts()
         self.emit("account-changed", acc)
+    
+    def save_accounts(self, store_credentials = True):
+        if store_credentials:
+            keyring.get_keyring().store_credentials(acc, acc.get_credentials())
+        self.sc.save_accounts()
+        
+def get_account_manager():
+    return AccountManager.get_instance()
+    
+    

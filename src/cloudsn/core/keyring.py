@@ -39,11 +39,14 @@ class KeyringManager:
         if KeyringManager.__default:
             raise KeyringManager.__default
             
+        #TODO control errors to disable providers
         self.config = config.SettingsController.get_instance()
         from keyrings.plainkeyring import PlainKeyring
         self.__add_manager (PlainKeyring())
         from keyrings.base64keyring import Base64Keyring
         self.__add_manager (Base64Keyring())
+        from keyrings.gkeyring import GnomeKeyring
+        self.__add_manager (GnomeKeyring())
         configured_name = self.config.get_prefs()["keyring"]
         for m in self.managers:
             if m.get_id() == configured_name:
@@ -77,12 +80,19 @@ class KeyringManager:
             return
         logger.info("Setting the keyring manager: %s" % (manager.get_name()))
         from cloudsn.core import account
+        old = self.current
         for acc in account.AccountManager.get_instance().get_accounts():
-            credentials = acc.get_credentials()
-            self.current.remove_credentials(acc)
-            manager.store_credentials(acc, credentials)
-            account.AccountManager.get_instance().save_account(acc)
+            try:
+                credentials = acc.get_credentials()
+                old.remove_credentials(acc)
+                manager.store_credentials(acc, credentials)
+            except Exception, e:
+                logger.exception("Cannot change the keyring for the account "\
+                    + acc.get_name() + ": %s" , e)
+            
         self.current = manager
+        account.get_account_manager().save_accounts(False)
+        
 
 class KeyringException(Exception): pass
 

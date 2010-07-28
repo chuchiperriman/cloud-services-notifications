@@ -35,7 +35,7 @@ class TwitterProvider(ProviderUtilsBuilder):
                 {"label": "Password", "type" : "pwd"}]
     
     def populate_dialog(self, widget, acc):
-        credentials = acc.get_credentials()
+        credentials = acc.get_credentials_save()
         self._set_text_value ("User",credentials.username)
         self._set_text_value ("Password", credentials.password)
     

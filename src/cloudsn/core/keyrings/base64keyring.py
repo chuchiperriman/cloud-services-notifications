@@ -13,8 +13,8 @@ class Base64Keyring(Keyring):
         return _("Base64 encoding")
 
     def remove_credentials(self, acc):
-        acc["username"] = None
-        acc["password"] = None
+        del(acc["username"])
+        del(acc["password"])
         
     def store_credentials(self, acc, credentials):
         try:

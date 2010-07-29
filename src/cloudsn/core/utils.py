@@ -4,6 +4,7 @@ import os
 import subprocess
 from email.header import decode_header
 from cloudsn.core import config
+from cloudsn import logger
 import tempfile
 import urllib2
 
@@ -15,7 +16,7 @@ def show_url(url):
     try:
         show_uri(screen_get_default(), url, get_current_event_time())
     except GError, e:
-        logger.error("Error in gtk.show_uri: " + e)
+        logger.exception("Error in gtk.show_uri: %s", e)
 
 def invoke_subprocess(cmdline):
 	setsid = getattr(os, 'setsid', None)

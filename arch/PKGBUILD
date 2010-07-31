@@ -1,0 +1,20 @@
+# Contributor: Angelo "Encelo" Theodorou <encelo@gmail.com>
+pkgname=cloudsn
+pkgver=0.6.0
+pkgrel=1
+pkgdesc="E-mail (pop3, gmail, imap), rss, and tweets notifier"
+arch=('any')
+url="http://chuchiperriman.github.com/cloud-services-notifications/"
+license=('GPL')
+depends=('python-notify' 'python-simplejson' 'pyxdg' 'pygtk' 'gnome-python' 'hicolor-icon-theme')
+install=cloudsn.install
+source=($pkgname-$pkgver.tar.gz::http://github.com/chuchiperriman/cloud-services-notifications/tarball/$pkgver)
+md5sums=('2b181e5c758fc396521919de84ffdce8')
+
+build() {
+  cd $srcdir/chuchiperriman-cloud-services-notifications-*
+
+  python setup.py install --root=$pkgdir --prefix=/usr
+}
+
+# vim:set ts=2 sw=2 et:

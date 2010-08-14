@@ -44,7 +44,8 @@ class Pop3Provider(ProviderUtilsBuilder):
     def update_account (self, account):
         credentials = account.get_credentials()
         g = PopBox (credentials.username, credentials.password, 
-            account["host"], account["port"], account["ssl"])
+            account["host"], account["port"], 
+            utils.get_boolean(account["ssl"]))
         account.new_unread = []
         notifications = {}
         mails = g.get_mails()

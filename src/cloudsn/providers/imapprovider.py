@@ -35,7 +35,9 @@ class ImapProvider(ProviderUtilsBuilder):
     
     def update_account (self, account):
         credentials = account.get_credentials()
-        g = ImapBox (account["host"], credentials.username, credentials.password, account["port"], account["ssl"])
+        g = ImapBox (account["host"], credentials.username, 
+            credentials.password, account["port"],
+            utils.get_boolean(account["ssl"]))
         account.new_unread = []
         notifications = {}
         mails = g.get_mails()

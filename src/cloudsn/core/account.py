@@ -22,6 +22,7 @@ class Account:
         self.total_unread = 0
         self.last_update = None
         self.error_notified = False
+        self.credentials = None
         if 'active' not in self.properties:
             self.properties["active"] = True
         if 'show_notifications' not in self.properties:
@@ -49,15 +50,20 @@ class Account:
         return self.provider
 
     def get_credentials(self):
-        return keyring.get_keyring().get_credentials(self)
+        if not self.credentials:
+            raise Exception (_("The credentials have not been loaded for the account %s") % (self.get_name()))
+            
+        return self.credentials
+    
+    #TODO change to get_credentials_safe
     def get_credentials_save(self):
-        try:
-            return keyring.get_keyring().get_credentials(self)
-        except Exception, e:
+        if not self.credentials:
             return keyring.Credentials("","")
+        
+        return self.credentials
             
     def set_credentials(self, credentials):
-        keyring.get_keyring().store_credentials(self, credentials)
+        self.credentials = credentials
         
     def get_show_notifications(self):
         return utils.get_boolean(self.properties["show_notifications"])
@@ -141,6 +147,8 @@ class AccountManager (gobject.GObject):
             if provider:
                 try:
                     acc = provider.load_account (conf)
+                    credentials = keyring.get_keyring().get_credentials(acc)
+                    acc.set_credentials (credentials)
                     self.add_account(acc)
                 except Exception, e:
                     logger.exception("Cannot load the account "+conf["name"]+": %s", e)

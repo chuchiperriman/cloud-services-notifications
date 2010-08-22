@@ -340,10 +340,11 @@
     <child internal-child="vbox">
       <object class="GtkVBox" id="dialog-vbox2">
         <property name="visible">True</property>
-        <property name="spacing">30</property>
+        <property name="spacing">8</property>
         <child>
           <object class="GtkVBox" id="vbox7">
             <property name="visible">True</property>
+            <property name="border_width">8</property>
             <property name="spacing">10</property>
             <child>
               <object class="GtkLabel" id="label11">
@@ -428,15 +429,93 @@
           </packing>
         </child>
         <child>
-          <object class="GtkVBox" id="provider_content">
+          <object class="GtkNotebook" id="notebook2">
             <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="border_width">8</property>
             <child>
-              <placeholder/>
+              <object class="GtkVBox" id="provider_content">
+                <property name="visible">True</property>
+                <property name="border_width">8</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label6">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Account data</property>
+              </object>
+              <packing>
+                <property name="tab_fill">False</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVBox" id="vbox3">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkTable" id="table2">
+                    <property name="visible">True</property>
+                    <property name="border_width">8</property>
+                    <property name="n_rows">2</property>
+                    <property name="n_columns">2</property>
+                    <property name="row_spacing">8</property>
+                    <child>
+                      <object class="GtkLabel" id="label12">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Command:</property>
+                      </object>
+                      <packing>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="activate_command_entry">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="invisible_char">&#x25CF;</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label13">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Execute command when the account is opened</property>
+                      </object>
+                      <packing>
+                        <property name="right_attach">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child type="tab">
+              <object class="GtkLabel" id="label7">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Advanced</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+              </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -612,8 +691,8 @@
               <object class="GtkToolButton" id="tool_update">
                 <property name="visible">True</property>
                 <property name="tooltip_text" translatable="yes">Update all accounts</property>
-                <property name="related_action">update_all_action</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">update_all_action</property>
                 <property name="label" translatable="yes">Update</property>
                 <property name="use_underline">True</property>
               </object>
@@ -635,8 +714,8 @@
               <object class="GtkToolButton" id="tool_preferences">
                 <property name="visible">True</property>
                 <property name="tooltip_text" translatable="yes">Show preferences</property>
-                <property name="related_action">preferences_action</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">preferences_action</property>
                 <property name="label" translatable="yes">toolbutton3</property>
                 <property name="use_underline">True</property>
               </object>

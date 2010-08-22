@@ -76,6 +76,14 @@ class Account:
 
     def set_active(self, active):
         self.properties["active"] = utils.get_boolean(active)
+        
+    def get_activate_command(self):
+        if "activate_command" in self.properties:
+            return self.properties["activate_command"]
+        return ""
+        
+    def set_activate_command(self, command):
+        self.properties["activate_command"] = command
 
     def get_last_update (self):
         return self.last_update
@@ -87,7 +95,10 @@ class Account:
         return []
 
     def activate (self):
-        if "activate_url" in self.properties:
+        if "activate_command" in self.properties and self.properties["activate_command"] != "":
+            logger.debug ("Executing the activate command")
+            utils.execute_command (self, self.properties["activate_command"])
+        elif "activate_url" in self.properties :
             utils.show_url (self.properties["activate_url"])
         else:
             logger.warn('This account type has not an activate action')

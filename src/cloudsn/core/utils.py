@@ -76,7 +76,23 @@ def download_image_to_pixbuf(url):
     path = download_image_to_tmp(url)
     return gtk.gdk.pixbuf_new_from_file(path)
 
+def execute_command(acc, command):
+    open_command = replace_variables(acc, command)
+    if open_command != "":
+        os.system(open_command + " &")
+        return True
+    else:
+        return False
+    
+def replace_variables(acc, command):
+    _command = command
+    available_variables = {"${account_name}": "'" + acc.get_name().replace("'", "") + "'"}
+    for variable in available_variables:
+        _command = _command.replace(variable, available_variables[variable])
+        
+    return _command
+    
 if __name__ == "__main__":
     print get_default_mail_reader()
     open_mail_reader()
-    
+

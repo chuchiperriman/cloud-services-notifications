@@ -239,6 +239,7 @@ class MainWindow:
         self.new_dialog = self.builder.get_object("account_new_dialog")
         account_name_entry = self.builder.get_object("account_name_entry");
         self.provider_content = self.builder.get_object("provider_content")
+        self.activate_command_entry = self.builder.get_object("activate_command_entry")
         self.provider_content.account = None
         self.new_dialog.set_transient_for(self.window)
         self.new_dialog.set_destroy_with_parent (True)
@@ -268,6 +269,7 @@ class MainWindow:
                     provider = self.pm.get_provider(provider_name)
                     
                     acc = provider.set_account_data_from_widget(acc_name, custom_widget)
+                    acc.set_activate_command (self.activate_command_entry.get_text())
                     self.am.add_account(acc)
                     self.am.save_account(acc)
                     self.main_store.append([acc.get_icon(),
@@ -300,6 +302,7 @@ class MainWindow:
         #TODO the name cannot be modified by the moment
         account_name_entry.set_sensitive (False)
         self.provider_content = self.builder.get_object("provider_content")
+        self.activate_command_entry = self.builder.get_object("activate_command_entry")
         self.provider_content.account = acc
         self.new_dialog.set_transient_for(self.window)
         self.new_dialog.set_destroy_with_parent (True)
@@ -323,6 +326,7 @@ class MainWindow:
                     custom_widget = self.provider_content.get_children()[0]
                     
                     acc = acc.get_provider().set_account_data_from_widget(acc_name, custom_widget, acc)
+                    acc.set_activate_command (self.activate_command_entry.get_text())
                     self.am.save_account(acc)
                     end = True
                 except Exception, e:
@@ -356,6 +360,7 @@ class MainWindow:
 
         box =  provider.get_account_data_widget(self.provider_content.account)
         self.provider_content.add(box)
+        self.activate_command_entry.set_text(self.provider_content.account.get_activate_command())
         box.show_all()
 
     def __on_account_checked_cb(self, widget, acc):

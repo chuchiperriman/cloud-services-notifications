@@ -1,3 +1,12 @@
+cloudsn (0.7.2) lucid; urgency=low
+
+  * Fixed #588397: Fixed errors with ssl
+  * Fixed #579628: Execute a custom command when open an account
+  * Fixed #579959: Encrypt passwords (you can select the keyring type)
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 23 Aug 2010 00:50:00 +0100
+
 cloudsn (0.6.0) lucid; urgency=low
 
   * Stable release

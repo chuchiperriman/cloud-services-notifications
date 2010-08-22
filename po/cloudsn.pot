@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-07-29 01:35+0200\n"
+"POT-Creation-Date: 2010-08-23 00:42+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,29 +22,34 @@ msgid ""
 "your configuration"
 msgstr ""
 
-#: ../src/cloudsn/core/account.py:135
+#: ../src/cloudsn/core/account.py:54
+#, python-format
+msgid "The credentials have not been loaded for the account %s"
+msgstr ""
+
+#: ../src/cloudsn/core/account.py:172
 #, python-format
 msgid "The account %s already exists"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:35
+#: ../src/cloudsn/core/controller.py:34
 msgid "Another instance is already running, close it first."
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:180
+#: ../src/cloudsn/core/controller.py:179
 msgid "New messages: "
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:200
+#: ../src/cloudsn/core/controller.py:199
 #, python-format
 msgid "Error checking account %s"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:226
+#: ../src/cloudsn/core/controller.py:225
 msgid "Application Error"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:227
+#: ../src/cloudsn/core/controller.py:226
 #, python-format
 msgid "Error starting the application: %s"
 msgstr ""
@@ -53,33 +58,33 @@ msgstr ""
 msgid "Can't find the cloudsn data directory"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:106
+#: ../src/cloudsn/ui/window.py:107
 msgid "Press to pause the checker daemon"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:110
+#: ../src/cloudsn/ui/window.py:111
 msgid "Press to start the checker daemon"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:175
+#: ../src/cloudsn/ui/window.py:196
 #, python-format
 msgid "Are you sure you want to delete the account %s?"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:238
+#: ../src/cloudsn/ui/window.py:260
 msgid "You must select a provider and fill the data"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:242 ../src/cloudsn/ui/window.py:300
+#: ../src/cloudsn/ui/window.py:264 ../src/cloudsn/ui/window.py:324
 msgid "You must fill the account name"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:261
+#: ../src/cloudsn/ui/window.py:284
 msgid "Error adding a new account: "
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:312
-msgid "Error editing an account: "
+#: ../src/cloudsn/ui/window.py:337
+msgid "Error editing the account: "
 msgstr ""
 
 #: ../src/cloudsn/ui/indicators/statusicon.py:31
@@ -90,17 +95,17 @@ msgstr ""
 msgid "Update accounts"
 msgstr ""
 
-#: ../src/cloudsn/providers/greaderprovider.py:40
+#: ../src/cloudsn/providers/greaderprovider.py:42
 #, python-format
 msgid "%d unread news"
 msgstr ""
 
-#: ../src/cloudsn/providers/greaderprovider.py:44
+#: ../src/cloudsn/providers/greaderprovider.py:46
 #, python-format
 msgid "%d unread new"
 msgstr ""
 
-#: ../src/cloudsn/providers/greaderprovider.py:66
+#: ../src/cloudsn/providers/greaderprovider.py:74
 msgid "The user name and the password are mandatory"
 msgstr ""
 
@@ -125,7 +130,7 @@ msgid "<b>New Account</b>"
 msgstr ""
 
 #: ../data/preferences.ui.h:2
-msgid "Account Name"
+msgid "Account data"
 msgstr ""
 
 #: ../data/preferences.ui.h:3
@@ -133,11 +138,11 @@ msgid "Account name: "
 msgstr ""
 
 #: ../data/preferences.ui.h:4
-msgid "Active"
+msgid "Add a new account"
 msgstr ""
 
 #: ../data/preferences.ui.h:5
-msgid "Add a new account"
+msgid "Advanced"
 msgstr ""
 
 #: ../data/preferences.ui.h:6
@@ -149,27 +154,27 @@ msgid "Check interval"
 msgstr ""
 
 #: ../data/preferences.ui.h:8
-msgid "Delete the selected account"
+msgid "Command:"
 msgstr ""
 
 #: ../data/preferences.ui.h:9
-msgid "Edit the selected account"
+msgid "Delete the selected account"
 msgstr ""
 
 #: ../data/preferences.ui.h:10
-msgid "General"
+msgid "Edit the selected account"
 msgstr ""
 
 #: ../data/preferences.ui.h:11
-msgid "Icon"
+msgid "Execute command when the account is opened"
 msgstr ""
 
 #: ../data/preferences.ui.h:12
-msgid "Indicate status with: "
+msgid "General"
 msgstr ""
 
 #: ../data/preferences.ui.h:13
-msgid "Last Update"
+msgid "Indicate status with: "
 msgstr ""
 
 #: ../data/preferences.ui.h:14
@@ -185,49 +190,53 @@ msgid "New Account"
 msgstr ""
 
 #: ../data/preferences.ui.h:17
-msgid "Preferences"
+msgid "Password manager: "
 msgstr ""
 
 #: ../data/preferences.ui.h:18
-msgid "Provider: "
+msgid "Preferences"
 msgstr ""
 
 #: ../data/preferences.ui.h:19
-msgid "Run application on startup"
+msgid "Provider: "
 msgstr ""
 
 #: ../data/preferences.ui.h:20
-msgid "Show preferences"
+msgid "Run application on startup"
 msgstr ""
 
 #: ../data/preferences.ui.h:21
-msgid "Stop/Play"
+msgid "Show preferences"
 msgstr ""
 
 #: ../data/preferences.ui.h:22
-msgid "Update"
+msgid "Stop/Play"
 msgstr ""
 
 #: ../data/preferences.ui.h:23
-msgid "Update all accounts"
+msgid "Update"
 msgstr ""
 
 #: ../data/preferences.ui.h:24
-msgid "Update the selected account"
+msgid "Update all accounts"
 msgstr ""
 
 #: ../data/preferences.ui.h:25
-msgid "_Edit"
+msgid "Update the selected account"
 msgstr ""
 
 #: ../data/preferences.ui.h:26
-msgid "_File"
+msgid "_Edit"
 msgstr ""
 
 #: ../data/preferences.ui.h:27
-msgid "_Help"
+msgid "_File"
 msgstr ""
 
 #: ../data/preferences.ui.h:28
+msgid "_Help"
+msgstr ""
+
+#: ../data/preferences.ui.h:29
 msgid "toolbutton3"
 msgstr ""

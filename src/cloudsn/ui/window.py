@@ -360,7 +360,8 @@ class MainWindow:
 
         box =  provider.get_account_data_widget(self.provider_content.account)
         self.provider_content.add(box)
-        self.activate_command_entry.set_text(self.provider_content.account.get_activate_command())
+        if self.provider_content.account:
+            self.activate_command_entry.set_text(self.provider_content.account.get_activate_command())
         box.show_all()
 
     def __on_account_checked_cb(self, widget, acc):

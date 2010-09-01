@@ -1,3 +1,10 @@
+cloudsn (0.7.4) lucid; urgency=low
+
+  * Fixed #623878: Error adding/editing the accounts
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 27 Aug 2010 20:11:00 +0100
+
 cloudsn (0.7.2) lucid; urgency=low
 
   * Fixed #588397: Fixed errors with ssl

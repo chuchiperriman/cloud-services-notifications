@@ -41,9 +41,9 @@ class MainWindow:
             account_name = self.main_store.get_value(citer, 1)
             acc = self.am.get_account(account_name)
             return acc, citer
-        
+
         return None, None
-    
+
     def __get_account_date(self, acc):
         last_update = ''
         dt = acc.get_last_update()
@@ -51,7 +51,7 @@ class MainWindow:
             last_update = dt.strftime("%Y-%m-%d %H:%M:%S")
 
         return last_update
-    
+
     def select_provider_combo (self, providers_combo, name):
         #Select the provider and disable item
         i=0
@@ -63,7 +63,7 @@ class MainWindow:
 
     def load_window(self):
         from cloudsn.core.controller import Controller
-        
+
         self.builder=gtk.Builder()
         self.builder.set_translation_domain("cloudsn")
         self.builder.add_from_file(config.add_data_prefix("preferences.ui"))
@@ -76,25 +76,25 @@ class MainWindow:
         self.providers_combo = self.builder.get_object("providers_combo");
         self.providers_store = self.builder.get_object("providers_store");
         self.play_button = self.builder.get_object("tool_play");
-        
+
         #Populate accounts
         for acc in self.am.get_accounts():
             self.main_store.append([acc.get_icon(), acc.get_name(),
                 self.__get_account_date(acc), acc.get_active()])
-        
+
         #Populate providers
         for prov in self.pm.get_providers():
             self.providers_store.append([prov.get_icon(), prov.get_name()])
 
         #Update the last check date
-        Controller.get_instance().connect ("account-checked", 
+        Controller.get_instance().connect ("account-checked",
             self.__on_account_checked_cb)
-        
-        Controller.get_instance().connect ("account-check-error", 
+
+        Controller.get_instance().connect ("account-check-error",
             self.__on_account_check_error_cb)
-        
+
         self.set_play_active (Controller.get_instance().get_active())
-        
+
     def run(self):
         self.load_window()
         self.window.show()
@@ -109,7 +109,7 @@ class MainWindow:
             self.play_button.set_stock_id(gtk.STOCK_MEDIA_PLAY)
             self.play_button.set_tooltip_text(
                 _("Press to start the checker daemon"))
-    
+
     def preferences_action_activate_cb (self, widget, data=None):
         self.pref_dialog = self.builder.get_object("preferences_dialog")
         self.pref_dialog.set_transient_for(self.window)
@@ -121,7 +121,7 @@ class MainWindow:
         minutes=self.builder.get_object("minutes_spin")
         max_not_spin=self.builder.get_object("max_not_spin")
         startup_check = self.builder.get_object("startup_check")
-        
+
         minutes.set_value (float(self.config.get_prefs()["minutes"]))
         max_not_spin.set_value (float(self.config.get_prefs()["max_notifications"]))
         if os.path.exists(config.get_startup_file_path()):
@@ -153,16 +153,16 @@ class MainWindow:
         if iiter:
             self.config.set_pref ("indicator", indicators_store.get_value(iiter,0))
         iiter = keyring_combo.get_active_iter()
-        
+
         selected = keyring_store.get_value(iiter,1)
         for m in self.km.get_managers():
             logger.debug("selected %s, current %s" % (selected, m.get_id()))
             if m.get_id() == selected:
                 self.km.set_manager(m)
                 break
-                
+
         self.config.set_pref ("keyring", selected)
-                
+
         #Check startup checkbox
         if startup_check.get_active():
             if not os.path.exists(config.get_startup_file_path()):
@@ -173,9 +173,9 @@ class MainWindow:
         else:
             if os.path.exists(config.get_startup_file_path()):
                 os.remove (config.get_startup_file_path())
-            
+
         self.config.save_prefs()
-        
+
     def about_action_activate_cb (self, widget, data=None):
         about.show_about_dialog()
 
@@ -187,14 +187,14 @@ class MainWindow:
             gtk.main_quit()
         else:
             self.window.hide()
-    
+
     def main_delete_button_clicked_cb(self, widget, data=None):
         acc, citer = self.get_main_account_selected()
         if not acc:
             return
-            
+
         msg = (_('Are you sure you want to delete the account %s?')) % (acc.get_name());
-        
+
         dia = gtk.MessageDialog(self.window,
                   gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
                   gtk.MESSAGE_QUESTION,
@@ -210,12 +210,12 @@ class MainWindow:
         acc, citer = self.get_main_account_selected()
         if acc:
             Controller.get_instance().update_account(acc)
-    
+
     def tool_play_toggled_cb (self, widget, data=None):
         from cloudsn.core.controller import Controller
         self.set_play_active(widget.get_active())
         Controller.get_instance().set_active(widget.get_active())
-    
+
     def account_deleted_cb(self, widget, acc):
         for i in range(len(self.main_store)):
             if self.main_store[i][1] == acc.get_name():
@@ -227,14 +227,14 @@ class MainWindow:
             gtk.main_quit()
         else:
             self.window.hide()
-    
+
     def active_cell_toggled_cb(self, cell, path, data=None):
         active = not self.main_store[path][3]
         self.main_store[path][3] = active
         account_name = self.main_store[path][1]
         acc = self.am.get_account(account_name)
         self.am.set_account_active(acc, active)
-    
+
     def new_action_activate_cb(self, widget, data=None):
         self.new_dialog = self.builder.get_object("account_new_dialog")
         account_name_entry = self.builder.get_object("account_name_entry");
@@ -262,12 +262,12 @@ class MainWindow:
                     acc_name = account_name_entry.get_text()
                     if acc_name == '':
                         raise Exception(_("You must fill the account name"))
-                    
+
                     custom_widget = self.provider_content.get_children()[0]
                     citer = self.providers_combo.get_active_iter()
                     provider_name = self.providers_store.get_value (citer, 1)
                     provider = self.pm.get_provider(provider_name)
-                    
+
                     acc = provider.set_account_data_from_widget(acc_name, custom_widget)
                     acc.set_activate_command (self.activate_command_entry.get_text())
                     self.am.add_account(acc)
@@ -286,16 +286,16 @@ class MainWindow:
                     md.destroy()
             else:
                 end = True
-            
+
         self.new_dialog.hide()
-    
+
     def edit_action_activate_cb(self, widget, data=None):
-        
+
         acc, citer = self.get_main_account_selected()
-        
+
         if not acc:
             return
-        
+
         self.new_dialog = self.builder.get_object("account_new_dialog")
         account_name_entry = self.builder.get_object("account_name_entry");
         account_name_entry.set_text(acc.get_name())
@@ -306,14 +306,14 @@ class MainWindow:
         self.provider_content.account = acc
         self.new_dialog.set_transient_for(self.window)
         self.new_dialog.set_destroy_with_parent (True)
-        
+
         #Select the provider and disable item
         providers_combo = self.builder.get_object("providers_combo")
         providers_combo.set_active(-1)
         self.select_provider_combo (providers_combo, acc.get_provider().get_name())
-        
+
         providers_combo.set_sensitive (False)
-        
+
         end = False
         while not end:
             response = self.new_dialog.run()
@@ -322,9 +322,9 @@ class MainWindow:
                     acc_name = account_name_entry.get_text()
                     if acc_name == '':
                         raise Exception(_("You must fill the account name"))
-                    
+
                     custom_widget = self.provider_content.get_children()[0]
-                    
+
                     acc = acc.get_provider().set_account_data_from_widget(acc_name, custom_widget, acc)
                     acc.set_activate_command (self.activate_command_entry.get_text())
                     self.am.save_account(acc)
@@ -339,19 +339,19 @@ class MainWindow:
                     md.destroy()
             else:
                 end = True
-            
+
         self.new_dialog.hide()
-    
+
     def update_all_action_activate_cb (self, widget, data=None):
         from cloudsn.core.controller import Controller
         Controller.get_instance().update_accounts()
-        
+
     def providers_combo_changed_cb(self, widget, data=None):
         ch = self.provider_content.get_children()
         for c in ch:
             self.provider_content.remove(c)
             c.destroy()
-        
+
         citer = self.providers_combo.get_active_iter()
         if not citer:
             return
@@ -389,5 +389,4 @@ def main ():
 
 if __name__ == "__main__":
     main()
-
 

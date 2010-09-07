@@ -127,7 +127,9 @@ class PopBox:
         self.__connect()
 
         messages = []
+        logger.debug("Starting reading POP messages")
         msgs = self.mbox.list()[1]
+        logger.debug("POP messages readed: %i" % (len(msgs)))
         for msg in msgs:
             try:
                 msgNum = int(msg.split(" ")[0])

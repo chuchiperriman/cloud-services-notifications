@@ -4,12 +4,14 @@ from cloudsn import logger
 from ..core.config import SettingsController, get_cloudsn_icon
 from ..core.utils import get_boolean
 from ..const import *
+from ..core.keyring import get_keyring
 
 AUTH_DONT_ASK_KEY = "auth_dont_ask"
 
 def check_auth_configuration():
     try:
         import gnomekeyring as gk
+        from ..core.keyrings import gkeyring
     except Exception:
         logger.debug("Gnome keyring is not available")
         return
@@ -17,6 +19,9 @@ def check_auth_configuration():
     conf = SettingsController.get_instance()
     prefs = conf.get_prefs()
     if AUTH_DONT_ASK_KEY in prefs and get_boolean(prefs[AUTH_DONT_ASK_KEY]) == True:
+        return
+    
+    if get_keyring().get_id() == gkeyring.GNOME_KEYRING_ID:
         return
 
     label = gtk.Label()

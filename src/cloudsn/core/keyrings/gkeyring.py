@@ -4,6 +4,8 @@ from ..keyring import Keyring, KeyringException, Credentials
 from cloudsn import logger
 import threading
 
+GNOME_KEYRING_ID = "gnomekeyring"
+
 class GnomeKeyring(Keyring):
 
     _KEYRING_NAME = 'cloudsn'
@@ -28,7 +30,7 @@ class GnomeKeyring(Keyring):
             self.loaded = True
         
     def get_id(self):
-        return "gnomekeyring"
+        return GNOME_KEYRING_ID
         
     def get_name(self):
         return _("Gnome keyring")

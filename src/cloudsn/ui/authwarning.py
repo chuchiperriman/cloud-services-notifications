@@ -1,7 +1,7 @@
 import gtk
 import gettext
 from cloudsn import logger
-from ..core.config import SettingsController
+from ..core.config import SettingsController, get_cloudsn_icon
 from ..core.utils import get_boolean
 from ..const import *
 
@@ -31,6 +31,7 @@ in the preferences dialog.
                        None,
                        gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
                        (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+    dialog.set_icon(get_cloudsn_icon())
     dialog.vbox.pack_start(label)
     checkbox = gtk.CheckButton(_("Don't ask me again"))
     checkbox.show()

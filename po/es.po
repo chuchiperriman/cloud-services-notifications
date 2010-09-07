@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-07 16:53+0200\n"
+"POT-Creation-Date: 2010-09-07 20:52+0200\n"
 "PO-Revision-Date: 2010-09-07 16:55+0200\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
 "Language-Team: Español <chuchiperriman@gmail.com>\n"
@@ -96,7 +96,7 @@ msgstr "Icono de estado"
 msgid "Update accounts"
 msgstr "Actualizar cuentas"
 
-#: ../src/cloudsn/ui/authwarning.py:22
+#: ../src/cloudsn/ui/authwarning.py:23
 msgid ""
 "<b>Security warning</b>\n"
 "\n"
@@ -112,11 +112,7 @@ msgstr ""
 "en el diálogo de preferencias.\n"
 "\n"
 
-#: ../src/cloudsn/ui/authwarning.py:29
-msgid "Security warning"
-msgstr "Aviso de seguridad"
-
-#: ../src/cloudsn/ui/authwarning.py:34
+#: ../src/cloudsn/ui/authwarning.py:35
 msgid "Don't ask me again"
 msgstr "No volver a preguntar"
 
@@ -266,6 +262,9 @@ msgstr "Ay_uda"
 msgid "toolbutton3"
 msgstr "toolbutton3"
 
+#~ msgid "Security warning"
+#~ msgstr "Aviso de seguridad"
+
 #~ msgid "Active"
 #~ msgstr "Activo"
 
@@ -292,4 +291,3 @@ msgstr "toolbutton3"
 
 #~ msgid "Cloud Services Notifications"
 #~ msgstr "Notificaciones de servicios en la nube"
-

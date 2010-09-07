@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-23 00:42+0200\n"
+"POT-Creation-Date: 2010-09-07 16:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,24 +33,24 @@ msgstr ""
 msgid "The account %s already exists"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:34
+#: ../src/cloudsn/core/controller.py:35
 msgid "Another instance is already running, close it first."
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:179
+#: ../src/cloudsn/core/controller.py:180
 msgid "New messages: "
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:199
+#: ../src/cloudsn/core/controller.py:200
 #, python-format
 msgid "Error checking account %s"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:225
+#: ../src/cloudsn/core/controller.py:227
 msgid "Application Error"
 msgstr ""
 
-#: ../src/cloudsn/core/controller.py:226
+#: ../src/cloudsn/core/controller.py:228
 #, python-format
 msgid "Error starting the application: %s"
 msgstr ""
@@ -93,6 +94,24 @@ msgstr ""
 
 #: ../src/cloudsn/ui/indicators/statusicon.py:46
 msgid "Update accounts"
+msgstr ""
+
+#: ../src/cloudsn/ui/authwarning.py:22
+msgid ""
+"<b>Security warning</b>\n"
+"\n"
+"You have gnome-keyring installed but your are using plain text encryption\n"
+"to store your passwords. You can select the encryption method\n"
+"in the preferences dialog.\n"
+"\n"
+msgstr ""
+
+#: ../src/cloudsn/ui/authwarning.py:29
+msgid "Security warning"
+msgstr ""
+
+#: ../src/cloudsn/ui/authwarning.py:34
+msgid "Don't ask me again"
 msgstr ""
 
 #: ../src/cloudsn/providers/greaderprovider.py:42

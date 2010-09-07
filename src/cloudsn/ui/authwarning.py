@@ -3,6 +3,7 @@ import gettext
 from cloudsn import logger
 from ..core.config import SettingsController
 from ..core.utils import get_boolean
+from ..const import *
 
 AUTH_DONT_ASK_KEY = "auth_dont_ask"
 
@@ -26,7 +27,7 @@ to store your passwords. You can select the encryption method
 in the preferences dialog.
 
 """))
-    dialog = gtk.Dialog(_("Security warning"),
+    dialog = gtk.Dialog(APP_LONG_NAME,
                        None,
                        gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
                        (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))

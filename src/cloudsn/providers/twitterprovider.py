@@ -8,6 +8,9 @@ from cloudsn.providers import twitter
 from cloudsn import logger
 import gtk
 
+CUSTOMER_KEY = 'uRPdgq7wqkiKmWzs9rneJA'
+CUSTOMER_SECRET = 'ZwwhbUl2mwdreaiGFd8IqUhfsZignBJIYknVA867Ieg'
+
 class TwitterProvider(ProviderUtilsBuilder):
 
     __default = None

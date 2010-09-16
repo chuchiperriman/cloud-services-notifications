@@ -6,12 +6,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
 	<title>Cloud Services Notifications</title>
-	
+
 	<style type="text/css">
 		body {
   		margin-top: 1.0em;
-  		background-color: #d1d1d1;
-		  font-family: "Helvetica,Arial,FreeSans"; 
+  		background-color: #dedede;
+		  font-family: "Helvetica,Arial,FreeSans";
   		color: #000000;
     }
     #container {
@@ -29,13 +29,47 @@
 		pre { background: #000; color: #fff; padding: 15px;}
     hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
     .footer { text-align:center; padding-top:30px; font-style: italic; }
+
+    #topbar{
+      font-size:14px;
+      color:#225373;
+      background:#327baa;
+      font-weight:bold;
+      padding:6px;
+      overflow:auto;
+      height:1%;
+      clear:both;
+    }
+    #topbar a{
+      color:#225373;
+      text-decoration:none;
+      margin:0 10px;
+      height:23px;
+      line-height:23px;
+      float:left;
+      display:block;
+    }
+    a.active{
+      height:23px;
+      line-height:23px;
+      background:url(images/tb_a.png) right top no-repeat;
+      padding-right:10px;
+    }
+    a.active span{
+      background:url(images/tb_span.png) left top no-repeat;
+      height:23px;
+      display:block;
+      padding-left:10px;
+    }
 	</style>
-	
+
 </head>
 
 <body>
-  <a href="http://github.com/chuchiperriman/cloud-services-notifications"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-  
+  <a href="http://github.com/chuchiperriman/cloud-services-notifications">
+    <img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" />
+  </a>
+
   <div id="container">
 
     <div class="download">
@@ -44,24 +78,26 @@
       <a href="http://github.com/chuchiperriman/cloud-services-notifications/tarball/master">
         <img border="0" width="90" src="http://github.com/images/modules/download/tar.png"></a>
     </div>
-    
-    <h1><img src="images/cloudsnweb.png" /><a href="http://github.com/chuchiperriman/cloud-services-notifications">Cloudsn</a> 
+
+    <h1><img src="images/cloudsnweb.png" style="vertical-align: middle;" /><a href="http://github.com/chuchiperriman/cloud-services-notifications">Cloudsn</a>
       <span class="small">by <a href="http://github.com/chuchiperriman">chuchiperriman</a></span></h1>
 
     <div class="description">
-      Notify when arrive new mails (pop3, gmail, imap), rss, tweets etc in the configured accounts. 
+      Notify when arrive new mails (pop3, gmail, imap), rss, tweets etc in the configured accounts.
     </div>
-<a href="#features">Features</a> |
-<a href="#screenshots">Screenshots</a> |
-<a href="#download">Download</a> |
-<a href="#license">License</a> |
-<a href="#about">About</a>
 
+<div id="topbar">
+    <a href="#features" class="active"><span>Features</span></a>
+    <a href="#screenshots" class="active"><span>Screenshots</span></a>
+    <a href="#download" class="active"><span>Download</span></a>
+    <a href="#license" class="active"><span>License</span></a>
+    <a href="#about" class="active"><span>About</span></a>
+</div>
 <a name="features"><h2>Features</h2></a>
-<p>Cloudsn is a gnome application that check for new mails, feeds etc. 
+<p>Cloudsn is a gnome application that check for new mails, feeds etc.
 It is developed for Gnome and tested in debian and ubuntu.<p>
 
-<p>Cloudsn try to implement the MVC pattern and it separates the providers, 
+<p>Cloudsn try to implement the MVC pattern and it separates the providers,
 configuration, indicators and notifications</p>
 <p>The providers check accounts against different services. Currently cloudsn
  has these providers implemented:
@@ -74,7 +110,7 @@ configuration, indicators and notifications</p>
     <li>Identi.ca</li>
 </ul>
 </p>
-<p>The indicators are a list of accounts and its unread items indicating the 
+<p>The indicators are a list of accounts and its unread items indicating the
 state of every one. Currently you can choose between use one of these:
 <ul>
     <li>Status Icon: Show the cloudsn icon and a list of active accounts with the information</li>
@@ -114,14 +150,16 @@ state of every one. Currently you can choose between use one of these:
 
 <a name="about"<h2>About</h2>
 <p>Cloudsn has been developed by Jesús Barbero Rodríguez (chuchiperriman gmail com)
-and it has been written in Python. Currently runs under python >= 2.5.</p>
-      
+and it has been written in Python. Currently runs under python >= 2.5.
+</p>
+
     <div class="footer">
       get the source code on GitHub : <a href="http://github.com/chuchiperriman/cloud-services-notifications">chuchiperriman/cloud-services-notifications</a>
     </div>
-    
+
   </div>
 
-  
+
 </body>
 </html>
+

@@ -256,6 +256,7 @@ class MainWindow:
             response = self.new_dialog.run()
             if response == 0:
                 try:
+                    logger.debug ("a")
                     if len(self.provider_content.get_children())==0:
                         raise Exception(_("You must select a provider and fill the data"))
 
@@ -267,7 +268,6 @@ class MainWindow:
                     citer = self.providers_combo.get_active_iter()
                     provider_name = self.providers_store.get_value (citer, 1)
                     provider = self.pm.get_provider(provider_name)
-
                     acc = provider.set_account_data_from_widget(acc_name, custom_widget)
                     acc.set_activate_command (self.activate_command_entry.get_text())
                     self.am.add_account(acc)

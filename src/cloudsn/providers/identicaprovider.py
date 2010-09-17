@@ -20,3 +20,6 @@ class IdenticaProvider(TwitterProvider):
             IdenticaProvider.__default = IdenticaProvider()
         return IdenticaProvider.__default
 
+    def get_import_error(self):
+        return None
+

@@ -56,12 +56,14 @@ class ProviderManager:
             from cloudsn.providers.imapprovider import ImapProvider
             from cloudsn.providers.twitterprovider import TwitterProvider
             from cloudsn.providers.identicaprovider import IdenticaProvider
+            from cloudsn.providers.feedsprovider import FeedsProvider
             ProviderManager.__default.add_provider (GMailProvider.get_instance())
             ProviderManager.__default.add_provider (GReaderProvider.get_instance())
             ProviderManager.__default.add_provider (Pop3Provider.get_instance())
             ProviderManager.__default.add_provider (ImapProvider.get_instance())
             ProviderManager.__default.add_provider (TwitterProvider.get_instance())
             ProviderManager.__default.add_provider (IdenticaProvider.get_instance())
+            ProviderManager.__default.add_provider (FeedsProvider.get_instance())
         return ProviderManager.__default
 
     def add_provider (self, provider):

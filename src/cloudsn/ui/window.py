@@ -358,6 +358,15 @@ class MainWindow:
         provider_name = self.providers_store.get_value (citer, 1)
         provider = self.pm.get_provider(provider_name)
 
+        if provider.get_import_error():
+            md = gtk.MessageDialog(self.window,
+                gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
+                gtk.BUTTONS_CLOSE,
+                _('Error loading the provider: ') + str(provider.get_import_error()))
+            md.run()
+            md.destroy()
+            return
+
         box =  provider.get_account_data_widget(self.provider_content.account)
         self.provider_content.add(box)
         if self.provider_content.account:

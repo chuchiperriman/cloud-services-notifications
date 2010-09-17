@@ -2,26 +2,28 @@
 from cloudsn.core.account import Account
 
 class Provider:
-    
+
     def __init__ (self, name):
         self.name = name
         self.icon = None
-        
+
     def load_account(self, props):
         return Account(props, self)
-        
+
     def update_account (self, account_data):
         pass
     def has_indicator(self):
         return True
     def has_notifications (self):
         return True
+    def get_import_error(self):
+        return None
     def get_name (self):
         return self.name
     def get_icon (self):
         return self.icon
     def get_account_data_widget (self, account=None):
-        """ 
+        """
             If account == None is a new account if not then editing
             Returns a widget and it will be inserted into the new account dialog
         """
@@ -32,7 +34,7 @@ class Provider:
             raise an exception if there is an error validating the data
         """
         raise NotImplementedError("The provider must implement this method!!")
-        
+
 class ProviderManager:
 
     __default = None
@@ -42,7 +44,7 @@ class ProviderManager:
     def __init__(self):
         if ProviderManager.__default:
            raise ProviderManager.__default
-           
+
     @staticmethod
     def get_instance():
         if not ProviderManager.__default:
@@ -71,4 +73,4 @@ class ProviderManager:
             if prov.get_name() == name:
                 return prov
         return None
-        
+

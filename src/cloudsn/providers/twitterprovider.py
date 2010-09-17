@@ -27,6 +27,9 @@ class TwitterProvider(ProviderUtilsBuilder):
             TwitterProvider.__default = TwitterProvider()
         return TwitterProvider.__default
 
+    def get_import_error(self):
+        return Exception(_("Twitter has disabled the basic authentication and now uses oauth. Cloudsn doesn't support oauth yet"))
+
     def load_account(self, props):
         acc = TwitterAccount(props, self)
         acc.properties["activate_url"] = self.activate_url
@@ -36,25 +39,25 @@ class TwitterProvider(ProviderUtilsBuilder):
     def get_dialog_def (self):
         return [{"label": "User", "type" : "str"},
                 {"label": "Password", "type" : "pwd"}]
-    
+
     def populate_dialog(self, widget, acc):
         credentials = acc.get_credentials_save()
         self._set_text_value ("User",credentials.username)
         self._set_text_value ("Password", credentials.password)
-    
+
     def set_account_data_from_widget(self, account_name, widget, account=None):
         username = self._get_text_value ("User")
         password = self._get_text_value ("Password")
         if username=='' or password=='':
             raise Exception(_("The user name and the password are mandatory"))
-        
+
         if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
                 'activate_url' : self.activate_url}
             account = self.load_account(props)
-            
+
         account.set_credentials(Credentials(username, password))
-        
+
         return account
 
     def update_account (self, account):
@@ -67,9 +70,9 @@ class TwitterProvider(ProviderUtilsBuilder):
         since_id = None
         if account.last_id != -1:
             since_id = account.last_id
-            
+
         messages = api.GetFriendsTimeline(since_id=since_id)
-        
+
         if len(messages) < 1:
             account.new_unread = []
             return
@@ -87,7 +90,7 @@ class TwitterProvider(ProviderUtilsBuilder):
             news.append (Notification(messages[0].id, messages[0].text,
                          messages[0].user.screen_name,
                          self.get_message_icon(messages[0])))
-            
+
         account.new_unread = news;
         account.last_id = messages[0].id
 
@@ -97,7 +100,7 @@ class TwitterProvider(ProviderUtilsBuilder):
             icon = utils.download_image_to_pixbuf(m.user.profile_image_url)
         except Exception, e:
             logger.exception("Error loading the user avatar",e)
-            
+
         return icon
 
 class TwitterAccount (AccountCacheMails):
@@ -107,3 +110,4 @@ class TwitterAccount (AccountCacheMails):
 
     def get_total_unread (self):
         return 0
+

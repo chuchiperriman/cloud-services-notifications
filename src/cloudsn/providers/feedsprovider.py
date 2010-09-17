@@ -1,5 +1,5 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
-from cloudsn.core.account import Account, AccountManager, Notification
+from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
 from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core.provider import Provider
@@ -40,9 +40,19 @@ class FeedsProvider(ProviderUtilsBuilder):
         return import_error
 
     def update_account (self, account):
-        print account["url"]
-        d = feedparser.parse(account["url"])
-        print d.feed.title
+        logger.debug("loading feed")
+        doc = feedparser.parse(account["url"])
+
+        account.new_unread = []
+        notifications = {}
+        for entry in doc.entries:
+            entry_id = entry.get("id", entry.title)
+            notifications[entry.get("id", entry.title)] = entry.title
+            if entry_id not in account.notifications:
+                logger.debug ("new entry %s" % (entry_id))
+                n = Notification(entry_id, entry.title, doc.feed.title)
+                account.new_unread.append (n)
+        account.notifications = notifications
 
     def get_dialog_def (self):
         return [{"label": "Url", "type" : "str"}]
@@ -62,11 +72,14 @@ class FeedsProvider(ProviderUtilsBuilder):
             account = self.load_account(props)
         else:
             account["url"] = url
+
+        doc = feedparser.parse(account["url"])
+        account["activate_url"] = doc.feed.link
         return account
 
-class FeedAccount (Account):
+class FeedAccount (AccountCacheMails):
     def __init__ (self, properties, provider):
-        Account.__init__(self, properties, provider)
+        AccountCacheMails.__init__(self, properties, provider)
     def has_credentials(self):
         return False
 

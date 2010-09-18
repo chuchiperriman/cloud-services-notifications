@@ -2,16 +2,18 @@
 # Maintainer: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>
 
 pkgname=cloudsn
-pkgver=0.7.4
-pkgrel=2
+pkgver=0.7.6
+pkgrel=1
 pkgdesc="E-mail (pop3, gmail, imap), rss, and tweets notifier"
 arch=('any')
 url="http://chuchiperriman.github.com/cloud-services-notifications/"
 license=('GPL')
 depends=('python-notify' 'python-simplejson' 'pyxdg' 'pygtk' 'gnome-python' 'hicolor-icon-theme')
+optdepends=('python-feedparser: RSS support'
+'python-gnomekeyring: Store passwords in gnome-keyring')
 install=cloudsn.install
 source=($pkgname-$pkgver.tar.gz::http://github.com/chuchiperriman/cloud-services-notifications/tarball/$pkgver)
-md5sums=('bcce84c185f597d04f5e217f29aab13a')
+md5sums=('ee28553ab449ae4a2f8a811738f0210e')
 
 build() {
   cd $srcdir/chuchiperriman-cloud-services-notifications-*
@@ -20,3 +22,4 @@ build() {
 }
 
 # vim:set ts=2 sw=2 et:
+

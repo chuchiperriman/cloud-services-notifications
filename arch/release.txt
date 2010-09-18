@@ -1,0 +1,12 @@
+* Create the new git tag with the version name and push it
+    * git tag 0.7.6
+    * gitpush --tags
+* Modify PKGBUILD and set the new version/dependencies etc.
+* run "makepkg -c"
+* create the md5:
+    * md5 cloudsn-0.7.6.tar.gz
+* Modify PKGBUILD and set the tar.gz md5
+* run "makepkg -c"
+* install the new package:
+    * sudo pacman -U cloudsn-0.7.6-1-any.pkg.tar.xz
+

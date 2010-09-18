@@ -40,7 +40,6 @@ class FeedsProvider(ProviderUtilsBuilder):
         return import_error
 
     def update_account (self, account):
-        logger.debug("loading feed")
         doc = feedparser.parse(account["url"])
 
         account.new_unread = []
@@ -49,7 +48,6 @@ class FeedsProvider(ProviderUtilsBuilder):
             entry_id = entry.get("id", entry.title)
             notifications[entry.get("id", entry.title)] = entry.title
             if entry_id not in account.notifications:
-                logger.debug ("new entry %s" % (entry_id))
                 n = Notification(entry_id, entry.title, doc.feed.title)
                 account.new_unread.append (n)
         account.notifications = notifications

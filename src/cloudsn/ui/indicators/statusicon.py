@@ -18,7 +18,7 @@ class StatusIconIndicator (Indicator):
             self.statusIcon.set_tooltip(APP_LONG_NAME)
             self.statusIcon.connect('activate', self.main_cb, self.statusIcon)
 
-            self.menu = self.create_pref_menu()        
+            self.menu = self.create_pref_menu()
             self.indmenu = self.create_main_menu()
 
             self.statusIcon.connect('popup-menu', self.popup_menu_cb, self.menu)
@@ -34,8 +34,8 @@ class StatusIconIndicator (Indicator):
         indmenu = gtk.Menu()
         indmenuItem = gtk.MenuItem("")
         indmenuItem.get_child().set_markup("<b>%s</b>" % (APP_LONG_NAME))
-        indmenuItem.connect('activate', self.quit_cb, self.statusIcon)
-        indmenuItem.set_sensitive(False)
+        indmenuItem.connect('activate', self.preferences_cb, self.statusIcon)
+        #indmenuItem.set_sensitive(False)
         indmenu.append(indmenuItem)
 
         return indmenu
@@ -58,11 +58,11 @@ class StatusIconIndicator (Indicator):
         menuItem.connect('activate', self.quit_cb, self.statusIcon)
         menu.append(menuItem)
         return menu
-        
+
     def create_indicator(self, acc):
         indmenuItem = gtk.ImageMenuItem(gtk.STOCK_QUIT)
         pix = self.scale_pixbuf(acc.get_icon())
-        
+
         """
         indmenuItem.set_image(gtk.image_new_from_pixbuf(pix))
         indmenuItem.get_child().set_label(("%s (%i)") % (acc.get_name(),acc.get_total_unread()))
@@ -83,13 +83,13 @@ class StatusIconIndicator (Indicator):
         acc.total_label = total_label
         acc.menu_icon = menu_icon
         acc.is_error_icon = False
-    
+
     def update_account(self, acc):
         #We had a previous error but now the update works.
         if acc.is_error_icon:
             acc.menu_icon.set_from_pixbuf(self.scale_pixbuf(acc.get_icon()))
             acc.is_error_icon = False
-        
+
         acc.total_label.set_label(("(%i)") % (acc.get_total_unread()))
 
     def update_error(self, acc):
@@ -102,26 +102,26 @@ class StatusIconIndicator (Indicator):
         self.indmenu.remove(acc.indicator)
         acc.indicator = None
         acc.total_label = None
-        
+
     def preferences_cb(self, widget, acc = None):
         win = window.MainWindow.get_instance()
-	win.run()
-    
+        win.run()
+
     def update_accounts_cb(self, widget, acc = None):
         c = controller.Controller.get_instance()
         c.update_accounts()
-        
+
     def acc_activate_cb(self, widget, acc = None):
         acc.activate()
-        
+
     def main_cb(self, widget, data = None):
         self.indmenu.show_all()
         self.indmenu.popup(None, None, gtk.status_icon_position_menu,
                            1, gtk.get_current_event_time(), self.statusIcon)
-        
+
     def quit_cb(self, widget, data = None):
        gtk.main_quit()
-    
+
     def about_cb (self, widget, data = None):
         about.show_about_dialog()
 
@@ -133,3 +133,4 @@ class StatusIconIndicator (Indicator):
                            3, time, self.statusIcon)
     def scale_pixbuf (self, pix):
         return pix.scale_simple(16,16,gtk.gdk.INTERP_BILINEAR)
+

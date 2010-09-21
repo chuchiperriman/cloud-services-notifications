@@ -47,6 +47,15 @@ def get_apps_prefix():
     else:
         return get_data_prefix()
 
+def get_cache_path ():
+    return bd.xdg_cache_home + '/cloud-services-notifications'
+
+def get_ensure_cache_path():
+    path = get_cache_path()
+    if not os.path.exists (path):
+        os.makedirs (path)
+    return path
+        
 def add_apps_prefix(subpath):
     return join (get_apps_prefix(), subpath)
 

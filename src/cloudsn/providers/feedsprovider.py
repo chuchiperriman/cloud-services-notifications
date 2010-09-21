@@ -6,8 +6,11 @@ from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
 from cloudsn import logger
+from os.path import join
+import os
 import gtk
 import urllib2
+import csv
 
 import_error = None
 
@@ -40,6 +43,9 @@ class FeedsProvider(ProviderUtilsBuilder):
         return import_error
 
     def update_account (self, account):
+        cache = FeedCache(account)
+        cache.load()
+        
         doc = feedparser.parse(account["url"])
 
         account.new_unread = []
@@ -50,7 +56,11 @@ class FeedsProvider(ProviderUtilsBuilder):
             if entry_id not in account.notifications:
                 n = Notification(entry_id, entry.title, doc.feed.title)
                 account.new_unread.append (n)
+                cache.add_feed(Feed.from_info(-1, entry_id, False))
+                
         account.notifications = notifications
+        if len(notifications) > 0:
+            cache.save()
 
     def get_dialog_def (self):
         return [{"label": "Url", "type" : "str"}]
@@ -81,3 +91,54 @@ class FeedAccount (AccountCacheMails):
     def has_credentials(self):
         return False
 
+class Feed:
+    def __init__(self, data):
+        self.feed_num = data[0]
+        self.feed_id = data[1]
+        self.feed_read = utils.get_boolean(data[2])
+        
+    @classmethod
+    def from_info(self, feed_num, feed_id, feed_read):
+        return Feed((feed_num, feed_id, feed_read))
+        
+    def get_data(self):
+        return (self.feed_num, self.feed_id, self.feed_read)
+        
+class FeedCache:
+    def __init__(self, account):
+        self.account = account
+
+    def get_filename(self):
+        return "feed-" + utils.get_safe_filename(self.account.get_name()) + ".csv"
+    
+    def get_filepath(self):
+        return join(config.get_ensure_cache_path(), self.get_filename())
+        
+    def load(self):
+        file_path = self.get_filepath()
+        if not os.path.exists (file_path):
+            f = open(file_path, "w")
+            f.close()
+        reader = csv.reader(open(file_path, "r+"), delimiter='\t')
+
+        self.feeds = dict()
+        self.last_num = -1
+        for data in reader:
+            feed_num = int(data[0])
+            self.feeds[data[1]] = data
+            if feed_num > self.last_num:
+                self.last_num = feed_num
+            
+    def save(self):
+        #TODO Only write the last 200 feeds
+        rows = sorted(self.feeds.values(), key=lambda x: int(x[0]))
+        writer = csv.writer(open(self.get_filepath(), "w+"), delimiter='\t')
+        writer.writerows(rows)
+        
+    def add_feed(self, feed):
+        self.last_num = self.last_num + 1
+        feed.feed_num = self.last_num
+        self.feeds[feed.feed_id] = feed.get_data()
+        
+        
+        

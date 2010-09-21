@@ -91,6 +91,9 @@ def replace_variables(acc, command):
         _command = _command.replace(variable, available_variables[variable])
         
     return _command
+
+def get_safe_filename(name):
+    return "".join([x for x in name.lower() if x.isalpha() or x.isdigit()])
     
 if __name__ == "__main__":
     print get_default_mail_reader()

@@ -23,6 +23,7 @@ def main():
     """
     rows = sorted(feeds.values(), key=lambda x: x[0])
     print rows
+    print rows[2:]
     return
     writer = csv.writer(open(FILE, "a+"), delimiter='\t')
 

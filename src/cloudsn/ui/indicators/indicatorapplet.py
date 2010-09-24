@@ -59,7 +59,7 @@ class IndicatorApplet (Indicator):
         if not acc.is_error_icon:
             acc.indicator.set_property_icon("icon", acc.get_icon())
             acc.is_error_icon = True
-        acc.indicator.set_property("count", str(0))
+        acc.indicator.set_property("count", "0")
         
     def remove_indicator(self, acc):
         acc.indicator = None

@@ -257,7 +257,6 @@ class MainWindow:
             response = self.new_dialog.run()
             if response == 0:
                 try:
-                    logger.debug ("a")
                     if len(self.provider_content.get_children())==0:
                         raise Exception(_("You must select a provider and fill the data"))
 

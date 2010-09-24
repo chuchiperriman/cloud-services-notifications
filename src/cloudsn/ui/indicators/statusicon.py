@@ -6,6 +6,7 @@ from cloudsn.core import config, controller, utils
 from cloudsn.ui import window, about
 from cloudsn.core.indicator import Indicator
 from cloudsn.const import *
+from cloudsn import logger
 import gettext
 
 class StatusIconIndicator (Indicator):
@@ -99,7 +100,10 @@ class StatusIconIndicator (Indicator):
         acc.total_label.set_label("")
 
     def remove_indicator(self, acc):
-        self.indmenu.remove(acc.indicator)
+        logger.debug("remove indicator")
+        #If the account is disabled, there is not an indicator
+        if acc.indicator:
+            self.indmenu.remove(acc.indicator)
         acc.indicator = None
         acc.total_label = None
 

@@ -9,4 +9,8 @@
 * run "makepkg -c"
 * install the new package:
     * sudo pacman -U cloudsn-0.7.6-1-any.pkg.tar.xz
+* Create source package:
+    * makepkg --source
+* Login into aur: http://aur.archlinux.org/
+* Go to http://aur.archlinux.org/pkgsubmit.php
 

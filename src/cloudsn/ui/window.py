@@ -80,7 +80,8 @@ class MainWindow:
         #Populate accounts
         for acc in self.am.get_accounts():
             self.main_store.append([acc.get_icon(), acc.get_name(),
-                self.__get_account_date(acc), acc.get_active()])
+                self.__get_account_date(acc), acc.get_active(),
+                acc.get_total_unread()])
 
         #Populate providers
         for prov in self.pm.get_providers():
@@ -274,10 +275,10 @@ class MainWindow:
                     self.am.save_account(acc)
                     self.main_store.append([acc.get_icon(),
                             acc.get_name(),self.__get_account_date(acc),
-                            acc.get_active()])
+                            acc.get_active(), acc.get_total_unread()])
                     end = True
                 except Exception, e:
-                    logger.error ('Error adding a new account: ' + str(e))
+                    logger.error ('Error adding a new account: %s', e)
                     md = gtk.MessageDialog(self.window,
                         gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
                         gtk.BUTTONS_CLOSE,
@@ -378,12 +379,14 @@ class MainWindow:
             if row[1] == acc.get_name():
                 row[0] = acc.get_icon()
                 row[2] = self.__get_account_date(acc)
+                row[3] = acc.get_total_unread()
 
     def __on_account_check_error_cb(self, widget, acc):
         for row in self.main_store:
             if row[1] == acc.get_name():
                 row[0] = acc.get_icon()
                 row[2] = self.__get_account_date(acc)
+                row[3] = acc.get_total_unread()
 
 def main ():
     import cloudsn.cloudsn

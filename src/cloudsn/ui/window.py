@@ -379,14 +379,14 @@ class MainWindow:
             if row[1] == acc.get_name():
                 row[0] = acc.get_icon()
                 row[2] = self.__get_account_date(acc)
-                row[3] = acc.get_total_unread()
+                row[4] = acc.get_total_unread()
 
     def __on_account_check_error_cb(self, widget, acc):
         for row in self.main_store:
             if row[1] == acc.get_name():
                 row[0] = acc.get_icon()
                 row[2] = self.__get_account_date(acc)
-                row[3] = acc.get_total_unread()
+                row[4] = acc.get_total_unread()
 
 def main ():
     import cloudsn.cloudsn

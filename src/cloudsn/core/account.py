@@ -49,6 +49,12 @@ class Account:
     def get_provider (self):
         return self.provider
 
+    def can_mark_read(self):
+        return False
+
+    def mark_read(self):
+        raise Exception("The mark_read method has not been implemented")
+
     def has_credentials(self):
         """False if the account doesn't need credentials"""
         return True

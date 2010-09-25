@@ -42,7 +42,7 @@ class FeedsProvider(ProviderUtilsBuilder):
         return import_error
 
     def update_account (self, account):
-        
+
         doc = feedparser.parse(account["url"])
 
         account.new_unread = []
@@ -90,47 +90,53 @@ class FeedAccount (Account):
 
     def get_new_unread_notifications(self):
         return self.new_unread
-        
+
     def add_feed(self, feed_id, feed_read):
         self.cache.add_feed(feed_id, feed_read);
         if not feed_read:
             self.total_unread = self.total_unread + 1
         self.cache.save()
-    
+
     def has_feed(self, feed_id):
         return feed_id in self.cache.feeds
-                
+
     def has_credentials(self):
         return False
-        
+
     def get_total_unread (self):
         return self.total_unread
-        
-    def activate (self):
-        self.total_unread = 0
+
+    def can_mark_read(self):
+        return True
+
+    def mark_read(self):
         for f in self.cache.feeds.values():
             f.feed_read = True
         self.cache.save()
-        Account.activate(self)
+        self.total_unread = 0
         #Update the unread items
         indicator.IndicatorManager.get_instance().get_indicator().update_account(self)
+
+    def activate (self):
+        self.mark_read()
+        Account.activate(self)
 
 class Feed:
     def __init__(self, data):
         self.feed_num = int(data[0])
         self.feed_id = data[1]
         self.feed_read = utils.get_boolean(data[2])
-        
+
 class FeedCache:
     def __init__(self, account):
         self.account = account
 
     def get_filename(self):
         return "feed-" + utils.get_safe_filename(self.account.get_name()) + ".csv"
-    
+
     def get_filepath(self):
         return join(config.get_ensure_cache_path(), self.get_filename())
-        
+
     def load(self):
         file_path = self.get_filepath()
         if not os.path.exists (file_path):
@@ -145,21 +151,20 @@ class FeedCache:
             self.feeds[data[1]] = Feed(data)
             if feed_num > self.last_num:
                 self.last_num = feed_num
-            
+
     def save(self):
         #TODO Only write the last 200 feeds
         rows = sorted(self.feeds.values(), key=lambda x: int(x.feed_num))
         num = len(rows)
-        if num > 100:
-            rows = rows[num - 100:]
+        if num > 300:
+            rows = rows[num - 300:]
         writer = csv.writer(open(self.get_filepath(), "w+"), delimiter='\t')
         num = 0
         for f in rows:
             writer.writerow((num, f.feed_id, f.feed_read))
             num = num + 1
-        
+
     def add_feed(self, feed_id, feed_read):
         self.last_num = self.last_num + 1
         self.feeds[feed_id] = Feed((self.last_num, feed_id, feed_read))
-        
-        
+

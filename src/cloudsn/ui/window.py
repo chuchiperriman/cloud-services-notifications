@@ -76,6 +76,7 @@ class MainWindow:
         self.providers_combo = self.builder.get_object("providers_combo");
         self.providers_store = self.builder.get_object("providers_store");
         self.play_button = self.builder.get_object("tool_play");
+        self.read_button = self.builder.get_object("main_read_button");
 
         #Populate accounts
         for acc in self.am.get_accounts():
@@ -211,6 +212,19 @@ class MainWindow:
         acc, citer = self.get_main_account_selected()
         if acc:
             Controller.get_instance().update_account(acc)
+
+    def main_read_button_clicked_cb(self, widget, data=None):
+        acc, citer = self.get_main_account_selected()
+        if acc and acc.can_mark_read():
+            acc.mark_read()
+        self.__on_account_checked_cb(None, acc)
+
+    def main_account_tree_cursor_changed_cb(self, widget, data=None):
+        acc, citer = self.get_main_account_selected()
+        if acc and acc.can_mark_read():
+            self.read_button.set_sensitive(True)
+        else:
+            self.read_button.set_sensitive(False)
 
     def tool_play_toggled_cb (self, widget, data=None):
         from cloudsn.core.controller import Controller

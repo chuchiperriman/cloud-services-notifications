@@ -726,6 +726,19 @@
                 <property name="homogeneous">True</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkToolButton" id="toolbutton1">
+                <property name="visible">True</property>
+                <property name="related_action">quit_action</property>
+                <property name="label" translatable="yes">toolbutton1</property>
+                <property name="use_underline">True</property>
+                <property name="stock_id">gtk-quit</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -750,6 +763,7 @@
                     <property name="headers_clickable">False</property>
                     <property name="enable_search">False</property>
                     <property name="search_column">1</property>
+                    <signal name="cursor_changed" handler="main_account_tree_cursor_changed_cb"/>
                     <child>
                       <object class="GtkTreeViewColumn" id="active_column">
                         <property name="title">Active</property>
@@ -863,6 +877,24 @@
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="main_read_button">
+                    <property name="label">gtk-clear</property>
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="tooltip_text" translatable="yes">Mark all messages as read</property>
+                    <property name="use_stock">True</property>
+                    <signal name="clicked" handler="main_read_button_clicked_cb"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="pack_type">end</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>

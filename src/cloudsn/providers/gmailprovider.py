@@ -50,6 +50,8 @@ class GMailProvider(Provider):
                 if mail.mail_id not in account.notifications:
                     news.append (Notification(mail.mail_id, mail.title, mail.author_name))
 
+            account.total_unread = g.getUnreadMsgCount()
+
         account.new_unread = news;
         account.notifications = notifications
 
@@ -126,6 +128,9 @@ class GMailProvider(Provider):
 class GMailAccount(AccountCacheMails):
     def __init__(self, properties, provider):
         AccountCacheMails.__init__(self, properties, provider)
+
+    def get_total_unread (self):
+        return self.total_unread
 
     def activate (self):
         #Hack for gmail domains like mail.quiter.com

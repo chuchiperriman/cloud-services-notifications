@@ -2,18 +2,20 @@
 # Copyright (C) 2010
 # This file is distributed under the same license as the cloudsn package.
 # Jesús Barbero Rodríguez <chuchiperriman@gmail.com>, 2010.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-07 20:52+0200\n"
-"PO-Revision-Date: 2010-09-07 16:55+0200\n"
+"POT-Creation-Date: 2010-09-25 02:26+0200\n"
+"PO-Revision-Date: 2010-09-25 02:30+0200\n"
 "Last-Translator: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>\n"
-"Language-Team: Español <chuchiperriman@gmail.com>\n"
+"Language-Team: es <chuchiperriman@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=es\n"
+"Content-Transfer-Encoding: UTF-8\n"
+"Plural-Forms: s\n"
 
 #: ../src/cloudsn/core/account.py:18
 msgid ""
@@ -23,12 +25,12 @@ msgstr ""
 "Error cargando la configuración de la cuenta: La propiedad \"name\" es "
 "obligatoria, revise la configuración"
 
-#: ../src/cloudsn/core/account.py:54
+#: ../src/cloudsn/core/account.py:64
 #, python-format
 msgid "The credentials have not been loaded for the account %s"
 msgstr "Las credenciales no han sido cargados para la cuenta %s"
 
-#: ../src/cloudsn/core/account.py:172
+#: ../src/cloudsn/core/account.py:183
 #, python-format
 msgid "The account %s already exists"
 msgstr "La cuenta %s ya existe"
@@ -59,44 +61,48 @@ msgstr "Error iniciando la aplicación: %s"
 msgid "Can't find the cloudsn data directory"
 msgstr "No se puede encontrar el directorio de datos de cloudsn"
 
-#: ../src/cloudsn/ui/window.py:107
+#: ../src/cloudsn/ui/window.py:109
 msgid "Press to pause the checker daemon"
 msgstr "Presione para parar el servicio de chequeo"
 
-#: ../src/cloudsn/ui/window.py:111
+#: ../src/cloudsn/ui/window.py:113
 msgid "Press to start the checker daemon"
 msgstr "Presione para iniciar el servicio de chequeo"
 
-#: ../src/cloudsn/ui/window.py:196
+#: ../src/cloudsn/ui/window.py:198
 #, python-format
 msgid "Are you sure you want to delete the account %s?"
 msgstr "¿Está seguro que desea eliminar la cuenta %s?"
 
-#: ../src/cloudsn/ui/window.py:260
+#: ../src/cloudsn/ui/window.py:275
 msgid "You must select a provider and fill the data"
 msgstr "Debe seleccionar un proveedor y rellenar los datos"
 
-#: ../src/cloudsn/ui/window.py:264 ../src/cloudsn/ui/window.py:324
+#: ../src/cloudsn/ui/window.py:279 ../src/cloudsn/ui/window.py:338
 msgid "You must fill the account name"
 msgstr "Debe rellenar el nombre de cuenta"
 
-#: ../src/cloudsn/ui/window.py:284
+#: ../src/cloudsn/ui/window.py:298
 msgid "Error adding a new account: "
 msgstr "Error añadiendo una cuenta nueva: "
 
-#: ../src/cloudsn/ui/window.py:337
+#: ../src/cloudsn/ui/window.py:351
 msgid "Error editing the account: "
 msgstr "Error editando la cuenta: "
 
-#: ../src/cloudsn/ui/indicators/statusicon.py:31
+#: ../src/cloudsn/ui/window.py:379
+msgid "Error loading the provider: "
+msgstr "Error cargando el proveedor: "
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:32
 msgid "Status Icon"
 msgstr "Icono de estado"
 
-#: ../src/cloudsn/ui/indicators/statusicon.py:46
+#: ../src/cloudsn/ui/indicators/statusicon.py:47
 msgid "Update accounts"
 msgstr "Actualizar cuentas"
 
-#: ../src/cloudsn/ui/authwarning.py:23
+#: ../src/cloudsn/ui/authwarning.py:28
 msgid ""
 "<b>Security warning</b>\n"
 "\n"
@@ -108,11 +114,12 @@ msgstr ""
 "<b>Aviso de seguridad</b>\n"
 "\n"
 "Tiene gnome-keyring instalado pero estáusando encriptación en texto plano\n"
-"para almacenar sus contraseñas. Puede seleccionar el métodode encriptación\n"
+"para almacenar sus contraseñas. Puede seleccionar el métodode encriptació"
+"n\n"
 "en el diálogo de preferencias.\n"
 "\n"
 
-#: ../src/cloudsn/ui/authwarning.py:35
+#: ../src/cloudsn/ui/authwarning.py:41
 msgid "Don't ask me again"
 msgstr "No volver a preguntar"
 
@@ -199,66 +206,74 @@ msgid "Indicate status with: "
 msgstr "Indicar el estado con: "
 
 #: ../data/preferences.ui.h:14
+msgid "Mark all messages as read"
+msgstr "Marcar todos los mensajes como leídos"
+
+#: ../data/preferences.ui.h:15
 msgid "Maximum notifications"
 msgstr "Notificaciones Máximas"
 
-#: ../data/preferences.ui.h:15
+#: ../data/preferences.ui.h:16
 msgid "Minutes: "
 msgstr "Minutos: "
 
-#: ../data/preferences.ui.h:16
+#: ../data/preferences.ui.h:17
 msgid "New Account"
 msgstr "Nueva cuenta"
 
-#: ../data/preferences.ui.h:17
+#: ../data/preferences.ui.h:18
 msgid "Password manager: "
 msgstr "Gestor de contraseñas: "
 
-#: ../data/preferences.ui.h:18
+#: ../data/preferences.ui.h:19
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../data/preferences.ui.h:19
+#: ../data/preferences.ui.h:20
 msgid "Provider: "
 msgstr "Proveedor: "
 
-#: ../data/preferences.ui.h:20
+#: ../data/preferences.ui.h:21
 msgid "Run application on startup"
 msgstr "Lanzar aplicación al iniciar"
 
-#: ../data/preferences.ui.h:21
+#: ../data/preferences.ui.h:22
 msgid "Show preferences"
 msgstr "Mostrar preferencias"
 
-#: ../data/preferences.ui.h:22
+#: ../data/preferences.ui.h:23
 msgid "Stop/Play"
 msgstr "Parar/Arrancar"
 
-#: ../data/preferences.ui.h:23
+#: ../data/preferences.ui.h:24
 msgid "Update"
 msgstr "Actualizar"
 
-#: ../data/preferences.ui.h:24
+#: ../data/preferences.ui.h:25
 msgid "Update all accounts"
 msgstr "Actualizar todas las cuentas"
 
-#: ../data/preferences.ui.h:25
+#: ../data/preferences.ui.h:26
 msgid "Update the selected account"
 msgstr "Actualizar la cuenta seleccionada"
 
-#: ../data/preferences.ui.h:26
+#: ../data/preferences.ui.h:27
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../data/preferences.ui.h:27
+#: ../data/preferences.ui.h:28
 msgid "_File"
 msgstr "_Archivo"
 
-#: ../data/preferences.ui.h:28
+#: ../data/preferences.ui.h:29
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: ../data/preferences.ui.h:29
+#: ../data/preferences.ui.h:30
+msgid "toolbutton1"
+msgstr "toolbutton1"
+
+#: ../data/preferences.ui.h:31
 msgid "toolbutton3"
 msgstr "toolbutton3"
 

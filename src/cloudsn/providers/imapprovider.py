@@ -4,13 +4,14 @@ Based on imap.py:
 
     Copyright 2009-2010 cGmail Core Team
     https://code.launchpad.net/cgmail
-    
+
 """
 from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
 from cloudsn.core import config
 from cloudsn.core import utils
+from cloudsn import logger
 import imaplib
 from email.Parser import HeaderParser
 import gtk
@@ -32,20 +33,36 @@ class ImapProvider(ProviderUtilsBuilder):
 
     def load_account(self, props):
         return AccountCacheMails(props, self)
-    
+
     def update_account (self, account):
-        credentials = account.get_credentials()
-        g = ImapBox (account["host"], credentials.username, 
-            credentials.password, account["port"],
-            utils.get_boolean(account["ssl"]))
         account.new_unread = []
         notifications = {}
-        mails = g.get_mails()
-        for mail_id, sub, fr in mails:
-            notifications[mail_id] = sub
-            if mail_id not in account.notifications:
-                n = Notification(mail_id, sub, fr)
-                account.new_unread.append (n)
+        all_inbox = []
+        credentials = account.get_credentials()
+
+        #Main inbox
+        all_inbox.append(ImapBox (account["host"], credentials.username,
+            credentials.password, account["port"],
+            utils.get_boolean(account["ssl"])))
+
+        if 'labels' in account.get_properties():
+            labels = []
+            labels += [l.strip() for l in account["labels"].split(",")]
+            for l in labels:
+                all_inbox.append(ImapBox (account["host"], credentials.username,
+                    credentials.password, account["port"],
+                    utils.get_boolean(account["ssl"]),
+                    False, l))
+
+        for g in all_inbox:
+            mails = g.get_mails()
+            logger.debug("Checking label %s: %i" %(g.mbox_dir, len(mails)))
+            for mail_id, sub, fr in mails:
+                notifications[mail_id] = sub
+                if mail_id not in account.notifications:
+                    n = Notification(mail_id, sub, fr)
+                    account.new_unread.append (n)
+
         account.notifications = notifications
 
     def get_dialog_def (self):
@@ -54,7 +71,7 @@ class ImapProvider(ProviderUtilsBuilder):
                 {"label": "Password", "type" : "pwd"},
                 {"label": "Port", "type" : "str"},
                 {"label": "Use SSL", "type" : "check"}]
-    
+
     def populate_dialog(self, widget, acc):
         credentials = acc.get_credentials_save()
         self._set_text_value ("Host",acc["host"])
@@ -62,7 +79,7 @@ class ImapProvider(ProviderUtilsBuilder):
         self._set_text_value ("Password", credentials.password)
         self._set_text_value ("Port",str(acc["port"]))
         self._set_check_value ("Use SSL",utils.get_boolean(acc["ssl"]))
-    
+
     def set_account_data_from_widget(self, account_name, widget, account=None):
         host = self._get_text_value ("Host")
         username = self._get_text_value ("User")
@@ -71,7 +88,7 @@ class ImapProvider(ProviderUtilsBuilder):
         ssl = self._get_check_value("Use SSL")
         if host=='' or username=='' or password=='':
             raise Exception(_("The host, user name and the password are mandatory"))
-        
+
         #TODO check valid values
         if not account:
             props = {'name' : account_name, 'provider_name' : self.get_name(),
@@ -83,12 +100,12 @@ class ImapProvider(ProviderUtilsBuilder):
             account["ssl"] = ssl
         account.set_credentials(Credentials(username, password))
         return account
-        
+
 class ImapBoxConnectionError(Exception): pass
 class ImapBoxAuthError(Exception): pass
 
 class ImapBox:
-	def __init__(self, host, user, password, 
+	def __init__(self, host, user, password,
 			port = 143, ssl = False,
 			use_default_mbox = True,
 			mbox_dir = None):
@@ -109,9 +126,9 @@ class ImapBox:
 			self.mbox = imaplib.IMAP4_SSL(self.host, self.port)
 
 		self.mbox.login(self.user, self.password)
-	
+
 	def get_mails(self):
-		
+
 		try:
 			self.__connect()
 		except ImapBoxConnectionError:

@@ -124,7 +124,6 @@
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="ssl_check">
-                    <property name="label" translatable="yes">checkbutton</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>

@@ -6,7 +6,7 @@ Based on imap.py:
     https://code.launchpad.net/cgmail
 
 """
-from cloudsn.providers.providersbase import ProviderUtilsBuilder
+from cloudsn.providers.providersbase import ProviderBase
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
 from cloudsn.core import config
@@ -16,13 +16,13 @@ import imaplib
 from email.Parser import HeaderParser
 import gtk
 
-class ImapProvider(ProviderUtilsBuilder):
+class ImapProvider(ProviderBase):
     __default = None
 
     def __init__(self):
         if ImapProvider.__default:
            raise ImapProvider.__default
-        ProviderUtilsBuilder.__init__(self, "Imap")
+        ProviderBase.__init__(self, "Imap")
         self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('imap.png'))
 
     @staticmethod
@@ -49,10 +49,11 @@ class ImapProvider(ProviderUtilsBuilder):
             labels = []
             labels += [l.strip() for l in account["labels"].split(",")]
             for l in labels:
-                all_inbox.append(ImapBox (account["host"], credentials.username,
-                    credentials.password, account["port"],
-                    utils.get_boolean(account["ssl"]),
-                    False, l))
+                if l != '':
+                    all_inbox.append(ImapBox (account["host"], credentials.username,
+                        credentials.password, account["port"],
+                        utils.get_boolean(account["ssl"]),
+                        False, l))
 
         for g in all_inbox:
             mails = g.get_mails()
@@ -65,41 +66,102 @@ class ImapProvider(ProviderUtilsBuilder):
 
         account.notifications = notifications
 
-    def get_dialog_def (self):
-        return [{"label": "Host", "type" : "str"},
-                {"label": "User", "type" : "str"},
-                {"label": "Password", "type" : "pwd"},
-                {"label": "Port", "type" : "str"},
-                {"label": "Use SSL", "type" : "check"}]
-
-    def populate_dialog(self, widget, acc):
-        credentials = acc.get_credentials_save()
-        self._set_text_value ("Host",acc["host"])
-        self._set_text_value ("User", credentials.username)
-        self._set_text_value ("Password", credentials.password)
-        self._set_text_value ("Port",str(acc["port"]))
-        self._set_check_value ("Use SSL",utils.get_boolean(acc["ssl"]))
+    def get_account_data_widget (self, account=None):
+        self.conf_widget = ImapPrefs(account, self)
+        return self.conf_widget.load()
 
     def set_account_data_from_widget(self, account_name, widget, account=None):
-        host = self._get_text_value ("Host")
-        username = self._get_text_value ("User")
-        password = self._get_text_value ("Password")
-        port = self._get_text_value ("Port")
-        ssl = self._get_check_value("Use SSL")
+        return self.conf_widget.set_account_data(account_name)
+
+class ImapPrefs:
+
+    def __init__(self, account, provider):
+        self.account = account
+        self.provider = provider
+
+    def load(self):
+        self.builder=gtk.Builder()
+        self.builder.set_translation_domain("cloudsn")
+        self.builder.add_from_file(config.add_data_prefix("imap-account.ui"))
+        self.box = self.builder.get_object("container")
+        self.labels_store = self.builder.get_object("labels_store")
+        self.labels_treeview = self.builder.get_object("labels_treeview")
+        self.builder.connect_signals(self)
+        if self.account:
+            credentials = self.account.get_credentials_save()
+            self.builder.get_object("host_entry").set_text(self.account["host"])
+            self.builder.get_object("username_entry").set_text(credentials.username)
+            self.builder.get_object("password_entry").set_text(credentials.password)
+            self.builder.get_object("port_entry").set_text(str(self.account["port"]))
+            self.builder.get_object("ssl_check").set_active(utils.get_boolean(self.account["ssl"]))
+            if 'labels' in self.account.get_properties():
+                labels = [l.strip() for l in self.account["labels"].split(",")]
+                for label in labels:
+                    if label != '':
+                        siter = self.labels_store.append()
+                        self.labels_store.set_value(siter, 0, label)
+        return self.box
+
+    def set_account_data (self, account_name):
+        host = self.builder.get_object("host_entry").get_text()
+        port = self.builder.get_object("port_entry").get_text()
+        username = self.builder.get_object("username_entry").get_text()
+        password = self.builder.get_object("password_entry").get_text()
+        ssl = self.builder.get_object("ssl_check").get_active()
         if host=='' or username=='' or password=='':
             raise Exception(_("The host, user name and the password are mandatory"))
 
-        #TODO check valid values
-        if not account:
-            props = {'name' : account_name, 'provider_name' : self.get_name(),
-                'host' : host, 'port' : port, 'ssl' : ssl}
-            account = self.load_account(props)
+        if not self.account:
+            props = {"name" : account_name, "provider_name" : self.provider.get_name(),
+                "host": host, "port": port, "ssl": ssl,
+                "labels" : self.__get_labels()}
+            self.account = AccountCacheMails(props, self.provider)
+            self.account.notifications = {}
         else:
-            account["host"] = host
-            account["port"] = int(port)
-            account["ssl"] = ssl
-        account.set_credentials(Credentials(username, password))
-        return account
+            self.account["host"] = host
+            self.account["port"] = port
+            self.account["ssl"] = ssl
+            self.account["labels"] = self.__get_labels()
+
+        credentials = Credentials(username, password)
+        self.account.set_credentials(credentials)
+
+        return self.account
+
+    def __get_labels(self):
+        labels = []
+        def add(model, path, siter, labels):
+            label = model.get_value(siter, 0)
+            labels.append(label)
+        self.labels_store.foreach(add, labels)
+        labels_string = ""
+        for label in labels:
+            labels_string += label + ","
+        return labels_string[:len(labels_string)-1]
+
+    def add_label_button_clicked_cb (self, widget, data=None):
+        siter = self.labels_store.append()
+        self.labels_store.set_value(siter, 0, _("Type the label name here"))
+        selection = self.labels_treeview.get_selection()
+        selection.select_iter(siter)
+        model, path_list = selection.get_selected_rows()
+        path = path_list[0]
+        self.labels_treeview.grab_focus()
+        self.labels_treeview.set_cursor(path,self.labels_treeview.get_column(0), True)
+
+
+    def del_label_button_clicked_cb (self, widget, data=None):
+        selection = self.labels_treeview.get_selection()
+        model, path_list = selection.get_selected_rows()
+        if path_list:
+            path = path_list[0]
+            siter = model.get_iter(path)
+            self.labels_store.remove(siter)
+
+    def label_cell_edited_cb(self, cell, path, new_text):
+        siter = self.labels_store.get_iter((int(path), ))
+        self.labels_store.set_value(siter, 0, new_text)
+
 
 class ImapBoxConnectionError(Exception): pass
 class ImapBoxAuthError(Exception): pass

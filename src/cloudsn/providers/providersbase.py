@@ -11,7 +11,7 @@ import urllib2
 
 class ProviderBase(Provider):
 
-    def __init__(self, name,id_provider = None):
+    def __init__(self, name, id_provider = None):
         Provider.__init__(self, name)
         self.id_provider = id_provider
         if not id_provider:
@@ -33,15 +33,15 @@ class ProviderGtkBuilder(ProviderBase):
         dialog = self._builder.get_object("main")
         self._builder.connect_signals(self)
         return dialog
-    
+
     def populate_dialog(self, builder, acc):
         raise NotImplementedError("The provider must implement this method")
-    
+
     def get_account_data_widget (self, account=None):
         box = self._create_dialog(parent).get_child()
         if account:
             self.populate_dialog(self.builder, account)
-        
+
     def _get_text_value (self, widget_name):
         return self._builder.get_object(widget_name).get_text()
 
@@ -57,25 +57,25 @@ class ProviderUtilsBuilder(ProviderBase):
 
     def get_dialog_def(self):
         raise NotImplementedError("The provider must implement this method")
-    
+
     def populate_dialog(widget, account):
         raise NotImplementedError("The provider must implement this method")
-    
+
     def get_account_data_widget (self, account=None):
         self.box = create_provider_widget (self.get_dialog_def())
         if account:
             self.populate_dialog(self.box, account)
         return self.box
-        
+
     def _get_text_value (self, label):
         return get_widget_by_label(self.box, label).get_text()
 
     def _set_text_value (self, label, value):
         return get_widget_by_label(self.box, label).set_text(value)
-    
+
     def _get_check_value (self, label):
         return get_widget_by_label(self.box, label).get_active()
 
     def _set_check_value (self, label, value):
         return get_widget_by_label(self.box, label).set_active(utils.get_boolean(value))
-        
+

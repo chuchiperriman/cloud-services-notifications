@@ -1,6 +1,7 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 from cloudsn.core import config, utils, keyring
 from cloudsn import logger
+from cloudsn.core.keyring import Credentials
 import gobject
 from datetime import datetime
 import gettext
@@ -169,7 +170,11 @@ class AccountManager (gobject.GObject):
                 try:
                     acc = provider.load_account (conf)
                     if acc.has_credentials():
-                        credentials = keyring.get_keyring().get_credentials(acc)
+                        credentials = Credentials("","")
+                        try:
+                            credentials = keyring.get_keyring().get_credentials(acc)
+                        except Exception, e:
+                            logger.exception("Cannot load credentials for account "+conf["name"]+": %s", e)
                         acc.set_credentials (credentials)
                     self.add_account(acc)
                 except Exception, e:

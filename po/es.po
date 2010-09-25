@@ -13,9 +13,10 @@ msgstr ""
 "Language-Team: es <chuchiperriman@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=es\n"
-"Content-Transfer-Encoding: UTF-8\n"
-"Plural-Forms: s\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
 
 #: ../src/cloudsn/core/account.py:18
 msgid ""

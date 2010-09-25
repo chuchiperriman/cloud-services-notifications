@@ -28,31 +28,15 @@ class GMailProvider(Provider):
         return GMailProvider.__default
 
     def load_account(self, props):
-        acc = AccountCacheMails(props, self)
-        
-        #Hack for gmail domains like mail.quiter.com
-        #TODO check this when the user change the configuration too
-        domain = None
-        try:
-            user, tmp, domain = acc.get_credentials().username.partition('@')
-        except Exception, e:
-            logger.exception("Cannot load credentials for account "+acc.get_name()+", continue: %s", e)
+        return GMailAccount(props, self)
 
-        if domain and domain != "gmail.com":
-            activate_url = "https://mail.google.com/a/" + domain
-        else:
-            activate_url = "https://mail.google.com/a/"
-            
-        acc.properties["activate_url"] = activate_url
-        return acc
-        
     def update_account (self, account):
         news = []
         notifications = {}
         labels = []
         if 'labels' in account.get_properties():
             labels += [l.strip() for l in account["labels"].split(",")]
-        
+
         if 'inbox' not in labels and '' not in labels:
             labels.append('inbox')
 
@@ -78,8 +62,8 @@ class GMailProvider(Provider):
         path = path_list[0]
         self.labels_treeview.grab_focus()
         self.labels_treeview.set_cursor(path,self.labels_treeview.get_column(0), True)
-        
-        
+
+
     def del_label_button_clicked_cb (self, widget, data=None):
         selection = self.labels_treeview.get_selection()
         model, path_list = selection.get_selected_rows()
@@ -87,11 +71,11 @@ class GMailProvider(Provider):
             path = path_list[0]
             siter = model.get_iter(path)
             self.labels_store.remove(siter)
-    
+
     def label_cell_edited_cb(self, cell, path, new_text):
         siter = self.labels_store.get_iter((int(path), ))
         self.labels_store.set_value(siter, 0, new_text)
-        
+
     def __get_labels(self):
         labels = []
         def add(model, path, siter, labels):
@@ -102,7 +86,7 @@ class GMailProvider(Provider):
         for label in labels:
             labels_string += label + ","
         return labels_string[:len(labels_string)-1]
-    
+
     def get_account_data_widget (self, account=None):
         self.builder=gtk.Builder()
         self.builder.set_translation_domain("cloudsn")
@@ -122,24 +106,45 @@ class GMailProvider(Provider):
                         siter = self.labels_store.append()
                         self.labels_store.set_value(siter, 0, label)
         return box
-        
+
     def set_account_data_from_widget(self, account_name, widget, account=None):
         username = self.builder.get_object("username_entry").get_text()
         password = self.builder.get_object("password_entry").get_text()
         if not account:
             props = {"name" : account_name, "provider_name" : self.get_name(),
-                "activate_url" : "http://gmail.google.com",
                 "labels" : self.__get_labels()}
             account = AccountCacheMails(props, self)
             account.notifications = {}
         else:
             account["labels"] = self.__get_labels()
-            
+
         credentials = Credentials(username, password)
         account.set_credentials(credentials)
-            
+
         return account
-        
+
+class GMailAccount(AccountCacheMails):
+    def __init__(self, properties, provider):
+        AccountCacheMails.__init__(self, properties, provider)
+
+    def activate (self):
+        #Hack for gmail domains like mail.quiter.com
+        #TODO check this when the user change the configuration too
+        domain = None
+        try:
+            user, tmp, domain = self.get_credentials().username.partition('@')
+        except Exception, e:
+            logger.exception("Cannot load credentials for account "+acc.get_name()+", continue: %s", e)
+
+        if domain and domain != "gmail.com":
+            activate_url = "https://mail.google.com/a/" + domain
+        else:
+            activate_url = "https://mail.google.com/a/"
+
+        self.properties["activate_url"] = activate_url
+
+        AccountCacheMails.activate(self)
+
 # Auxiliar structure
 class Mail:
     mail_id=""
@@ -150,7 +155,7 @@ class Mail:
 
 # Sax XML Handler
 class MailHandler(ContentHandler):
-	
+
 	# Tags
     TAG_FEED = "feed"
     TAG_FULLCOUNT = "fullcount"
@@ -201,7 +206,7 @@ class MailHandler(ContentHandler):
             temp_mail=self.entries.pop()
             temp_mail.title=temp_mail.title+content
             self.entries.append(temp_mail)
-		
+
         if (self.actual==self.PATH_ID):
             temp_mail=self.entries.pop()
             temp_mail.mail_id=temp_mail.mail_id+content
@@ -231,7 +236,7 @@ class MailHandler(ContentHandler):
 # The mail class
 class GmailAtom:
 
-    realm = "New mail feed" 
+    realm = "New mail feed"
     host = "https://mail.google.com"
     url = host + "/mail/feed/atom"
 
@@ -257,5 +262,4 @@ class GmailAtom:
 
     def get_mails (self):
         return self.m.entries
-
 

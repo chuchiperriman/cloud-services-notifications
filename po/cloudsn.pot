@@ -8,27 +8,26 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-25 02:26+0200\n"
+"POT-Creation-Date: 2010-09-26 22:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/cloudsn/core/account.py:18
+#: ../src/cloudsn/core/account.py:19
 msgid ""
 "Error loading account configuration: The name property is mandatory, check "
 "your configuration"
 msgstr ""
 
-#: ../src/cloudsn/core/account.py:64
+#: ../src/cloudsn/core/account.py:65
 #, python-format
 msgid "The credentials have not been loaded for the account %s"
 msgstr ""
 
-#: ../src/cloudsn/core/account.py:183
+#: ../src/cloudsn/core/account.py:188
 #, python-format
 msgid "The account %s already exists"
 msgstr ""
@@ -59,36 +58,36 @@ msgstr ""
 msgid "Can't find the cloudsn data directory"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:109
+#: ../src/cloudsn/ui/window.py:110
 msgid "Press to pause the checker daemon"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:113
+#: ../src/cloudsn/ui/window.py:114
 msgid "Press to start the checker daemon"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:198
+#: ../src/cloudsn/ui/window.py:204
 #, python-format
 msgid "Are you sure you want to delete the account %s?"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:275
+#: ../src/cloudsn/ui/window.py:281
 msgid "You must select a provider and fill the data"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:279 ../src/cloudsn/ui/window.py:338
+#: ../src/cloudsn/ui/window.py:285 ../src/cloudsn/ui/window.py:344
 msgid "You must fill the account name"
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:298
+#: ../src/cloudsn/ui/window.py:304
 msgid "Error adding a new account: "
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:351
+#: ../src/cloudsn/ui/window.py:357
 msgid "Error editing the account: "
 msgstr ""
 
-#: ../src/cloudsn/ui/window.py:379
+#: ../src/cloudsn/ui/window.py:385
 msgid "Error loading the provider: "
 msgstr ""
 
@@ -116,12 +115,12 @@ msgstr ""
 
 #: ../src/cloudsn/providers/greaderprovider.py:42
 #, python-format
-msgid "%d unread news"
+msgid "%d new unread news of %i"
 msgstr ""
 
 #: ../src/cloudsn/providers/greaderprovider.py:46
 #, python-format
-msgid "%d unread new"
+msgid "%d new unread new of %i"
 msgstr ""
 
 #: ../src/cloudsn/providers/greaderprovider.py:74
@@ -217,53 +216,57 @@ msgid "Password manager: "
 msgstr ""
 
 #: ../data/preferences.ui.h:19
-msgid "Preferences"
+msgid "Play sound on notifications"
 msgstr ""
 
 #: ../data/preferences.ui.h:20
-msgid "Provider: "
+msgid "Preferences"
 msgstr ""
 
 #: ../data/preferences.ui.h:21
-msgid "Run application on startup"
+msgid "Provider: "
 msgstr ""
 
 #: ../data/preferences.ui.h:22
-msgid "Show preferences"
+msgid "Run application on startup"
 msgstr ""
 
 #: ../data/preferences.ui.h:23
-msgid "Stop/Play"
+msgid "Show preferences"
 msgstr ""
 
 #: ../data/preferences.ui.h:24
-msgid "Update"
+msgid "Stop/Play"
 msgstr ""
 
 #: ../data/preferences.ui.h:25
-msgid "Update all accounts"
+msgid "Update"
 msgstr ""
 
 #: ../data/preferences.ui.h:26
-msgid "Update the selected account"
+msgid "Update all accounts"
 msgstr ""
 
 #: ../data/preferences.ui.h:27
-msgid "_Edit"
+msgid "Update the selected account"
 msgstr ""
 
 #: ../data/preferences.ui.h:28
-msgid "_File"
+msgid "_Edit"
 msgstr ""
 
 #: ../data/preferences.ui.h:29
-msgid "_Help"
+msgid "_File"
 msgstr ""
 
 #: ../data/preferences.ui.h:30
-msgid "toolbutton1"
+msgid "_Help"
 msgstr ""
 
 #: ../data/preferences.ui.h:31
+msgid "toolbutton1"
+msgstr ""
+
+#: ../data/preferences.ui.h:32
 msgid "toolbutton3"
 msgstr ""

@@ -5,6 +5,7 @@ import shutil
 import gettext
 from cloudsn.core import config, provider, account, indicator, keyring
 from cloudsn import logger
+import cloudsn.core.utils as coreutils
 from cloudsn.ui import about, utils
 
 STOP_RESPONSE = 1
@@ -123,6 +124,7 @@ class MainWindow:
         minutes=self.builder.get_object("minutes_spin")
         max_not_spin=self.builder.get_object("max_not_spin")
         startup_check = self.builder.get_object("startup_check")
+        enable_sounds_check = self.builder.get_object("enable_sounds_check")
 
         minutes.set_value (float(self.config.get_prefs()["minutes"]))
         max_not_spin.set_value (float(self.config.get_prefs()["max_notifications"]))
@@ -130,6 +132,9 @@ class MainWindow:
             startup_check.set_active(True)
         else:
             startup_check.set_active(False)
+
+        enable_sounds_check.set_active(coreutils.get_boolean(self.config.get_prefs()["enable_sounds"]))
+
         #Populate indicator combo
         i=0
         indicator_name = self.config.get_prefs()["indicator"]
@@ -151,6 +156,7 @@ class MainWindow:
         self.pref_dialog.hide()
         self.config.set_pref ("minutes", minutes.get_value())
         self.config.set_pref ("max_notifications", max_not_spin.get_value())
+        self.config.set_pref ("enable_sounds", enable_sounds_check.get_active())
         iiter = indicator_combo.get_active_iter()
         if iiter:
             self.config.set_pref ("indicator", indicators_store.get_value(iiter,0))

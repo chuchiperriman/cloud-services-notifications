@@ -32,7 +32,7 @@ if len(err_deps) > 0:
     for dep in err_deps:
         print '\t', dep
     sys.exit(1)
-    
+
 err_opts = []
 for dep in DEP_OPTIONALS:
     try:
@@ -56,6 +56,7 @@ DATA_FILES = [("share/cloudsn",
 #Icons and UI
 DATA_FILES += [("share/cloudsn", glob('data/*.png'))]
 DATA_FILES += [("share/cloudsn", glob('data/*.ui'))]
+DATA_FILES += [("share/cloudsn", glob('data/*.ogg'))]
 
 #desktop
 DATA_FILES += [('share/applications', ['data/cloudsn.desktop'])]
@@ -146,3 +147,4 @@ setup(name=const.APP_NAME,
       scripts=['cloudsn'],
       cmdclass={'build': BuildData, 'install_data': InstallData}
      )
+

@@ -55,7 +55,7 @@ def get_ensure_cache_path():
     if not os.path.exists (path):
         os.makedirs (path)
     return path
-        
+
 def add_apps_prefix(subpath):
     return join (get_apps_prefix(), subpath)
 
@@ -66,7 +66,7 @@ class SettingsController(gobject.GObject):
     __gtype_name__ = "SettingsController"
 
     # Section, Key, Value
-    __gsignals__ = { "value-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_BOOLEAN, 
+    __gsignals__ = { "value-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_BOOLEAN,
                                         (gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_PYOBJECT))}
 
     CONFIG_HOME = bd.xdg_config_home + '/cloud-services-notifications'
@@ -76,9 +76,11 @@ class SettingsController(gobject.GObject):
     __default_prefs = {
         "preferences" : {
             "minutes" : 10,
-            "indicator" : '', 
+            "indicator" : '',
             "max_notifications" : 3,
-            "keyring" : ''}
+            "keyring" : '',
+            "enable_sounds" : "True"
+            }
     }
 
     def __init__(self):
@@ -101,7 +103,7 @@ class SettingsController(gobject.GObject):
                 config.add_section (sec)
             for key, value in data.iteritems():
                 config.set(sec, key, value)
-        
+
     def config_to_dict (self, config):
         res = {}
         for sec in config.sections():
@@ -109,7 +111,7 @@ class SettingsController(gobject.GObject):
             for key in config.options(sec):
                 res[sec][key] = config.get(sec, key)
         return res
-    
+
     def ensure_config (self):
         if not os.path.exists (self.CONFIG_HOME):
             os.makedirs (self.CONFIG_HOME)
@@ -117,16 +119,16 @@ class SettingsController(gobject.GObject):
         if not os.path.exists (self.CONFIG_ACCOUNTS):
             f = open(self.CONFIG_ACCOUNTS, "w")
             f.close()
-            
+
         if not os.path.exists (self.CONFIG_PREFERENCES):
             f = open(self.CONFIG_PREFERENCES, "w")
             f.close()
-            
+
         self.config_prefs = ConfigParser.ConfigParser()
         self.config_prefs.read (self.CONFIG_PREFERENCES)
         self.config_accs = ConfigParser.ConfigParser()
         self.config_accs.read (self.CONFIG_ACCOUNTS)
-        
+
         def fill_parser(parser, defaults):
             for secname, section in defaults.iteritems():
                 if not parser.has_section(secname):
@@ -136,7 +138,7 @@ class SettingsController(gobject.GObject):
                         default = str(default)
                     if not parser.has_option(secname, key):
                         parser.set(secname, key, default)
-                    
+
         fill_parser(self.config_prefs, self.__default_prefs)
 
     def get_account_list (self):
@@ -153,9 +155,9 @@ class SettingsController(gobject.GObject):
                     res.append (sec)
             else:
                 logger.error("The account " + sec + " has not a provider_name property")
-                
+
         return res
-        
+
     def get_account_config (self, account_name):
         return self.accounts[account_name]
 
@@ -163,13 +165,13 @@ class SettingsController(gobject.GObject):
         if account.get_name() in self.accounts:
             del self.accounts[account.get_name()]
         self.accounts[account.get_name()] = account.get_properties()
-        
+
     def del_account_config (self, account_name):
         del self.accounts[account_name]
-        
+
     def get_prefs (self):
         return self.prefs["preferences"]
-        
+
     def set_pref (self, key, value):
         self.prefs["preferences"][key] = value
         self.emit("value-changed", "preferences", key, value)
@@ -197,5 +199,4 @@ def get_startup_file_dir():
 
 def get_startup_file_path():
     return abspath(join(get_startup_file_dir(), "cloudsn.desktop"))
-
 

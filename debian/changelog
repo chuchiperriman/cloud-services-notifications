@@ -1,3 +1,14 @@
+cloudsn (0.7.8) lucid; urgency=low
+
+  * Option to play a beep when show a notification
+  * Added IMAP labels support
+  * Fixed some bugs with gmail
+  * Created RSS cache to know what news has been readed
+  * New "clean" button to mark messages as read (only supported by rss provider)
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 26 Sep 2010 22:23:00 +0100
+
 cloudsn (0.7.6) lucid; urgency=low
 
   * Warning if gnome-keyring is not active

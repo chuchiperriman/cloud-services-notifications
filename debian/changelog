@@ -1,3 +1,14 @@
+cloudsn (0.8.0) maverick; urgency=low
+
+  * Option to play a beep when show a notification
+  * Added IMAP labels support
+  * Fixed some bugs with gmail
+  * Created RSS cache to know what news has been readed
+  * New "clean" button to mark messages as read (only supported by rss provider)
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  dom, 03 oct 2010 13:25:35 +0200
+
 cloudsn (0.7.8) lucid; urgency=low
 
   * Option to play a beep when show a notification

@@ -3,24 +3,24 @@
 
 pkgname=cloudsn
 pkgver=0.7.8
-pkgrel=1
+pkgrel=2
 pkgdesc="E-mail (pop3, gmail, imap), rss, and tweets notifier"
 arch=('any')
 url="http://chuchiperriman.github.com/cloud-services-notifications/"
 license=('GPL')
-depends=('python-notify' 'python-simplejson' 'pyxdg' 'pygtk' 'gnome-python' 'hicolor-icon-theme')
+depends=('python2' 'python-notify' 'python-simplejson' 'pyxdg' 'pygtk' 'gnome-python' 'hicolor-icon-theme')
 optdepends=('python-feedparser: RSS support'
 'python-gnomekeyring: Store passwords in gnome-keyring'
 'gstreamer0.10-python: To play sounds'
 )
 install=cloudsn.install
-source=($pkgname-$pkgver.tar.gz::http://github.com/chuchiperriman/cloud-services-notifications/tarball/$pkgver)
+source=($pkgname-$pkgver.tar.gz::https://github.com/chuchiperriman/cloud-services-notifications/tarball/$pkgver)
 md5sums=('2d3ce3bd8fb3cba3fb1a8be1e8ecf86d')
 
 build() {
   cd $srcdir/chuchiperriman-cloud-services-notifications-*
 
-  python setup.py install --root=$pkgdir --prefix=/usr
+  python2 setup.py install --root=$pkgdir --prefix=/usr
 }
 
 # vim:set ts=2 sw=2 et:

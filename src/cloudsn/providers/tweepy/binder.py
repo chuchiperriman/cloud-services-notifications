@@ -7,9 +7,9 @@ import urllib
 import time
 import re
 
-from tweepy.error import TweepError
-from tweepy.utils import convert_to_utf8_str
-from tweepy.models import Model
+from error import TweepError
+from utils import convert_to_utf8_str
+from models import Model
 
 re_path_template = re.compile('{\w+}')
 

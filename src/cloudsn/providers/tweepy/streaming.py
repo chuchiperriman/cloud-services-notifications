@@ -8,11 +8,11 @@ from threading import Thread
 from time import sleep
 import urllib
 
-from tweepy.models import Status
-from tweepy.api import API
-from tweepy.error import TweepError
+from models import Status
+from api import API
+from error import TweepError
 
-from tweepy.utils import import_simplejson
+from utils import import_simplejson
 json = import_simplejson()
 
 STREAM_VERSION = 1

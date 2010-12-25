@@ -1,2 +1,2 @@
-PYTHONPATH=$PYTHONPATH:../src/ python ./twitteroauth.py
+PYTHONPATH=$PYTHONPATH:../src/ python2 ./twitteroauth.py
 

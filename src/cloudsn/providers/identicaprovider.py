@@ -2,7 +2,6 @@ import tweepy
 from providersbase import ProviderUtilsBuilder
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
-from .twitterprovider import TwitterProvider
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
@@ -12,10 +11,9 @@ class IdenticaProvider(ProviderUtilsBuilder):
 
     __default = None
 
-    def __init__(self, name = "Identi.ca", id_provider = None, activate_url = "http://twitter.com",
-                api_url = "http://twitter.com"):
-        ProviderUtilsBuilder.__init__(self, "Identi.ca", "identica")
-        self.activate_url = "http://identi.ca"
+    def __init__(self, name = "Identi.ca", id_provider = "identica", activate_url = "http://identi.ca"):
+        ProviderUtilsBuilder.__init__(self, name, id_provider)
+        self.activate_url = activate_url
         
     @staticmethod
     def get_instance():
@@ -53,16 +51,20 @@ class IdenticaProvider(ProviderUtilsBuilder):
 
         return account
 
-    def update_account (self, account):
+    def get_api(self, account):
         credentials = account.get_credentials()
         auth = tweepy.BasicAuthHandler(credentials.username, credentials.password)
         api = tweepy.API(auth, "identi.ca",api_root="/api")
+        return api
+        
+    def update_account (self, account):
+        api = self.get_api(account)
         
         since_id = None
         if account.last_id != -1:
             since_id = account.last_id
 
-        messages = tweets = api.public_timeline()
+        messages = api.home_timeline()
 
         if len(messages) < 1:
             account.new_unread = []

@@ -21,7 +21,8 @@ def main():
     auth.get_access_token(verifier)
     ACCESS_KEY = auth.access_token.key
     ACCESS_SECRET = auth.access_token.secret
-    
+    print "ACCESS_KEY: " + ACCESS_KEY
+    print "ACCESS_SECRET: " + ACCESS_SECRET
     #Access to twitter with the access keys
     auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
     auth.set_access_token(ACCESS_KEY, ACCESS_SECRET)

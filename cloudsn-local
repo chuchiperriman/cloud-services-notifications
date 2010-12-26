@@ -1,8 +1,10 @@
 #!/usr/bin/python
+import os, sys
+srcpath = os.path.abspath("src")
+sys.path.insert(0,srcpath)
 
 from cloudsn import cloudsn
 
 if __name__ == "__main__":
     cloudsn.start()
-
-
+    

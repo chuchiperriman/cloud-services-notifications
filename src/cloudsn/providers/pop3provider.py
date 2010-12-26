@@ -9,7 +9,6 @@ Based on pop3.py:
 from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
-from cloudsn.core import config
 from cloudsn.core import utils
 from cloudsn import logger
 

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkTable" id="container">
+    <property name="visible">True</property>
+    <property name="n_rows">2</property>
+    <property name="n_columns">2</property>
+    <child>
+      <object class="GtkLabel" id="label1">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Set permissions on Twitter:</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLinkButton" id="permission_button">
+        <property name="label" translatable="yes">Go to Twitter</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="has_tooltip">True</property>
+        <property name="relief">none</property>
+        <property name="uri">http://glade.gnome.org</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="right_attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label2">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">Set the Twitter PIN:</property>
+      </object>
+      <packing>
+        <property name="top_attach">1</property>
+        <property name="bottom_attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="pin_entry">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="invisible_char">&#x2022;</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="right_attach">2</property>
+        <property name="top_attach">1</property>
+        <property name="bottom_attach">2</property>
+      </packing>
+    </child>
+  </object>
+</interface>

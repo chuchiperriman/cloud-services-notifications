@@ -9,8 +9,12 @@ when new messages are detected.
 
 Currently the application has these providers implemented:
 
-* Gmail: Check for new e-mails in the inbox
+* Gmail: Check for new e-mails in the inbox or configured folders
 * Google Reader: Check for unread feeds
+* Twitter: Show new tweets
+* Identi.ca: Show new messages
+* RSS: Show new posts
+* IMAP: Check for new e-mails in the inbox or configured folders
 
 The application has (or will have) an MVC model to support new providers
 like pop3, imap, tweeter, facebook, etc. The application will have

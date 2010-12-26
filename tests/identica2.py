@@ -16,8 +16,8 @@ def main():
     auth = tweepy.BasicAuthHandler("chuchiperriman", password)
     api = tweepy.API(auth, "identi.ca",api_root="/api")
     #api.update_status("Testing cloudsn with tweety")
-    public_tweets = api.public_timeline()
-    for tweet in public_tweets:
+    tweets = api.home_timeline()
+    for tweet in tweets:
         print tweet.text
         
 if __name__ == '__main__':

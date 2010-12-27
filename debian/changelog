@@ -1,3 +1,12 @@
+cloudsn (0.8.2) maverick; urgency=low
+
+  * Added Tweepy library
+  * Implemented Twitter oauth provider with tweepy
+  * Identi.ca provider uses tweepy
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 27 dec 2010 01:22:35 +0200
+ 
 cloudsn (0.8.0) maverick; urgency=low
 
   * Option to play a beep when show a notification

@@ -2,7 +2,7 @@ from identicaprovider import IdenticaProvider
 from cloudsn.core.keyring import Credentials
 from cloudsn.core.account import AccountCacheMails
 from cloudsn.core import config
-import tweepy
+from cloudsn.providers import tweepy
 import gtk
 
 CONSUMER_KEY = 'uRPdgq7wqkiKmWzs9rneJA'

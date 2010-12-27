@@ -62,7 +62,7 @@ class IdenticaProvider(ProviderUtilsBuilder):
         api = self.get_api(account)
         
         since_id = None
-        if account["since_id"] != -1:
+        if "since_id" in account and account["since_id"] != -1:
             since_id = account["since_id"]
 
         messages = api.home_timeline(since_id=since_id)

@@ -142,7 +142,7 @@ setup(name=const.APP_NAME,
       url='http://github.com/chuchiperriman',
       package_dir = {'' : 'src'},
       packages=['cloudsn', 'cloudsn.core', 'cloudsn.ui', 'cloudsn.ui.indicators',
-	'cloudsn.providers', 'cloudsn.core.keyrings'],
+      'cloudsn.providers', 'cloudsn.providers.tweepy', 'cloudsn.core.keyrings'],
       data_files = DATA_FILES,
       scripts=['cloudsn'],
       cmdclass={'build': BuildData, 'install_data': InstallData}

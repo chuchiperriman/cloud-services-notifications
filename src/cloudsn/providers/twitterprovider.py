@@ -1,5 +1,6 @@
 from identicaprovider import IdenticaProvider
 from cloudsn.core.keyring import Credentials
+from cloudsn.core.account import AccountCacheMails
 from cloudsn.core import config
 import tweepy
 import gtk

@@ -4,7 +4,7 @@ from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
-from cloudsn.core import config
+import gobject
 import gtk
 
 class IdenticaProvider(ProviderUtilsBuilder):
@@ -24,7 +24,8 @@ class IdenticaProvider(ProviderUtilsBuilder):
     def load_account(self, props):
         acc = IdenticaAccount(props, self)
         acc.properties["activate_url"] = self.activate_url
-        acc.last_id = -1
+        if not "since_id" in acc:
+            acc["since_id"] = -1
         return acc
 
     def get_dialog_def (self):
@@ -61,17 +62,17 @@ class IdenticaProvider(ProviderUtilsBuilder):
         api = self.get_api(account)
         
         since_id = None
-        if account.last_id != -1:
-            since_id = account.last_id
+        if "since_id" in account and account["since_id"] != -1:
+            since_id = account["since_id"]
 
-        messages = api.home_timeline()
+        messages = api.home_timeline(since_id=since_id)
 
         if len(messages) < 1:
             account.new_unread = []
             return
 
         news = []
-        if account.last_id != -1:
+        if since_id:
             for m in messages:
                 if m.id not in account.notifications:
                     account.notifications[m.id] = m.id
@@ -85,7 +86,12 @@ class IdenticaProvider(ProviderUtilsBuilder):
                          self.get_message_icon(messages[0])))
 
         account.new_unread = news;
-        account.last_id = messages[0].id
+        account["since_id"] = messages[0].id
+        gobject.idle_add(self.__save_account, account)
+        
+    def __save_account(self, account):
+        AccountManager.get_instance().save_account(account)
+        return False
         
     def get_message_icon(self,m):
         icon = None

@@ -1,3 +1,10 @@
+cloudsn (0.8.6) maverick; urgency=low
+
+  * Reimplemented pop3 provider. Now it is fast!
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 02 jan 2011 10:30:35 +0200
+ 
 cloudsn (0.8.4) maverick; urgency=low
 
   * Fixed critical packaging errors!

@@ -2,8 +2,8 @@
 # Maintainer: Jesús Barbero Rodríguez <chuchiperriman@gmail.com>
 
 pkgname=cloudsn
-pkgver=0.7.8
-pkgrel=2
+pkgver=0.8.6
+pkgrel=1
 pkgdesc="E-mail (pop3, gmail, imap), rss, and tweets notifier"
 arch=('any')
 url="http://chuchiperriman.github.com/cloud-services-notifications/"
@@ -15,7 +15,7 @@ optdepends=('python-feedparser: RSS support'
 )
 install=cloudsn.install
 source=($pkgname-$pkgver.tar.gz::https://github.com/chuchiperriman/cloud-services-notifications/tarball/$pkgver)
-md5sums=('2d3ce3bd8fb3cba3fb1a8be1e8ecf86d')
+md5sums=('d879114b5cbfb8827a2267d6b06bb5b1')
 
 build() {
   cd $srcdir/chuchiperriman-cloud-services-notifications-*

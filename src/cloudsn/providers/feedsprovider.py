@@ -153,7 +153,6 @@ class FeedCache:
                 self.last_num = feed_num
 
     def save(self):
-        #TODO Only write the last 200 feeds
         rows = sorted(self.feeds.values(), key=lambda x: int(x.feed_num))
         num = len(rows)
         if num > 300:

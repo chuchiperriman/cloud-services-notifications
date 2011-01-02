@@ -1,15 +1,9 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
-"""
-Based on pop3.py:
-
-    Copyright 2009-2010 cGmail Core Team
-    https://code.launchpad.net/cgmail
-    
-"""
 from cloudsn.providers.providersbase import ProviderUtilsBuilder
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
 from cloudsn.core import utils
+from cloudsn.core.config import SettingsController
 from cloudsn import logger
 
 import poplib
@@ -25,6 +19,7 @@ class Pop3Provider(ProviderUtilsBuilder):
         if Pop3Provider.__default:
            raise Pop3Provider.__default
         ProviderUtilsBuilder.__init__(self, "Pop3")
+        self.parser = EmailParser()
 
     @staticmethod
     def get_instance():
@@ -41,19 +36,36 @@ class Pop3Provider(ProviderUtilsBuilder):
         return acc
             
     def update_account (self, account):
-        credentials = account.get_credentials()
-        g = PopBox (credentials.username, credentials.password, 
-            account["host"], account["port"], 
-            utils.get_boolean(account["ssl"]))
+    
+        mbox = self.__connect(account)
+        
+        messages, new_messages = self.__get_mails(mbox, account)
+        
+        num_messages = len(new_messages)
+        max_not = float(SettingsController.get_instance().get_prefs()["max_notifications"])
+        
         account.new_unread = []
-        notifications = {}
-        mails = g.get_mails()
-        for mail_id, sub, fr in mails:
-            notifications[mail_id] = sub
-            if mail_id not in account.notifications:
+        for mail_id, mail_num in new_messages:
+            account.notifications[mail_id] = mail_num
+            #We only get the e-mail content if all will be shown
+            if num_messages <= max_not:
+                msgNum, sub, fr = self.__get_mail_content(mbox, mail_num)
+                #Store the mail_id, not the msgNum
                 n = Notification(mail_id, sub, fr)
-                account.new_unread.append (n)
-        account.notifications = notifications
+            else:
+                n = Notification(mail_id, "New mail", "unknow")
+            account.new_unread.append (n)
+        
+        #Remove old unread mails not in the current list of unread mails
+        #TODO Do this better!!!!!
+        only_current_ids = []
+        for mail_id, mail_num in messages:
+            only_current_ids.append(mail_id)
+        for nid in account.notifications.keys():
+            if nid not in only_current_ids:
+                del account.notifications[nid]
+        
+        mbox.quit()
 
     def get_dialog_def (self):
         return [{"label": "Host", "type" : "str"},
@@ -90,63 +102,48 @@ class Pop3Provider(ProviderUtilsBuilder):
             
         account.set_credentials(Credentials(username, password))
         return account
-
-class PopBoxConnectionError(Exception): pass
-class PopBoxAuthError(Exception): pass
-
-class PopBox:
-    def __init__(self, user, password, host, port = 110, ssl = False):
-        self.user = user
-        self.password = password
-        self.host = host
-        self.port = int(port)
-        self.ssl = ssl
-
-        self.mbox = None
-        self.parser = EmailParser()
-
-    def __connect(self):
-        try:
-            if not self.ssl:
-                self.mbox = poplib.POP3(self.host, self.port)
-            else:
-                self.mbox = poplib.POP3_SSL(self.host, self.port)
-        except Exception, e:
-            logger.error("Error connecting the POP3 account: " + str(e))
-            raise PopBoxConnectionError()
-
-        try:
-            self.mbox.user(self.user)
-            self.mbox.pass_(self.password)
-        except poplib.error_proto, e:
-            logger.error("Auth Error connecting the POP3 account: " + str(e))
-            raise PopBoxAuthError()
-
-    def get_mails(self):
-        self.__connect()
-
+    
+    #************** email methods **************
+    def __connect(self, account):
+        credentials = account.get_credentials()
+        port = 110
+        if "port" in account:
+            port = int(float(account["port"]))
+            
+        if not utils.get_boolean(account["ssl"]):
+            mbox = poplib.POP3(account["host"], port)
+        else:
+            mbox = poplib.POP3_SSL(account["host"], port)
+        mbox.user(credentials.username)
+        mbox.pass_(credentials.password)
+        
+        return mbox
+        
+    def __get_mails(self, mbox, account):
+        """ Returns:
+            [list of [msgId, msgNum] all mails, list of [msgId, msgNum] new mails"""
+        
+        new_messages = []
         messages = []
-        logger.debug("Starting reading POP messages")
-        msgs = self.mbox.list()[1]
-        logger.debug("POP messages readed: %i" % (len(msgs)))
-        for msg in msgs:
-            try:
-                msgNum = int(msg.split(" ")[0])
-                msgSize = int(msg.split(" ")[1])
+        ids = mbox.uidl()
+        max_not = float(SettingsController.get_instance().get_prefs()["max_notifications"])
+        for id_pop in ids[1]:
+            msgNum = int(id_pop.split(" ")[0])
+            msgId = id_pop.split(" ")[1]
+            
+            messages.append( [msgId, msgNum] )
+            if msgId not in account.notifications:
+                new_messages.append( [msgId, msgNum] )
 
-                # retrieve only the header
-                st = "\n".join(self.mbox.top(msgNum, 0)[1])
-                #print st
-                #print "----------------------------------------"
-                msg = self.parser.parsestr(st, True) # header only
-                sub = utils.mime_decode(msg.get("Subject"))
-                msgid = msg.get("Message-Id")
-                if not msgid:
-                    msgid = hash(msg.get("Received") + sub)
-                fr = utils.mime_decode(msg.get("From"))
-                messages.append( [msgid, sub, fr] )
-            except Exception, e:
-                logger.error("Error reading pop3 box: " + str(e))
-		
-        self.mbox.quit()
-        return messages
+        return [messages, new_messages]
+        
+    def __get_mail_content(self, mbox, msgNum):
+        # retrieve only the header
+        st = "\n".join(mbox.top(msgNum, 0)[1])
+        #print st
+        #print "----------------------------------------"
+        msg = self.parser.parsestr(st, True) # header only
+        sub = utils.mime_decode(msg.get("Subject"))
+        fr = utils.mime_decode(msg.get("From"))
+        return [msgNum, sub, fr]
+

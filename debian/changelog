@@ -1,17 +1,26 @@
+cloudsn (0.8.8) natty; urgency=low
+
+  * Natty package
+  * Better default values for Ubuntu
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 27 jun 2011 10:15:35 +0200
+
+
 cloudsn (0.8.6) maverick; urgency=low
 
   * Reimplemented pop3 provider. Now it is fast!
 
 
  -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 02 jan 2011 10:30:35 +0200
- 
+
 cloudsn (0.8.4) maverick; urgency=low
 
   * Fixed critical packaging errors!
 
 
  -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Thu, 28 dec 2010 00:22:35 +0200
- 
+
 cloudsn (0.8.2) maverick; urgency=low
 
   * Added Tweepy library
@@ -20,7 +29,7 @@ cloudsn (0.8.2) maverick; urgency=low
 
 
  -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 27 dec 2010 01:22:35 +0200
- 
+
 cloudsn (0.8.0) maverick; urgency=low
 
   * Option to play a beep when show a notification
@@ -30,7 +39,7 @@ cloudsn (0.8.0) maverick; urgency=low
   * New "clean" button to mark messages as read (only supported by rss provider)
 
 
- -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  dom, 03 oct 2010 13:25:35 +0200
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Sun, 03 oct 2010 13:25:35 +0200
 
 cloudsn (0.7.8) lucid; urgency=low
 

@@ -60,8 +60,8 @@ class KeyringManager:
                 logger.info("Current keyring: %s " % (self.current.get_name()))
                 break
         if not self.current:
-            #Plain by default
-            self.current = self.managers[0]
+            #The most secure by default
+            self.current = self.managers[-1]
             logger.info("No keyring configured, using %s " % (self.current.get_name()))
 
     @staticmethod

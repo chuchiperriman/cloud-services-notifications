@@ -1,0 +1,284 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: cloud-services-notifications\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-09-26 22:11+0200\n"
+"PO-Revision-Date: 2011-05-28 19:37+0100\n"
+"Last-Translator: Ander Martínez <ander.basaundi@gmail.com>\n"
+"Language-Team: ander.basaundi <ander.basaundi@gmail.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Basque\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: SPAIN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ../src/cloudsn/core/account.py:19
+msgid ""
+"Error loading account configuration: The name property is mandatory, check "
+"your configuration"
+msgstr ""
+"Errorea kontuaren konfiguraketa kargatzean: Izen propietatea derrigorrezkoa "
+"da, zure konfiguraketa berrikusi."
+
+#: ../src/cloudsn/core/account.py:65
+#, python-format
+msgid "The credentials have not been loaded for the account %s"
+msgstr "%s kontuaren kredentzialeak ez dira kargatu"
+
+#: ../src/cloudsn/core/account.py:188
+#, python-format
+msgid "The account %s already exists"
+msgstr "%s kontua existitzen da dagoeneko"
+
+#: ../src/cloudsn/core/controller.py:35
+msgid "Another instance is already running, close it first."
+msgstr "Beste instantzia bat martxan da, itxi ezazu lehenengo."
+
+#: ../src/cloudsn/core/controller.py:180
+msgid "New messages: "
+msgstr "Mezu berriak:"
+
+#: ../src/cloudsn/core/controller.py:200
+#, python-format
+msgid "Error checking account %s"
+msgstr "Errorea %s kontua begiratzean"
+
+#: ../src/cloudsn/core/controller.py:227
+msgid "Application Error"
+msgstr "Aplikazioaren Errorea"
+
+#: ../src/cloudsn/core/controller.py:228
+#, python-format
+msgid "Error starting the application: %s"
+msgstr "Hurrengo aplikazioa abiarazten errorea: %s"
+
+#: ../src/cloudsn/core/config.py:30
+msgid "Can't find the cloudsn data directory"
+msgstr "Ezin da cloudsn-ren datuen katalogoa topatu"
+
+#: ../src/cloudsn/ui/window.py:110
+msgid "Press to pause the checker daemon"
+msgstr "Zapaldu daemon begiralea gelditzeko"
+
+#: ../src/cloudsn/ui/window.py:114
+msgid "Press to start the checker daemon"
+msgstr "Zapaldu daemon begiralea martxan jartzeko"
+
+#: ../src/cloudsn/ui/window.py:204
+#, python-format
+msgid "Are you sure you want to delete the account %s?"
+msgstr "Ziur al zaude kontu hau ezabatu nahi duzula?"
+
+#: ../src/cloudsn/ui/window.py:281
+msgid "You must select a provider and fill the data"
+msgstr "Hornitzaile bat aukeratu behar duzu eta datuak bete"
+
+#: ../src/cloudsn/ui/window.py:285 ../src/cloudsn/ui/window.py:344
+msgid "You must fill the account name"
+msgstr "Kontuaren izena bete behar duzu"
+
+#: ../src/cloudsn/ui/window.py:304
+msgid "Error adding a new account: "
+msgstr "Errorea kontu berria gehitzerakoan:"
+
+#: ../src/cloudsn/ui/window.py:357
+msgid "Error editing the account: "
+msgstr "Errorea kontua editatzen:"
+
+#: ../src/cloudsn/ui/window.py:385
+msgid "Error loading the provider: "
+msgstr "Errorea hornitzailea kargatzen:"
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:32
+msgid "Status Icon"
+msgstr "Egoera Ikonoa"
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:47
+msgid "Update accounts"
+msgstr "Kontuak eguneratu"
+
+#: ../src/cloudsn/ui/authwarning.py:28
+msgid ""
+"<b>Security warning</b>\n"
+"\n"
+"You have gnome-keyring installed but your are using plain text encryption\n"
+"to store your passwords. You can select the encryption method\n"
+"in the preferences dialog.\n"
+"\n"
+msgstr ""
+"<b>Segurtasun abisua</b>\n"
+"\n"
+"gnome-keyring instalatuta duzu baina testu arrunta erabiltzen ari zara\n"
+"pasahitzak gordetzeko. Enkriptaketa metodoa aukeratu dezakezu\n"
+"hobespenen elkarrizketa leihoan.\n"
+"\n"
+
+#: ../src/cloudsn/ui/authwarning.py:41
+msgid "Don't ask me again"
+msgstr "Ez galdetu berriz"
+
+#: ../src/cloudsn/providers/greaderprovider.py:42
+#, python-format
+msgid "%d new unread news of %i"
+msgstr "%d berri irakurtzeke %i kontuan"
+
+#: ../src/cloudsn/providers/greaderprovider.py:46
+#, python-format
+msgid "%d new unread new of %i"
+msgstr "%d posta irakurtzeke %i kontuan"
+
+#: ../src/cloudsn/providers/greaderprovider.py:74
+msgid "The user name and the password are mandatory"
+msgstr "Erabiltzaile izena eta pasahitza beharrezkoak dira"
+
+#: ../data/gmail-account.ui.h:1
+msgid "<b>Account information</b>"
+msgstr "<b>Kontuaren informazioa</b>"
+
+#: ../data/gmail-account.ui.h:2
+msgid "<b>Labels to check</b>"
+msgstr "<b>Begiratu behar diren etiketak</b>"
+
+#: ../data/gmail-account.ui.h:3
+msgid "Password: "
+msgstr "Pasahitza:"
+
+#: ../data/gmail-account.ui.h:4
+msgid "Username: "
+msgstr "Erabiltzailea:"
+
+#: ../data/preferences.ui.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>Kontu berria</b>"
+
+#: ../data/preferences.ui.h:2
+msgid "Account data"
+msgstr "Kontuaren datuak"
+
+#: ../data/preferences.ui.h:3
+msgid "Account name: "
+msgstr "Kontuaren izena:"
+
+#: ../data/preferences.ui.h:4
+msgid "Add a new account"
+msgstr "Kontu berria gehitu"
+
+#: ../data/preferences.ui.h:5
+msgid "Advanced"
+msgstr "Aurreratua"
+
+#: ../data/preferences.ui.h:6
+msgid "By account: "
+msgstr "Kontuaren arabera:"
+
+#: ../data/preferences.ui.h:7
+msgid "Check interval"
+msgstr "Begiraden arteko tartea"
+
+#: ../data/preferences.ui.h:8
+msgid "Command:"
+msgstr "Agindua:"
+
+#: ../data/preferences.ui.h:9
+msgid "Delete the selected account"
+msgstr "Ezabatu aukeratutako kontua"
+
+#: ../data/preferences.ui.h:10
+msgid "Edit the selected account"
+msgstr "Editatu aukeratutako kontua"
+
+#: ../data/preferences.ui.h:11
+msgid "Execute command when the account is opened"
+msgstr "Kontua irekita dagoenean agindua exekutatu"
+
+#: ../data/preferences.ui.h:12
+msgid "General"
+msgstr "Orokorra"
+
+#: ../data/preferences.ui.h:13
+msgid "Indicate status with: "
+msgstr "Egoera hurrengoaz adierazi:"
+
+#: ../data/preferences.ui.h:14
+msgid "Mark all messages as read"
+msgstr "Mezu guztiak irakurritzat eman"
+
+#: ../data/preferences.ui.h:15
+msgid "Maximum notifications"
+msgstr "Gehieneko jakinarazpen kopurua"
+
+#: ../data/preferences.ui.h:16
+msgid "Minutes: "
+msgstr "Minutuak"
+
+#: ../data/preferences.ui.h:17
+msgid "New Account"
+msgstr "Kontu berria"
+
+#: ../data/preferences.ui.h:18
+msgid "Password manager: "
+msgstr "Pasahitz kudeatzailea:"
+
+#: ../data/preferences.ui.h:19
+msgid "Play sound on notifications"
+msgstr "Soinua erreproduzitu jakinarazpenekin"
+
+#: ../data/preferences.ui.h:20
+msgid "Preferences"
+msgstr "Hobespenak"
+
+#: ../data/preferences.ui.h:21
+msgid "Provider: "
+msgstr "Hornitzailea:"
+
+#: ../data/preferences.ui.h:22
+msgid "Run application on startup"
+msgstr "Aplikazioa martxan jarri abiaraztean"
+
+#: ../data/preferences.ui.h:23
+msgid "Show preferences"
+msgstr "Hobespenak erakutsi"
+
+#: ../data/preferences.ui.h:24
+msgid "Stop/Play"
+msgstr "Gelditu/Erreproduzitu"
+
+#: ../data/preferences.ui.h:25
+msgid "Update"
+msgstr "Eguneratu"
+
+#: ../data/preferences.ui.h:26
+msgid "Update all accounts"
+msgstr "Eguneratu kontu guztiak"
+
+#: ../data/preferences.ui.h:27
+msgid "Update the selected account"
+msgstr "Eguneratu aukeratutako kontua"
+
+#: ../data/preferences.ui.h:28
+msgid "_Edit"
+msgstr "_Editatu"
+
+#: ../data/preferences.ui.h:29
+msgid "_File"
+msgstr "_Fitxategia"
+
+#: ../data/preferences.ui.h:30
+msgid "_Help"
+msgstr "_Laguntza"
+
+#: ../data/preferences.ui.h:31
+msgid "toolbutton1"
+msgstr "toolbutton1"
+
+#: ../data/preferences.ui.h:32
+msgid "toolbutton3"
+msgstr "toolbutton3"

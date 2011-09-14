@@ -1,0 +1,281 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cloudsn\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-03 18:17+0900\n"
+"PO-Revision-Date: 2011-09-03 23:12+0900\n"
+"Last-Translator: Yu Inao <lagfer@youck.org>\n"
+"Language-Team: Japanese <lagfer@youck.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: JAPAN\n"
+
+#: ../src/cloudsn/core/account.py:19
+msgid "Error loading account configuration: The name property is mandatory, check your configuration"
+msgstr "アカウント設定読み込みエラー: 名前プロパティは必須です。設定を確認して下さい"
+
+#: ../src/cloudsn/core/account.py:65
+#, python-format
+msgid "The credentials have not been loaded for the account %s"
+msgstr "アカウント %s 用の証明書が読み込まれていません"
+
+#: ../src/cloudsn/core/account.py:188
+#, python-format
+msgid "The account %s already exists"
+msgstr "アカウント %s は既に存在します"
+
+#: ../src/cloudsn/core/controller.py:35
+msgid "Another instance is already running, close it first."
+msgstr "別のインスタンスが起動しています。まずそちらを終了して下さい。"
+
+#: ../src/cloudsn/core/controller.py:180
+msgid "New messages: "
+msgstr "新しいメッセージ: "
+
+#: ../src/cloudsn/core/controller.py:200
+#, python-format
+msgid "Error checking account %s"
+msgstr "エラー確認アカウント %s"
+
+#: ../src/cloudsn/core/controller.py:227
+msgid "Application Error"
+msgstr "アプリケーションエラー"
+
+#: ../src/cloudsn/core/controller.py:228
+#, python-format
+msgid "Error starting the application: %s"
+msgstr "アプリケーション起動エラー: %s"
+
+#: ../src/cloudsn/core/config.py:30
+msgid "Can't find the cloudsn data directory"
+msgstr "cloudsn データディレクトリが見つかりません"
+
+#: ../src/cloudsn/ui/window.py:110
+msgid "Press to pause the checker daemon"
+msgstr "確認用デーモンの一時停止"
+
+#: ../src/cloudsn/ui/window.py:114
+msgid "Press to start the checker daemon"
+msgstr "確認用デーモンの起動"
+
+#: ../src/cloudsn/ui/window.py:204
+#, python-format
+msgid "Are you sure you want to delete the account %s?"
+msgstr "アカウント %s を削除します。よろしいですか。"
+
+#: ../src/cloudsn/ui/window.py:281
+msgid "You must select a provider and fill the data"
+msgstr "プロバイダを選択し項目を埋めて下さい"
+
+#: ../src/cloudsn/ui/window.py:285
+#: ../src/cloudsn/ui/window.py:344
+msgid "You must fill the account name"
+msgstr "アカウント名は必須です"
+
+#: ../src/cloudsn/ui/window.py:304
+msgid "Error adding a new account: "
+msgstr "新アカウント追加エラー: "
+
+#: ../src/cloudsn/ui/window.py:357
+msgid "Error editing the account: "
+msgstr "アカウント編集エラー: "
+
+#: ../src/cloudsn/ui/window.py:385
+msgid "Error loading the provider: "
+msgstr "プロバイダ読込みエラー: "
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:32
+msgid "Status Icon"
+msgstr "ステータスアイコン"
+
+#: ../src/cloudsn/ui/indicators/statusicon.py:47
+msgid "Update accounts"
+msgstr "アカウント更新"
+
+#: ../src/cloudsn/ui/authwarning.py:28
+msgid ""
+"<b>Security warning</b>\n"
+"\n"
+"You have gnome-keyring installed but your are using plain text encryption\n"
+"to store your passwords. You can select the encryption method\n"
+"in the preferences dialog.\n"
+"\n"
+msgstr ""
+"<b>セキュリティ警告</b>\n"
+"\n"
+"あなたのパスワードを記録するのに gnome-keyring のインストールが必要ですが\n"
+"プレーンテキスト暗号化が使用されています。暗号化方法は環境設定ダイアログで\n"
+"選択出来ます。\n"
+"\n"
+
+#: ../src/cloudsn/ui/authwarning.py:41
+msgid "Don't ask me again"
+msgstr "以降確認しない"
+
+#: ../src/cloudsn/providers/greaderprovider.py:41
+#, python-format
+msgid "%d new unread news of %i"
+msgstr "新未読 %d 件 / %i 件"
+
+#: ../src/cloudsn/providers/greaderprovider.py:45
+#, python-format
+msgid "%d new unread new of %i"
+msgstr "新未読 %d 件 / %i 件"
+
+#: ../src/cloudsn/providers/greaderprovider.py:73
+msgid "The user name and the password are mandatory"
+msgstr "ユーザー名とパスワードは必須です"
+
+#: ../data/gmail-account.ui.h:1
+msgid "<b>Account information</b>"
+msgstr "<b>アカウント情報</b>"
+
+#: ../data/gmail-account.ui.h:2
+msgid "<b>Labels to check</b>"
+msgstr "<b>確認対象ラベル</b>"
+
+#: ../data/gmail-account.ui.h:3
+msgid "Password: "
+msgstr "パスワード: "
+
+#: ../data/gmail-account.ui.h:4
+msgid "Username: "
+msgstr "ユーザー名: "
+
+#: ../data/preferences.ui.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>新規アカウント</b>"
+
+#: ../data/preferences.ui.h:2
+msgid "Account data"
+msgstr "アカウントデータ"
+
+#: ../data/preferences.ui.h:3
+msgid "Account name: "
+msgstr "アカウント名: "
+
+#: ../data/preferences.ui.h:4
+msgid "Add a new account"
+msgstr "新規アカウント追加"
+
+#: ../data/preferences.ui.h:5
+msgid "Advanced"
+msgstr "高度な設定"
+
+#: ../data/preferences.ui.h:6
+msgid "By account: "
+msgstr "アカウント毎: "
+
+#: ../data/preferences.ui.h:7
+msgid "Check interval"
+msgstr "確認頻度"
+
+#: ../data/preferences.ui.h:8
+msgid "Command:"
+msgstr "コマンド: "
+
+#: ../data/preferences.ui.h:9
+msgid "Delete the selected account"
+msgstr "選択アカウント削除"
+
+#: ../data/preferences.ui.h:10
+msgid "Edit the selected account"
+msgstr "選択アカウント編集"
+
+#: ../data/preferences.ui.h:11
+msgid "Execute command when the account is opened"
+msgstr "アカウント選択時コマンド実行"
+
+#: ../data/preferences.ui.h:12
+msgid "General"
+msgstr "一般"
+
+#: ../data/preferences.ui.h:13
+msgid "Indicate status with: "
+msgstr ""
+
+#: ../data/preferences.ui.h:14
+msgid "Mark all messages as read"
+msgstr "全メッセージ既読化"
+
+#: ../data/preferences.ui.h:15
+msgid "Maximum notifications"
+msgstr "通知最大数"
+
+#: ../data/preferences.ui.h:16
+msgid "Minutes: "
+msgstr "分: "
+
+#: ../data/preferences.ui.h:17
+msgid "New Account"
+msgstr "新規アカウント"
+
+#: ../data/preferences.ui.h:18
+msgid "Password manager: "
+msgstr "パスワードマネージャー"
+
+#: ../data/preferences.ui.h:19
+msgid "Play sound on notifications"
+msgstr "通知時サウンド再生"
+
+#: ../data/preferences.ui.h:20
+msgid "Preferences"
+msgstr "設定"
+
+#: ../data/preferences.ui.h:21
+msgid "Provider: "
+msgstr "プロバイダー"
+
+#: ../data/preferences.ui.h:22
+msgid "Run application on startup"
+msgstr "起動時アプリケーション実行"
+
+#: ../data/preferences.ui.h:23
+msgid "Show preferences"
+msgstr "設定表示"
+
+#: ../data/preferences.ui.h:24
+msgid "Stop/Play"
+msgstr "停止/再生"
+
+#: ../data/preferences.ui.h:25
+msgid "Update"
+msgstr "更新"
+
+#: ../data/preferences.ui.h:26
+msgid "Update all accounts"
+msgstr "全アカウント更新"
+
+#: ../data/preferences.ui.h:27
+msgid "Update the selected account"
+msgstr "選択アカウント更新"
+
+#: ../data/preferences.ui.h:28
+msgid "_Edit"
+msgstr ""
+
+#: ../data/preferences.ui.h:29
+msgid "_File"
+msgstr ""
+
+#: ../data/preferences.ui.h:30
+msgid "_Help"
+msgstr ""
+
+#: ../data/preferences.ui.h:31
+msgid "toolbutton1"
+msgstr ""
+
+#: ../data/preferences.ui.h:32
+msgid "toolbutton3"
+msgstr ""
+

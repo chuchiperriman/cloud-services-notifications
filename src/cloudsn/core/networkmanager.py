@@ -5,12 +5,9 @@ from cloudsn import logger
 from dbus.mainloop.glib import DBusGMainLoop
 import dbus
 
-# possible states, see http://projects.gnome.org/NetworkManager/developers/spec-08.html#type-NM_STATE
+# possible states, see http://projects.gnome.org/NetworkManager/developers/api/09/spec.html#type-NM_STATE
 STATE_UNKNOWN		= dbus.UInt32(0)
-STATE_ASLEEP		= dbus.UInt32(1)
-STATE_CONNECTING	= dbus.UInt32(2)
-STATE_CONNECTED		= dbus.UInt32(3)
-STATE_DISCONNEDTED	= dbus.UInt32(4)
+STATE_CONNECTED_GLOBAL = dbus.UInt32(70)
 
 class NetworkManager:
 	def __init__(self):
@@ -40,7 +37,7 @@ class NetworkManager:
 			logger.error("Could not connect to the Network Manager: %s" % msg )
 
 	def online(self):
-		return self.state == STATE_UNKNOWN or self.state == STATE_CONNECTED
+		return self.state == STATE_UNKNOWN or self.state == STATE_CONNECTED_GLOBAL
 
 	def offline(self):
 		return not self.online()

@@ -34,6 +34,7 @@ class IndicatorManager():
         from cloudsn.ui.indicators import statusicon
         statusindi = statusicon.StatusIconIndicator()
         self.indicators[statusindi.get_name()] = statusindi
+        indiapplet = None
         try:
             from cloudsn.ui.indicators import indicatorapplet
             indiapplet = indicatorapplet.IndicatorApplet()

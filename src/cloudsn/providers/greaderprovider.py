@@ -87,9 +87,8 @@ class GReaderProvider(ProviderUtilsBuilder):
 
 class GreaderAtom:
 
-	login_url = "https://www.google.com/accounts/ServiceLogin"
-	auth_url = "https://www.google.com/accounts/ServiceLoginAuth"
-	reader_url = "https://www.google.com/reader/api/0/unread-count"
+	auth_url = "https://www.google.com/accounts/ClientLogin"
+	reader_url = "https://www.google.com/reader/api/0/unread-count?%s"
 
 	def __init__(self, user, pswd):
 		self.username = user
@@ -100,17 +99,24 @@ class GreaderAtom:
 		urllib2.install_opener(self.opener)
 
 	def sendRequest(self):
-		f = urllib2.urlopen(self.login_url)
-		data = f.read()
-		galx_match_obj = re.search(r'name="GALX"\s*value="([^"]+)"', data, re.IGNORECASE)
-		galx_value = galx_match_obj.group(1) if galx_match_obj.group(1) is not None else ''
-		params = urllib.urlencode({'Email':self.username,
-					'Passwd':self.password,
-					'GALX':galx_value})
+	    auth_req_data = urllib.urlencode({'Email': self.username,
+                                  'Passwd': self.password,
+                                  'service': 'reader'})
+        auth_req = urllib2.Request(self.auth_url, data=auth_req_data)
+        auth_resp_content = urllib2.urlopen(auth_req).read()
+        auth_resp_dict = dict(x.split('=') for x in auth_resp_content.split('\n') if x)
+        auth_token = auth_resp_dict["Auth"]
+        
+        # Create a cookie in the header using the SID 
+        header = {}
+        header['Authorization'] = 'GoogleLogin auth=%s' % auth_token
 
-		f = urllib2.urlopen(self.auth_url, params)
-
-		return self.opener.open(self.reader_url)
+        reader_req_data = urllib.urlencode({'all': 'true',
+                                            'output': 'xml'})
+        
+        reader_url = self.reader_url % (reader_req_data)
+        reader_req = urllib2.Request(reader_url, None, header)
+		return urllib2.urlopen(reader_req)
 
 	def parseDocument (self, data):
 		self.feeds=list()

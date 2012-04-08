@@ -2,7 +2,7 @@
 from cloudsn.core import config, utils, keyring
 from cloudsn import logger
 from cloudsn.core.keyring import Credentials
-import gobject
+from gi.repository import GObject
 from datetime import datetime
 import gettext
 
@@ -136,21 +136,21 @@ class AccountCacheMails (Account):
     def get_new_unread_notifications(self):
         return self.new_unread
 
-class AccountManager (gobject.GObject):
+class AccountManager (GObject.Object):
 
     __default = None
 
     __gtype_name__ = "AccountManager"
 
-    __gsignals__ = { "account-added" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-                     "account-deleted" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-                     "account-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-                     "account-active-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))}
+    __gsignals__ = { "account-added" : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_PYOBJECT,)),
+                     "account-deleted" : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_PYOBJECT,)),
+                     "account-changed" : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_PYOBJECT,)),
+                     "account-active-changed" : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_PYOBJECT,))}
 
     def __init__(self):
         if AccountManager.__default:
            raise AccountManager.__default
-        gobject.GObject.__init__(self)
+        GObject.Object.__init__(self)
         from cloudsn.core.provider import ProviderManager
         self.accounts = {}
         self.sc = config.SettingsController.get_instance()

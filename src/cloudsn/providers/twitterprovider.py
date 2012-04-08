@@ -3,7 +3,7 @@ from cloudsn.core.keyring import Credentials
 from cloudsn.core.account import AccountCacheMails
 from cloudsn.core import config
 from cloudsn.providers import tweepy
-import gtk
+from gi.repository import Gtk
 
 CONSUMER_KEY = 'uRPdgq7wqkiKmWzs9rneJA'
 CONSUMER_SECRET = 'ZwwhbUl2mwdreaiGFd8IqUhfsZignBJIYknVA867Ieg'
@@ -44,7 +44,7 @@ class TwitterPrefs:
         self.provider = provider
 
     def load(self):
-        self.builder=gtk.Builder()
+        self.builder=Gtk.Builder()
         self.builder.set_translation_domain("cloudsn")
         self.builder.add_from_file(config.add_data_prefix("twitter-account.ui"))
         self.box = self.builder.get_object("container")

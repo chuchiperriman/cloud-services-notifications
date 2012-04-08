@@ -1,20 +1,20 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
-import gtk
+from gi.repository import Gtk
 
 def create_provider_widget(fields):
-    table = gtk.Table(len(fields), 2)
+    table = Gtk.Table(len(fields), 2)
     table.widgets = {}
     i = 0
     for f in fields:
-        hbox = gtk.HBox()
-        label = gtk.Label(f["label"])
+        hbox = Gtk.HBox()
+        label = Gtk.Label(f["label"])
         if f["type"] == "pwd":
-            entry = gtk.Entry()
+            entry = Gtk.Entry()
             entry.set_visibility(False)
         elif f["type"] == "check":
-            entry = gtk.CheckButton()
+            entry = Gtk.CheckButton()
         else:
-            entry = gtk.Entry()
+            entry = Gtk.Entry()
 
         entry.set_name(f["label"])
         table.attach(label, 0, 1, i, i+1)

@@ -1,5 +1,5 @@
 import gconf
-import gtk
+from gi.repository import Gtk
 import os
 import subprocess
 from email.header import decode_header
@@ -10,13 +10,13 @@ import urllib2
 
 def show_url(url):
     """Open any @url with default viewer"""
-    from gtk import show_uri, get_current_event_time
-    from gtk.gdk import screen_get_default
-    from glib import GError
+    #from Gtk import show_uri, get_current_event_time
+    #from Gtk.gdk import screen_get_default
+    #from glib import GError
     try:
-        show_uri(screen_get_default(), url, get_current_event_time())
-    except GError, e:
-        logger.exception("Error in gtk.show_uri: %s", e)
+        Gtk.show_uri(Gtk.Gdk.screen_get_default(), url, Gtk.get_current_event_time())
+    except Gtk.Glib.GError, e:
+        logger.exception("Error in Gtk.show_uri: %s", e)
 
 def invoke_subprocess(cmdline):
 	setsid = getattr(os, 'setsid', None)
@@ -46,14 +46,14 @@ def get_boolean (value):
     return False
 
 def get_error_pixbuf():
-    icons = gtk.icon_theme_get_default()
-    l = gtk.ICON_LOOKUP_USE_BUILTIN
-    return icons.load_icon(gtk.STOCK_DIALOG_ERROR, 32, l)
+    icons = Gtk.icon_theme_get_default()
+    l = Gtk.ICON_LOOKUP_USE_BUILTIN
+    return icons.load_icon(Gtk.STOCK_DIALOG_ERROR, 32, l)
 
 def get_account_error_pixbuf (acc):
     original = acc.get_provider().get_icon().copy()
-    error = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('error.png'))
-    error.composite(original, 10, 10, 22, 22, 10, 10, 1.0, 1.0, gtk.gdk.INTERP_HYPER, 220)
+    error = Gdk.pixbuf_new_from_file(config.add_data_prefix('error.png'))
+    error.composite(original, 10, 10, 22, 22, 10, 10, 1.0, 1.0, Gdk.INTERP_HYPER, 220)
     return original
 
 def download_image_to_tmp(url):
@@ -74,7 +74,7 @@ def download_image_to_tmp(url):
 
 def download_image_to_pixbuf(url):
     path = download_image_to_tmp(url)
-    return gtk.gdk.pixbuf_new_from_file(path)
+    return Gdk.pixbuf_new_from_file(path)
 
 def execute_command(acc, command):
     open_command = replace_variables(acc, command)

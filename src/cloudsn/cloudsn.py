@@ -15,7 +15,7 @@ def setup_locale_and_gettext():
     # also install ngettext()
     gettext.install(APP_NAME, localedir=localedir, unicode=True,
             names=("ngettext",))
-    # For gtk.Builder, we need to call the C library gettext functions
+    # For Gtk.Builder, we need to call the C library gettext functions
     # As well as set the codeset to avoid locale-dependent translation
     # of the message catalog
     locale.bindtextdomain(APP_NAME, localedir)

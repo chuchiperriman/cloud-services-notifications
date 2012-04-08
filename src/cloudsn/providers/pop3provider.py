@@ -9,7 +9,7 @@ from cloudsn import logger
 import poplib
 from email.Parser import Parser as EmailParser
 from email.header import decode_header
-import gtk
+from gi.repository import Gtk
 
 class Pop3Provider(ProviderUtilsBuilder):
 

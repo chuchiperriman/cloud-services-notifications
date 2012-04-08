@@ -7,7 +7,7 @@ import urllib2
 import re
 import urllib
 import xml.dom.minidom
-import gtk
+from gi.repository import Gtk
 
 class GReaderProvider(ProviderUtilsBuilder):
 

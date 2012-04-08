@@ -1,5 +1,5 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
-import gtk
+from gi.repository import Gtk
 import os
 import shutil
 import gettext
@@ -65,7 +65,7 @@ class MainWindow:
     def load_window(self):
         from cloudsn.core.controller import Controller
 
-        self.builder=gtk.Builder()
+        self.builder=Gtk.Builder()
         self.builder.set_translation_domain("cloudsn")
         self.builder.add_from_file(config.add_data_prefix("preferences.ui"))
         self.builder.connect_signals(self)
@@ -105,11 +105,11 @@ class MainWindow:
     def set_play_active(self, active):
         self.play_button.set_active(active)
         if active:
-            self.play_button.set_stock_id(gtk.STOCK_MEDIA_PAUSE)
+            self.play_button.set_stock_id(Gtk.STOCK_MEDIA_PAUSE)
             self.play_button.set_tooltip_text(
                 _("Press to pause the checker daemon"))
         else:
-            self.play_button.set_stock_id(gtk.STOCK_MEDIA_PLAY)
+            self.play_button.set_stock_id(Gtk.STOCK_MEDIA_PLAY)
             self.play_button.set_tooltip_text(
                 _("Press to start the checker daemon"))
 
@@ -188,11 +188,11 @@ class MainWindow:
         about.show_about_dialog()
 
     def quit_action_activate_cb (self, widget, data=None):
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def close_action_activate_cb (self, widget, data=None):
         if self.dialog_only:
-            gtk.main_quit()
+            Gtk.main_quit()
         else:
             self.window.hide()
 
@@ -203,13 +203,13 @@ class MainWindow:
 
         msg = (_('Are you sure you want to delete the account %s?')) % (acc.get_name());
 
-        dia = gtk.MessageDialog(self.window,
-                  gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                  gtk.MESSAGE_QUESTION,
-                  gtk.BUTTONS_YES_NO,
+        dia = Gtk.MessageDialog(self.window,
+                  Gtk.DIALOG_MODAL | Gtk.DIALOG_DESTROY_WITH_PARENT,
+                  Gtk.MESSAGE_QUESTION,
+                  Gtk.BUTTONS_YES_NO,
                   msg)
         dia.show_all()
-        if dia.run() == gtk.RESPONSE_YES:
+        if dia.run() == Gtk.RESPONSE_YES:
             self.am.del_account(acc, True)
         dia.hide()
 
@@ -245,7 +245,7 @@ class MainWindow:
 
     def window_delete_event_cb (self, widget, event, data=None):
         if self.dialog_only:
-            gtk.main_quit()
+            Gtk.main_quit()
         else:
             self.window.hide()
 
@@ -298,9 +298,9 @@ class MainWindow:
                     end = True
                 except Exception, e:
                     logger.error ('Error adding a new account: %s', e)
-                    md = gtk.MessageDialog(self.window,
-                        gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
-                        gtk.BUTTONS_CLOSE,
+                    md = Gtk.MessageDialog(self.window,
+                        Gtk.DIALOG_DESTROY_WITH_PARENT, Gtk.MESSAGE_ERROR,
+                        Gtk.BUTTONS_CLOSE,
                         _('Error adding a new account: ') + str(e))
                     md.run()
                     md.destroy()
@@ -351,9 +351,9 @@ class MainWindow:
                     end = True
                 except Exception, e:
                     logger.exception ('Error editing the account: %s', e)
-                    md = gtk.MessageDialog(self.window,
-                        gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
-                        gtk.BUTTONS_CLOSE,
+                    md = Gtk.MessageDialog(self.window,
+                        Gtk.DIALOG_DESTROY_WITH_PARENT, Gtk.MESSAGE_ERROR,
+                        Gtk.BUTTONS_CLOSE,
                         _('Error editing the account: ') + str(e))
                     md.run()
                     md.destroy()
@@ -379,9 +379,9 @@ class MainWindow:
         provider = self.pm.get_provider(provider_name)
 
         if provider.get_import_error():
-            md = gtk.MessageDialog(self.window,
-                gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
-                gtk.BUTTONS_CLOSE,
+            md = Gtk.MessageDialog(self.window,
+                Gtk.DIALOG_DESTROY_WITH_PARENT, Gtk.MESSAGE_ERROR,
+                Gtk.BUTTONS_CLOSE,
                 _('Error loading the provider: ') + str(provider.get_import_error()))
             md.run()
             md.destroy()
@@ -416,7 +416,7 @@ def main ():
     win = MainWindow.get_instance()
     win.dialog_only = True
     win.run()
-    gtk.main()
+    Gtk.main()
 
 if __name__ == "__main__":
     main()

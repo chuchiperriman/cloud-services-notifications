@@ -1,3 +1,12 @@
+cloudsn (0.8.12) oneiric; urgency=low
+
+  * Oneiric package
+  * Fixed bugs with new gnome changes
+  * Fixed authentication bug with Google Reader
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Wed, 19 oct 2011 23:32:00 +0200
+
 cloudsn (0.8.8) natty; urgency=low
 
   * Natty package
@@ -5,7 +14,6 @@ cloudsn (0.8.8) natty; urgency=low
 
 
  -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 27 jun 2011 10:15:35 +0200
-
 
 cloudsn (0.8.6) maverick; urgency=low
 

@@ -1,8 +1,6 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 #!/usr/bin/python
-import pygtk
-pygtk.require('2.0')
-import gtk
+from gi.repository import Gtk
 from cloudsn.core import config, utils, account
 from cloudsn.ui import window
 from cloudsn.core.indicator import Indicator

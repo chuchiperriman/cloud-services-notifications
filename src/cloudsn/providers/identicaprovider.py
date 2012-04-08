@@ -4,8 +4,8 @@ from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
 from cloudsn.core.provider import Provider
 from cloudsn.core import utils
-import gobject
-import gtk
+from gi.repository import GObject
+from gi.repository import Gtk
 
 class IdenticaProvider(ProviderUtilsBuilder):
 
@@ -87,7 +87,7 @@ class IdenticaProvider(ProviderUtilsBuilder):
 
         account.new_unread = news;
         account["since_id"] = messages[0].id
-        gobject.idle_add(self.__save_account, account)
+        GObject.idle_add(self.__save_account, account)
         
     def __save_account(self, account):
         AccountManager.get_instance().save_account(account)

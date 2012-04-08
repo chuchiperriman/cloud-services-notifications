@@ -1,4 +1,4 @@
-import gtk
+from gi.repository import Gtk
 import gettext
 from cloudsn import logger
 from ..core.config import SettingsController, get_cloudsn_icon
@@ -24,7 +24,7 @@ def check_auth_configuration():
     if get_keyring().get_id() == gkeyring.GNOME_KEYRING_ID:
         return
 
-    label = gtk.Label()
+    label = Gtk.Label()
     label.set_markup(_("""<b>Security warning</b>
 
 You have gnome-keyring installed but your are using plain text encryption
@@ -32,13 +32,13 @@ to store your passwords. You can select the encryption method
 in the preferences dialog.
 
 """))
-    dialog = gtk.Dialog(APP_LONG_NAME,
+    dialog = Gtk.Dialog(APP_LONG_NAME,
                        None,
-                       gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                       (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+                       Gtk.DIALOG_MODAL | Gtk.DIALOG_DESTROY_WITH_PARENT,
+                       (Gtk.STOCK_OK, Gtk.RESPONSE_ACCEPT))
     dialog.set_icon(get_cloudsn_icon())
     dialog.vbox.pack_start(label)
-    checkbox = gtk.CheckButton(_("Don't ask me again"))
+    checkbox = Gtk.CheckButton(_("Don't ask me again"))
     checkbox.show()
     dialog.vbox.pack_end(checkbox)
     label.show()

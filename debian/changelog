@@ -1,3 +1,10 @@
+cloudsn (0.8.14) precise; urgency=low
+
+  * Precise package
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 06 may 2012 14:30:00 +0200
+
 cloudsn (0.8.8) natty; urgency=low
 
   * Natty package

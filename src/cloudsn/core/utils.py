@@ -1,5 +1,5 @@
-import gconf
-from gi.repository import Gtk
+#import gconf
+from gi.repository import Gtk, Gio
 import os
 import subprocess
 from email.header import decode_header
@@ -23,7 +23,8 @@ def invoke_subprocess(cmdline):
 	subprocess.Popen(cmdline, close_fds = True, preexec_fn = setsid)
 
 def get_default_mail_reader():
-	client = gconf.client_get_default()
+	#client = gconf.client_get_default()
+	client = Gio.Settings.new()
 	cmd  = client.get_string("/desktop/gnome/url-handlers/mailto/command")
 	return cmd.split()[0]
 
@@ -46,9 +47,9 @@ def get_boolean (value):
     return False
 
 def get_error_pixbuf():
-    icons = Gtk.icon_theme_get_default()
-    l = Gtk.ICON_LOOKUP_USE_BUILTIN
-    return icons.load_icon(Gtk.STOCK_DIALOG_ERROR, 32, l)
+    icons = Gtk.IconTheme.get_default()
+    #TODO How can I set this value with gir ? l = Gtk.ICON_LOOKUP_USE_BUILTIN
+    return icons.load_icon(Gtk.STOCK_DIALOG_ERROR, 32, 0)
 
 def get_account_error_pixbuf (acc):
     original = acc.get_provider().get_icon().copy()

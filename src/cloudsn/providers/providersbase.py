@@ -6,7 +6,7 @@ from cloudsn.core import config
 from cloudsn.ui.utils import create_provider_widget, get_widget_by_label
 from xml.sax.handler import ContentHandler
 from xml import sax
-from gi.repository import Gtk
+from gi.repository import Gtk, GdkPixbuf
 import urllib2
 
 class ProviderBase(Provider):
@@ -17,7 +17,7 @@ class ProviderBase(Provider):
         if not id_provider:
             self.id_provider = name
         self.id_provider = self.id_provider.lower()
-        self.icon = Gtk.gdk.pixbuf_new_from_file(config.add_data_prefix(self.id_provider + '.png'))
+        self.icon = GdkPixbuf.Pixbuf.new_from_file(config.add_data_prefix(self.id_provider + '.png'))
 
 
 class ProviderGtkBuilder(ProviderBase):

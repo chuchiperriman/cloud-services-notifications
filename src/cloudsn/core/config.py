@@ -191,7 +191,7 @@ __cloudsn_icon = None
 def get_cloudsn_icon():
     global __cloudsn_icon
     if not __cloudsn_icon:
-        __cloudsn_icon = Gtk.gdk.pixbuf_new_from_file(add_data_prefix('cloudsn.png'))
+        __cloudsn_icon = Gtk.Gdk.pixbuf_new_from_file(add_data_prefix('cloudsn.png'))
     return __cloudsn_icon
 
 def get_startup_file_dir():

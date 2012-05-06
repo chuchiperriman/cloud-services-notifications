@@ -2,7 +2,7 @@
 from cloudsn.core.provider import Provider, ProviderManager
 from cloudsn.core import account, config, networkmanager, notification, utils, indicator
 from cloudsn import logger
-from ..ui.authwarning import check_auth_configuration
+from cloudsn.ui.authwarning import check_auth_configuration
 from time import time
 from gi.repository import Gtk
 from gi.repository import GObject
@@ -216,8 +216,11 @@ class Controller (GObject.Object):
 
     def _start_idle(self):
         try:
+            logger.debug("aaa")
             check_auth_configuration()
+            logger.debug("aaab")
             self.nm.set_statechange_callback(self.on_nm_state_changed)
+            logger.debug("aaac")
             self.set_active (True)
             self.update_accounts()
             self.started = True
@@ -233,6 +236,7 @@ class Controller (GObject.Object):
         return False
 
     def start(self):
+        logger.debug("aaasss")
         GObject.threads_init()
         GObject.idle_add(self._start_idle)
         try:

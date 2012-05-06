@@ -1,10 +1,10 @@
 from gi.repository import Gtk
 import gettext
 from cloudsn import logger
-from ..core.config import SettingsController, get_cloudsn_icon
-from ..core.utils import get_boolean
-from ..const import *
-from ..core.keyring import get_keyring
+from cloudsn.core.config import SettingsController, get_cloudsn_icon
+from cloudsn.core.utils import get_boolean
+from cloudsn.const import *
+from cloudsn.core.keyring import get_keyring
 
 AUTH_DONT_ASK_KEY = "auth_dont_ask"
 

@@ -1,6 +1,6 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 import gnomekeyring as gk
-from ..keyring import Keyring, KeyringException, Credentials
+from cloudsn.core.keyring import Keyring, KeyringException, Credentials
 from cloudsn import logger
 import threading
 

@@ -1,15 +1,15 @@
 #!/usr/bin/python
 
-from .core.controller import Controller
-from .core import config, utils, notification
 from . import logger
+from core import config, utils, notification
+from core.controller import Controller
 from os.path import join, abspath
 import gettext
 import locale
 from const import *
 
 def setup_locale_and_gettext():
-    """Set up localization with gettext"""
+    #Set up localization with gettext
     localedir = join (config.get_base_data_prefix(),"locale")
     # Install _() builtin for gettext; always returning unicode objects
     # also install ngettext()
@@ -27,14 +27,17 @@ def setup_locale_and_gettext():
         pass
 
 def start ():
+    logger.info("1")
     try:
         setup_locale_and_gettext()
     except Exception, e:
         logger.exception("Error loading the internationalitation: %s", e)
     
     try:
+        logger.debug("aaaww")
         cr = Controller.get_instance()
         cr.start()
+        logger.debug("aaaasdas")
     except Exception, e:
         logger.exception("Error starting cloudsn: %s", e)
         #We not traduce this notification because the problem can be gettext
@@ -43,6 +46,7 @@ def start ():
                             utils.get_error_pixbuf())
 
 if __name__ == "__main__":
+    logger.debug("0")
     start()
 
 

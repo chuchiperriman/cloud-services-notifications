@@ -11,13 +11,13 @@ notifying = False
 last_notify = tstart = datetime.now()
 
 try:
-    import pynotify
-    if pynotify.init("Cloud Services Notifications"):
+    from gi.repository import Notify
+    if Notify.init("Cloud Services Notifications"):
         disable = False
     else:
         logger.error("Cannot initialize libnotify")
 except Exception, e:
-    logger.exception ("there was a problem initializing the pynotify module: %s" % (e))
+    logger.exception ("there was a problem initializing the Notify module: %s" % (e))
 
 
 #def notify_closed_cb (n, data=None):
@@ -56,11 +56,11 @@ def notify_process ():
 
 def notify (title, message, icon = None):
     if disable == True:
-        raise NotificationError ("there was a problem initializing the pynotify module")
+        raise NotificationError ("there was a problem initializing the Notify module")
 
     global notifications
-    n = pynotify.Notification(title, message)
-    n.set_urgency(pynotify.URGENCY_LOW)
+    n = Notify.Notification.new(title, message, None)
+    n.set_urgency(Notify.Urgency.LOW)
     #n.set_timeout(3000)
 
     if icon:

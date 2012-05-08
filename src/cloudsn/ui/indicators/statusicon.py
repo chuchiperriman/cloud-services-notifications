@@ -1,4 +1,4 @@
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
 from cloudsn import const
 from cloudsn.core import config, controller, utils
 from cloudsn.ui import window, about
@@ -134,5 +134,5 @@ class StatusIconIndicator (Indicator):
                 data.popup(None, None, Gtk.status_icon_position_menu,
                            3, time, self.statusIcon)
     def scale_pixbuf (self, pix):
-        return pix.scale_simple(16,16,Gtk.Gdk.INTERP_BILINEAR)
+        return pix.scale_simple(16,16,Gdk.INTERP_BILINEAR)
 

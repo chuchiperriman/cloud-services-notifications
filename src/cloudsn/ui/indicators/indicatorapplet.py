@@ -1,10 +1,9 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 #!/usr/bin/python
-from gi.repository import Gtk
+from gi.repository import Gtk, Indicate
 from cloudsn.core import config, utils, account
 from cloudsn.ui import window
 from cloudsn.core.indicator import Indicator
-import indicate
 from cloudsn.const import *
 from cloudsn import logger
 
@@ -18,7 +17,7 @@ class IndicatorApplet (Indicator):
 
     def set_active(self, active):
         if active:
-            self.server = indicate.indicate_server_ref_default()
+            self.server = Indicate.Server.ref_default()
             self.server.set_type("message.im")
             self.server.connect("server-display", self.on_server_display_cb)
             self.server.set_desktop_file(config.add_apps_prefix("cloudsn.desktop"))
@@ -29,10 +28,10 @@ class IndicatorApplet (Indicator):
             logger.debug("deactivate Not implemented")
 
     def create_indicator(self, acc):
-        indicator = indicate.Indicator()
+        indicator = Indicate.Indicator()
         indicator.set_property("name", acc.get_name())
         indicator.set_property("count", str(acc.get_total_unread()))
-        indicator.set_property_icon("icon", acc.get_icon())
+        #TODO indicator.set_property_icon("icon", acc.get_icon())
         indicator.show()
         indicator.connect("user-display", self.on_indicator_display_cb)
         acc.indicator = indicator
@@ -42,7 +41,7 @@ class IndicatorApplet (Indicator):
     def update_account(self, acc):
         #We had a previous error but now the update works.
         if acc.is_error_icon:
-            acc.indicator.set_property_icon("icon", acc.get_icon())
+            #acc.indicator.set_property_icon("icon", acc.get_icon())
             acc.is_error_icon = False
         else:
             if len(acc.get_new_unread_notifications()) > 0:

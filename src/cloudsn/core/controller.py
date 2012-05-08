@@ -4,8 +4,7 @@ from cloudsn.core import account, config, networkmanager, notification, utils, i
 from cloudsn import logger
 from cloudsn.ui.authwarning import check_auth_configuration
 from time import time
-from gi.repository import Gtk
-from gi.repository import GObject
+from gi.repository import Gtk, GObject
 import gettext
 import thread
 

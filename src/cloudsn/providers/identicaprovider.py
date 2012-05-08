@@ -1,5 +1,6 @@
 from cloudsn.providers import tweepy
 from providersbase import ProviderUtilsBuilder
+from cloudsn import logger
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
 from cloudsn.core.provider import Provider

@@ -7,8 +7,7 @@ import os
 import sys
 from os import mkdir
 from os.path import isdir, join, dirname, abspath
-from gi.repository import GObject
-from gi.repository import Gtk
+from gi.repository import GObject, Gtk, GdkPixbuf
 import gettext
 
 
@@ -191,7 +190,7 @@ __cloudsn_icon = None
 def get_cloudsn_icon():
     global __cloudsn_icon
     if not __cloudsn_icon:
-        __cloudsn_icon = Gtk.Gdk.pixbuf_new_from_file(add_data_prefix('cloudsn.png'))
+        __cloudsn_icon = GdkPixbuf.Pixbuf.new_from_file(add_data_prefix('cloudsn.png'))
     return __cloudsn_icon
 
 def get_startup_file_dir():

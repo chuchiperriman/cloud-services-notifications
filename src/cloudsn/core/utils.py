@@ -1,5 +1,5 @@
 #import gconf
-from gi.repository import Gtk, Gio
+from gi.repository import Gtk, Gio, Gdk, GdkPixbuf
 import os
 import subprocess
 from email.header import decode_header
@@ -14,7 +14,7 @@ def show_url(url):
     #from Gtk.gdk import screen_get_default
     #from glib import GError
     try:
-        Gtk.show_uri(Gtk.Gdk.screen_get_default(), url, Gtk.get_current_event_time())
+        Gtk.show_uri(Gdk.screen_get_default(), url, Gtk.get_current_event_time())
     except Gtk.Glib.GError, e:
         logger.exception("Error in Gtk.show_uri: %s", e)
 
@@ -53,8 +53,8 @@ def get_error_pixbuf():
 
 def get_account_error_pixbuf (acc):
     original = acc.get_provider().get_icon().copy()
-    error = Gdk.pixbuf_new_from_file(config.add_data_prefix('error.png'))
-    error.composite(original, 10, 10, 22, 22, 10, 10, 1.0, 1.0, Gdk.INTERP_HYPER, 220)
+    error = GdkPixbuf.Pixbuf.new_from_file(config.add_data_prefix('error.png'))
+    error.composite(original, 10, 10, 22, 22, 10, 10, 1.0, 1.0, GdkPixbuf.InterpType.HYPER, 220)
     return original
 
 def download_image_to_tmp(url):

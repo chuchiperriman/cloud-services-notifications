@@ -6,7 +6,6 @@ import gettext
 from cloudsn.core import config, provider, account, indicator, keyring
 from cloudsn import logger
 import cloudsn.core.utils as coreutils
-from cloudsn.ui import about, utils
 
 STOP_RESPONSE = 1
 
@@ -36,12 +35,13 @@ class MainWindow:
 
     def get_main_account_selected (self):
         selection = self.main_account_tree.get_selection()
-        model, paths = selection.get_selected_rows()
-        for path in paths:
-            citer = self.main_store.get_iter(path)
-            account_name = self.main_store.get_value(citer, 1)
-            acc = self.am.get_account(account_name)
-            return acc, citer
+        if selection:
+            model, paths = selection.get_selected_rows()
+            for path in paths:
+                citer = self.main_store.get_iter(path)
+                account_name = self.main_store.get_value(citer, 1)
+                acc = self.am.get_account(account_name)
+                return acc, citer
 
         return None, None
 
@@ -204,9 +204,9 @@ class MainWindow:
         msg = (_('Are you sure you want to delete the account %s?')) % (acc.get_name());
 
         dia = Gtk.MessageDialog(self.window,
-                  Gtk.DIALOG_MODAL | Gtk.DIALOG_DESTROY_WITH_PARENT,
+                  Gtk.DIALOG_MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                   Gtk.MESSAGE_QUESTION,
-                  Gtk.BUTTONS_YES_NO,
+                  Gtk.ButtonsType.YES_NO,
                   msg)
         dia.show_all()
         if dia.run() == Gtk.RESPONSE_YES:
@@ -299,8 +299,8 @@ class MainWindow:
                 except Exception, e:
                     logger.error ('Error adding a new account: %s', e)
                     md = Gtk.MessageDialog(self.window,
-                        Gtk.DIALOG_DESTROY_WITH_PARENT, Gtk.MESSAGE_ERROR,
-                        Gtk.BUTTONS_CLOSE,
+                        Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR,
+                        Gtk.ButtonsType.CLOSE,
                         _('Error adding a new account: ') + str(e))
                     md.run()
                     md.destroy()
@@ -352,8 +352,8 @@ class MainWindow:
                 except Exception, e:
                     logger.exception ('Error editing the account: %s', e)
                     md = Gtk.MessageDialog(self.window,
-                        Gtk.DIALOG_DESTROY_WITH_PARENT, Gtk.MESSAGE_ERROR,
-                        Gtk.BUTTONS_CLOSE,
+                        Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR,
+                        Gtk.ButtonsType.CLOSE,
                         _('Error editing the account: ') + str(e))
                     md.run()
                     md.destroy()
@@ -380,8 +380,8 @@ class MainWindow:
 
         if provider.get_import_error():
             md = Gtk.MessageDialog(self.window,
-                Gtk.DIALOG_DESTROY_WITH_PARENT, Gtk.MESSAGE_ERROR,
-                Gtk.BUTTONS_CLOSE,
+                Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR,
+                Gtk.ButtonsType.CLOSE,
                 _('Error loading the provider: ') + str(provider.get_import_error()))
             md.run()
             md.destroy()

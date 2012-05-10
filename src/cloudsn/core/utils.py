@@ -14,9 +14,9 @@ def show_url(url):
     #from Gtk.gdk import screen_get_default
     #from glib import GError
     try:
-        Gtk.show_uri(Gdk.screen_get_default(), url, Gtk.get_current_event_time())
-    except Gtk.Glib.GError, e:
-        logger.exception("Error in Gtk.show_uri: %s", e)
+        Gtk.show_uri(Gdk.Screen.get_default(), url, Gtk.get_current_event_time())
+    except:
+        logger.exception("Error in Gtk.show_uri: %s")
 
 def invoke_subprocess(cmdline):
 	setsid = getattr(os, 'setsid', None)
@@ -75,7 +75,7 @@ def download_image_to_tmp(url):
 
 def download_image_to_pixbuf(url):
     path = download_image_to_tmp(url)
-    return Gdk.pixbuf_new_from_file(path)
+    return GdkPixbuf.Pixbuf.new_from_file(path)
 
 def execute_command(acc, command):
     open_command = replace_variables(acc, command)

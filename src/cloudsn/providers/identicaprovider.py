@@ -99,7 +99,7 @@ class IdenticaProvider(ProviderUtilsBuilder):
         try:
             icon = utils.download_image_to_pixbuf(m.user.profile_image_url)
         except Exception, e:
-            logger.exception("Error loading the user avatar",e)
+            logger.exception("Error loading the user avatar")
 
         return icon
 

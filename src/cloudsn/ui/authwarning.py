@@ -34,13 +34,13 @@ in the preferences dialog.
 """))
     dialog = Gtk.Dialog(APP_LONG_NAME,
                        None,
-                       Gtk.DIALOG_MODAL | Gtk.DIALOG_DESTROY_WITH_PARENT,
-                       (Gtk.STOCK_OK, Gtk.RESPONSE_ACCEPT))
+                       Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                       (Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT))
     dialog.set_icon(get_cloudsn_icon())
-    dialog.vbox.pack_start(label)
+    dialog.vbox.pack_start(label, False, False, 10)
     checkbox = Gtk.CheckButton(_("Don't ask me again"))
     checkbox.show()
-    dialog.vbox.pack_end(checkbox)
+    dialog.vbox.pack_end(checkbox, False, False, 0)
     label.show()
     response = dialog.run()
     dialog.destroy()

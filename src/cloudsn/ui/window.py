@@ -204,12 +204,12 @@ class MainWindow:
         msg = (_('Are you sure you want to delete the account %s?')) % (acc.get_name());
 
         dia = Gtk.MessageDialog(self.window,
-                  Gtk.DIALOG_MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                  Gtk.MESSAGE_QUESTION,
+                  Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                  Gtk.MessageType.QUESTION,
                   Gtk.ButtonsType.YES_NO,
                   msg)
         dia.show_all()
-        if dia.run() == Gtk.RESPONSE_YES:
+        if dia.run() == Gtk.ResponseType.YES:
             self.am.del_account(acc, True)
         dia.hide()
 
@@ -238,10 +238,12 @@ class MainWindow:
         Controller.get_instance().set_active(widget.get_active())
 
     def account_deleted_cb(self, widget, acc):
-        for i in range(len(self.main_store)):
-            if self.main_store[i][1] == acc.get_name():
-                del self.main_store[i]
-                break
+        selection = self.main_account_tree.get_selection()
+        if selection:
+            model, paths = selection.get_selected_rows()
+            for path in paths:
+                citer = self.main_store.get_iter(path)
+                self.main_store.remove(citer)
 
     def window_delete_event_cb (self, widget, event, data=None):
         if self.dialog_only:

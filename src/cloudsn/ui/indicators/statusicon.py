@@ -1,4 +1,4 @@
-from gi.repository import Gtk, Gdk
+from gi.repository import Gtk, Gdk, GdkPixbuf
 from cloudsn import const
 from cloudsn.core import config, controller, utils
 from cloudsn.ui import window, about
@@ -14,7 +14,7 @@ class StatusIconIndicator (Indicator):
             self.statusIcon = Gtk.StatusIcon()
             self.statusIcon.set_from_pixbuf(config.get_cloudsn_icon())
             self.statusIcon.set_visible(True)
-            self.statusIcon.set_tooltip(APP_LONG_NAME)
+            self.statusIcon.set_tooltip_text(APP_LONG_NAME)
             self.statusIcon.connect('activate', self.main_cb, self.statusIcon)
 
             self.menu = self.create_pref_menu()
@@ -70,11 +70,11 @@ class StatusIconIndicator (Indicator):
         """
         indmenuItem = Gtk.MenuItem()
         box = Gtk.HBox()
-        menu_icon = Gtk.image_new_from_pixbuf(pix)
-        box.pack_start(menu_icon, False, False)
+        menu_icon = Gtk.Image.new_from_pixbuf(pix)
+        box.pack_start(menu_icon, False, False, 0)
         box.pack_start(Gtk.Label(acc.get_name()), False, True, 10)
         total_label = Gtk.Label(("(%i)") % (acc.get_total_unread()))
-        box.pack_end(total_label, False, False)
+        box.pack_end(total_label, False, False, 0)
         indmenuItem.add(box)
         indmenuItem.connect('activate', self.acc_activate_cb, acc)
         self.indmenu.append(indmenuItem)
@@ -118,8 +118,8 @@ class StatusIconIndicator (Indicator):
 
     def main_cb(self, widget, data = None):
         self.indmenu.show_all()
-        self.indmenu.popup(None, None, Gtk.status_icon_position_menu,
-                           1, Gtk.get_current_event_time(), self.statusIcon)
+        self.indmenu.popup(None, None, Gtk.StatusIcon.position_menu,
+                           self.statusIcon, 1, Gtk.get_current_event_time())
 
     def quit_cb(self, widget, data = None):
        Gtk.main_quit()
@@ -131,8 +131,8 @@ class StatusIconIndicator (Indicator):
         if button == 3:
             if data:
                 data.show_all()
-                data.popup(None, None, Gtk.status_icon_position_menu,
-                           3, time, self.statusIcon)
+                data.popup(None, None, Gtk.StatusIcon.position_menu,
+                           self.statusIcon, 3, time)
     def scale_pixbuf (self, pix):
-        return pix.scale_simple(16,16,Gdk.INTERP_BILINEAR)
+        return pix.scale_simple(16,16,GdkPixbuf.InterpType.BILINEAR)
 

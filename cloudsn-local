@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 import os, sys
 srcpath = os.path.abspath("src")
 sys.path.insert(0,srcpath)

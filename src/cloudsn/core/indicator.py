@@ -1,3 +1,4 @@
+import os
 from cloudsn.core import config, utils, notification
 from cloudsn import logger
 
@@ -55,7 +56,9 @@ class IndicatorManager():
                                     _("The indicator named %s is configured but it cannot be found") % (indicator_conf),
                                     utils.get_error_pixbuf())
         if not self.indicator:
-            if indiapplet:
+            if "DESKTOP_SESSION" in os.environ\
+                    and os.environ["DESKTOP_SESSION"] == 'ubuntu'\
+                    and indiapplet:
                 self.indicator = indiapplet
             else:
                 self.indicator = statusindi

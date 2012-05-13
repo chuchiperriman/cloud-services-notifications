@@ -59,16 +59,8 @@ class StatusIconIndicator (Indicator):
         return menu
 
     def create_indicator(self, acc):
-        indmenuItem = Gtk.ImageMenuItem(Gtk.STOCK_QUIT)
         pix = self.scale_pixbuf(acc.get_icon())
-
-        """
-        indmenuItem.set_image(Gtk.image_new_from_pixbuf(pix))
-        indmenuItem.get_child().set_label(("%s (%i)") % (acc.get_name(),acc.get_total_unread()))
-        indmenuItem.connect('activate', self.acc_activate_cb, acc)
-        indmenuItem.set_always_show_image (True)
-        """
-        indmenuItem = Gtk.MenuItem()
+        indmenuItem = Gtk.MenuItem.new()
         box = Gtk.HBox()
         menu_icon = Gtk.Image.new_from_pixbuf(pix)
         box.pack_start(menu_icon, False, False, 0)

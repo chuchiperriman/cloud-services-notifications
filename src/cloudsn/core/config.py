@@ -7,8 +7,7 @@ import os
 import sys
 from os import mkdir
 from os.path import isdir, join, dirname, abspath
-import gobject
-import gtk
+from gi.repository import GObject, Gtk, GdkPixbuf
 import gettext
 
 
@@ -59,15 +58,15 @@ def get_ensure_cache_path():
 def add_apps_prefix(subpath):
     return join (get_apps_prefix(), subpath)
 
-class SettingsController(gobject.GObject):
+class SettingsController(GObject.Object):
 
     __default = None
 
     __gtype_name__ = "SettingsController"
 
     # Section, Key, Value
-    __gsignals__ = { "value-changed" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_BOOLEAN,
-                                        (gobject.TYPE_STRING, gobject.TYPE_STRING, gobject.TYPE_PYOBJECT))}
+    __gsignals__ = { "value-changed" : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_BOOLEAN,
+                                        (GObject.TYPE_STRING, GObject.TYPE_STRING, GObject.TYPE_PYOBJECT))}
 
     CONFIG_HOME = bd.xdg_config_home + '/cloud-services-notifications'
     CONFIG_PREFERENCES = CONFIG_HOME + '/preferences'
@@ -86,7 +85,7 @@ class SettingsController(gobject.GObject):
     def __init__(self):
         if SettingsController.__default:
            raise SettingsController.__default
-        gobject.GObject.__init__(self)
+        GObject.Object.__init__(self)
         self.ensure_config()
         self.prefs = self.config_to_dict(self.config_prefs)
         self.accounts = self.config_to_dict(self.config_accs)
@@ -191,7 +190,7 @@ __cloudsn_icon = None
 def get_cloudsn_icon():
     global __cloudsn_icon
     if not __cloudsn_icon:
-        __cloudsn_icon = gtk.gdk.pixbuf_new_from_file(add_data_prefix('cloudsn.png'))
+        __cloudsn_icon = GdkPixbuf.Pixbuf.new_from_file(add_data_prefix('cloudsn.png'))
     return __cloudsn_icon
 
 def get_startup_file_dir():

@@ -1,9 +1,28 @@
+cloudsn (0.10.0) oneiric; urgency=low
+
+  * Migrated to gtk3 and gobject introspection
+  * Using gsettings instead of gconf
+  * Better gnome shell support
+  * Indicator selection is smart looking the current desktop
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Wed, 20 may 2012 00:05:00 +0200
+
 cloudsn (0.8.14) precise; urgency=low
 
   * Precise package
 
 
  -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 06 may 2012 14:30:00 +0200
+
+cloudsn (0.8.12) oneiric; urgency=low
+
+  * Oneiric package
+  * Fixed bugs with new gnome changes
+  * Fixed authentication bug with Google Reader
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Wed, 19 oct 2011 23:32:00 +0200
 
 cloudsn (0.8.8) natty; urgency=low
 
@@ -12,7 +31,6 @@ cloudsn (0.8.8) natty; urgency=low
 
 
  -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Mon, 27 jun 2011 10:15:35 +0200
-
 
 cloudsn (0.8.6) maverick; urgency=low
 

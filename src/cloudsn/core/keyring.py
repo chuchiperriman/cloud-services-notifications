@@ -43,11 +43,13 @@ class KeyringManager:
         self.config = config.SettingsController.get_instance()
         from keyrings.plainkeyring import PlainKeyring
         self.__add_manager (PlainKeyring())
+
         try:
             from keyrings.base64keyring import Base64Keyring
             self.__add_manager (Base64Keyring())
         except Exception, e:
             logger.exception("Cannot load base64 keyring: %s", e)
+            
         try:
             from keyrings.gkeyring import GnomeKeyring
             self.__add_manager (GnomeKeyring())

@@ -7,7 +7,7 @@ from cloudsn.core import utils, indicator, config
 from cloudsn import logger
 from os.path import join
 import os
-import gtk
+from gi.repository import Gtk, GdkPixbuf
 import urllib2
 import csv
 
@@ -27,7 +27,7 @@ class FeedsProvider(ProviderUtilsBuilder):
         if FeedsProvider.__default:
            raise FeedsProvider.__default
         ProviderUtilsBuilder.__init__(self, _("RSS news"), 'rss')
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('rss.png'))
+        self.icon = GdkPixbuf.Pixbuf.new_from_file(config.add_data_prefix('rss.png'))
 
     @staticmethod
     def get_instance():

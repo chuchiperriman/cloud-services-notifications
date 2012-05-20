@@ -1,12 +1,11 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
-import gtk
+from gi.repository import Gtk
 import os
 import shutil
 import gettext
 from cloudsn.core import config, provider, account, indicator, keyring
 from cloudsn import logger
 import cloudsn.core.utils as coreutils
-from cloudsn.ui import about, utils
 
 STOP_RESPONSE = 1
 
@@ -36,12 +35,13 @@ class MainWindow:
 
     def get_main_account_selected (self):
         selection = self.main_account_tree.get_selection()
-        model, paths = selection.get_selected_rows()
-        for path in paths:
-            citer = self.main_store.get_iter(path)
-            account_name = self.main_store.get_value(citer, 1)
-            acc = self.am.get_account(account_name)
-            return acc, citer
+        if selection:
+            model, paths = selection.get_selected_rows()
+            for path in paths:
+                citer = self.main_store.get_iter(path)
+                account_name = self.main_store.get_value(citer, 1)
+                acc = self.am.get_account(account_name)
+                return acc, citer
 
         return None, None
 
@@ -65,7 +65,7 @@ class MainWindow:
     def load_window(self):
         from cloudsn.core.controller import Controller
 
-        self.builder=gtk.Builder()
+        self.builder=Gtk.Builder()
         self.builder.set_translation_domain("cloudsn")
         self.builder.add_from_file(config.add_data_prefix("preferences.ui"))
         self.builder.connect_signals(self)
@@ -105,11 +105,11 @@ class MainWindow:
     def set_play_active(self, active):
         self.play_button.set_active(active)
         if active:
-            self.play_button.set_stock_id(gtk.STOCK_MEDIA_PAUSE)
+            self.play_button.set_stock_id(Gtk.STOCK_MEDIA_PAUSE)
             self.play_button.set_tooltip_text(
                 _("Press to pause the checker daemon"))
         else:
-            self.play_button.set_stock_id(gtk.STOCK_MEDIA_PLAY)
+            self.play_button.set_stock_id(Gtk.STOCK_MEDIA_PLAY)
             self.play_button.set_tooltip_text(
                 _("Press to start the checker daemon"))
 
@@ -188,11 +188,11 @@ class MainWindow:
         about.show_about_dialog()
 
     def quit_action_activate_cb (self, widget, data=None):
-        gtk.main_quit()
+        Gtk.main_quit()
 
     def close_action_activate_cb (self, widget, data=None):
         if self.dialog_only:
-            gtk.main_quit()
+            Gtk.main_quit()
         else:
             self.window.hide()
 
@@ -203,13 +203,13 @@ class MainWindow:
 
         msg = (_('Are you sure you want to delete the account %s?')) % (acc.get_name());
 
-        dia = gtk.MessageDialog(self.window,
-                  gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                  gtk.MESSAGE_QUESTION,
-                  gtk.BUTTONS_YES_NO,
+        dia = Gtk.MessageDialog(self.window,
+                  Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                  Gtk.MessageType.QUESTION,
+                  Gtk.ButtonsType.YES_NO,
                   msg)
         dia.show_all()
-        if dia.run() == gtk.RESPONSE_YES:
+        if dia.run() == Gtk.ResponseType.YES:
             self.am.del_account(acc, True)
         dia.hide()
 
@@ -238,14 +238,16 @@ class MainWindow:
         Controller.get_instance().set_active(widget.get_active())
 
     def account_deleted_cb(self, widget, acc):
-        for i in range(len(self.main_store)):
-            if self.main_store[i][1] == acc.get_name():
-                del self.main_store[i]
-                break
+        selection = self.main_account_tree.get_selection()
+        if selection:
+            model, paths = selection.get_selected_rows()
+            for path in paths:
+                citer = self.main_store.get_iter(path)
+                self.main_store.remove(citer)
 
     def window_delete_event_cb (self, widget, event, data=None):
         if self.dialog_only:
-            gtk.main_quit()
+            Gtk.main_quit()
         else:
             self.window.hide()
 
@@ -298,9 +300,9 @@ class MainWindow:
                     end = True
                 except Exception, e:
                     logger.error ('Error adding a new account: %s', e)
-                    md = gtk.MessageDialog(self.window,
-                        gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
-                        gtk.BUTTONS_CLOSE,
+                    md = Gtk.MessageDialog(self.window,
+                        Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR,
+                        Gtk.ButtonsType.CLOSE,
                         _('Error adding a new account: ') + str(e))
                     md.run()
                     md.destroy()
@@ -351,9 +353,9 @@ class MainWindow:
                     end = True
                 except Exception, e:
                     logger.exception ('Error editing the account: %s', e)
-                    md = gtk.MessageDialog(self.window,
-                        gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
-                        gtk.BUTTONS_CLOSE,
+                    md = Gtk.MessageDialog(self.window,
+                        Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR,
+                        Gtk.ButtonsType.CLOSE,
                         _('Error editing the account: ') + str(e))
                     md.run()
                     md.destroy()
@@ -379,9 +381,9 @@ class MainWindow:
         provider = self.pm.get_provider(provider_name)
 
         if provider.get_import_error():
-            md = gtk.MessageDialog(self.window,
-                gtk.DIALOG_DESTROY_WITH_PARENT, gtk.MESSAGE_ERROR,
-                gtk.BUTTONS_CLOSE,
+            md = Gtk.MessageDialog(self.window,
+                Gtk.DialogFlags.DESTROY_WITH_PARENT, Gtk.MessageType.ERROR,
+                Gtk.ButtonsType.CLOSE,
                 _('Error loading the provider: ') + str(provider.get_import_error()))
             md.run()
             md.destroy()
@@ -416,7 +418,7 @@ def main ():
     win = MainWindow.get_instance()
     win.dialog_only = True
     win.run()
-    gtk.main()
+    Gtk.main()
 
 if __name__ == "__main__":
     main()

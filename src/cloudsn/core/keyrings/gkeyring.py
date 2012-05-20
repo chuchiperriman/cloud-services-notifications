@@ -1,6 +1,6 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
-import gnomekeyring as gk
-from ..keyring import Keyring, KeyringException, Credentials
+from gi.repository import GnomeKeyring as gk
+from cloudsn.core.keyring import Keyring, KeyringException, Credentials
 from cloudsn import logger
 import threading
 
@@ -12,7 +12,7 @@ class GnomeKeyring(Keyring):
     
     def __init__(self):
         self._protocol = "network"
-        self._key = gk.ITEM_NETWORK_PASSWORD
+        self._key = gk.ItemType.NETWORK_PASSWORD
         if not gk.is_available():
             raise KeyringException("The Gnome keyring is not available")
         logger.debug("default keyring ok")
@@ -39,16 +39,23 @@ class GnomeKeyring(Keyring):
         self.lock.acquire()
         try:
             logger.debug("Getting credentials with gnome keyring for account %s" % (acc.get_name()))
-            attrs = {"account_name": acc.get_name()}
+            attrs = gk.Attribute.list_new()
+            gk.Attribute.list_append_string(attrs, 'account_name', acc.get_name())
             try:
-                items = gk.find_items_sync(gk.ITEM_NETWORK_PASSWORD, attrs)
+                (result, items) = gk.find_items_sync(gk.ItemType.NETWORK_PASSWORD, attrs)
             except gk.NoMatchError, e:
                 items = list()
+                
             if len(items) < 1:
                 raise KeyringException("Cannot find the keyring data for the account %s" % (acc.get_name()))
             
             logger.debug("items ok")
-            return Credentials (items[0].attributes["username"], items[0].secret)
+            
+            username = ''
+            for attr in gk.Attribute.list_to_glist(items[0].attributes):
+                if attr.name == 'username':
+                    username = attr.get_string()
+            return Credentials (username, items[0].secret)
         finally:
             self.lock.release()
 
@@ -71,12 +78,13 @@ class GnomeKeyring(Keyring):
             self.__check_keyring()
             #Remove the old info and create a new item with the new info
             self.remove_credentials(acc)
-            attrs = {
-                "account_name": acc.get_name(),
-                "username": credentials.username,
-                }
-            id = gk.item_create_sync(self._KEYRING_NAME, \
-                 gk.ITEM_NETWORK_PASSWORD, acc.get_name(), attrs, credentials.password, True)
+
+            attrs = gk.Attribute.list_new()
+            gk.Attribute.list_append_string(attrs, 'account_name', acc.get_name())
+            gk.Attribute.list_append_string(attrs, 'username', credentials.username)
+            
+            (result, id) = gk.item_create_sync(self._KEYRING_NAME, \
+                 gk.ItemType.NETWORK_PASSWORD, acc.get_name(), attrs, credentials.password, True)
             logger.debug("credentials stored with id: %i" % (id))
         finally:
             self.lock.release()

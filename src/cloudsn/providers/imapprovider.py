@@ -14,7 +14,7 @@ from cloudsn.core import utils
 from cloudsn import logger
 import imaplib
 from email.Parser import HeaderParser
-import gtk
+from gi.repository import Gtk, GdkPixbuf
 
 class ImapProvider(ProviderBase):
     __default = None
@@ -23,7 +23,7 @@ class ImapProvider(ProviderBase):
         if ImapProvider.__default:
            raise ImapProvider.__default
         ProviderBase.__init__(self, "Imap")
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('imap.png'))
+        self.icon = GdkPixbuf.Pixbuf.new_from_file(config.add_data_prefix('imap.png'))
 
     @staticmethod
     def get_instance():
@@ -80,7 +80,7 @@ class ImapPrefs:
         self.provider = provider
 
     def load(self):
-        self.builder=gtk.Builder()
+        self.builder=Gtk.Builder()
         self.builder.set_translation_domain("cloudsn")
         self.builder.add_from_file(config.add_data_prefix("imap-account.ui"))
         self.box = self.builder.get_object("container")

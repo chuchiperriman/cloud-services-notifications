@@ -14,6 +14,8 @@ from cloudsn.core import config, utils
 
 enabled = False
 try:
+    #TODO Disabled because I need study how to do it with gtk-3 
+    raise Exception("Sound is unsuported by the moment")
     import pygst
     pygst.require("0.10")
     import gst

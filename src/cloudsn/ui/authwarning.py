@@ -1,10 +1,10 @@
-import gtk
+from gi.repository import Gtk
 import gettext
 from cloudsn import logger
-from ..core.config import SettingsController, get_cloudsn_icon
-from ..core.utils import get_boolean
-from ..const import *
-from ..core.keyring import get_keyring
+from cloudsn.core.config import SettingsController, get_cloudsn_icon
+from cloudsn.core.utils import get_boolean
+from cloudsn.const import *
+from cloudsn.core.keyring import get_keyring
 
 AUTH_DONT_ASK_KEY = "auth_dont_ask"
 
@@ -24,7 +24,7 @@ def check_auth_configuration():
     if get_keyring().get_id() == gkeyring.GNOME_KEYRING_ID:
         return
 
-    label = gtk.Label()
+    label = Gtk.Label()
     label.set_markup(_("""<b>Security warning</b>
 
 You have gnome-keyring installed but your are using plain text encryption
@@ -32,15 +32,15 @@ to store your passwords. You can select the encryption method
 in the preferences dialog.
 
 """))
-    dialog = gtk.Dialog(APP_LONG_NAME,
+    dialog = Gtk.Dialog(APP_LONG_NAME,
                        None,
-                       gtk.DIALOG_MODAL | gtk.DIALOG_DESTROY_WITH_PARENT,
-                       (gtk.STOCK_OK, gtk.RESPONSE_ACCEPT))
+                       Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                       (Gtk.STOCK_OK, Gtk.ResponseType.ACCEPT))
     dialog.set_icon(get_cloudsn_icon())
-    dialog.vbox.pack_start(label)
-    checkbox = gtk.CheckButton(_("Don't ask me again"))
+    dialog.vbox.pack_start(label, False, False, 10)
+    checkbox = Gtk.CheckButton(_("Don't ask me again"))
     checkbox.show()
-    dialog.vbox.pack_end(checkbox)
+    dialog.vbox.pack_end(checkbox, False, False, 0)
     label.show()
     response = dialog.run()
     dialog.destroy()

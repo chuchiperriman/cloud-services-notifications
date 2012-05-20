@@ -2,21 +2,20 @@
 from cloudsn.core.provider import Provider, ProviderManager
 from cloudsn.core import account, config, networkmanager, notification, utils, indicator
 from cloudsn import logger
-from ..ui.authwarning import check_auth_configuration
+from cloudsn.ui.authwarning import check_auth_configuration
 from time import time
-import gtk
-import gobject
+from gi.repository import Gtk, GObject
 import gettext
 import thread
 
-class Controller (gobject.GObject):
+class Controller (GObject.Object):
 
     __default = None
 
     __gtype_name__ = "Controller"
 
-    __gsignals__ = { "account-checked" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,)),
-                     "account-check-error" : (gobject.SIGNAL_RUN_LAST, gobject.TYPE_NONE, (gobject.TYPE_PYOBJECT,))}
+    __gsignals__ = { "account-checked" : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_PYOBJECT,)),
+                     "account-check-error" : (GObject.SIGNAL_RUN_LAST, GObject.TYPE_NONE, (GObject.TYPE_PYOBJECT,))}
 
     timeout_id = -1
     interval = 60
@@ -37,7 +36,7 @@ class Controller (gobject.GObject):
             print message
             sys.exit(-1)
 
-        gobject.GObject.__init__(self)
+        GObject.Object.__init__(self)
         self.started = False
         self.config = config.SettingsController.get_instance()
         self.config.connect("value-changed", self._settings_changed)
@@ -92,13 +91,13 @@ class Controller (gobject.GObject):
 
         if self.timeout_id < 0:
             logger.debug("new source: "+str(self.timeout_id))
-            self.timeout_id = gobject.timeout_add_seconds(self.interval,
+            self.timeout_id = GObject.timeout_add_seconds(self.interval,
                                 self.update_accounts, None)
         elif self.interval != old:
             logger.debug("removed source: "+str(self.timeout_id))
-            gobject.source_remove(self.timeout_id)
+            GObject.source_remove(self.timeout_id)
             logger.debug("restart source: "+str(self.timeout_id))
-            self.timeout_id = gobject.timeout_add_seconds(self.interval,
+            self.timeout_id = GObject.timeout_add_seconds(self.interval,
                                 self.update_accounts, None)
 
     def on_nm_state_changed (self):
@@ -111,11 +110,11 @@ class Controller (gobject.GObject):
 
     def set_active(self, active):
         if active and not self.get_active():
-            self.timeout_id = gobject.timeout_add_seconds(self.interval,
+            self.timeout_id = GObject.timeout_add_seconds(self.interval,
                                 self.update_accounts, None)
             logger.debug("activated source: "+str(self.timeout_id))
         elif not active and self.get_active():
-            gobject.source_remove(self.timeout_id)
+            GObject.source_remove(self.timeout_id)
             logger.debug("deactivated source "+str(self.timeout_id))
             self.timeout_id = -1
 
@@ -156,8 +155,8 @@ class Controller (gobject.GObject):
             logger.debug('Updating account: ' + acc.get_name())
 
             #Process events to show the main icon
-            while gtk.events_pending():
-                gtk.main_iteration(False)
+            while Gtk.events_pending():
+                Gtk.main_iteration(False)
 
             self.am.update_account(acc)
 
@@ -168,8 +167,8 @@ class Controller (gobject.GObject):
 
 
             #Process events to show the indicator menu
-            while gtk.events_pending():
-                gtk.main_iteration(False)
+            while Gtk.events_pending():
+                Gtk.main_iteration(False)
 
             if acc.get_provider().has_notifications() and \
                     acc.get_show_notifications():
@@ -216,8 +215,11 @@ class Controller (gobject.GObject):
 
     def _start_idle(self):
         try:
+            logger.debug("aaa")
             check_auth_configuration()
+            logger.debug("aaab")
             self.nm.set_statechange_callback(self.on_nm_state_changed)
+            logger.debug("aaac")
             self.set_active (True)
             self.update_accounts()
             self.started = True
@@ -233,10 +235,11 @@ class Controller (gobject.GObject):
         return False
 
     def start(self):
-        gobject.threads_init()
-        gobject.idle_add(self._start_idle)
+        logger.debug("aaasss")
+        GObject.threads_init()
+        GObject.idle_add(self._start_idle)
         try:
-            gtk.main()
+            Gtk.main()
         except KeyboardInterrupt:
             logger.info ('KeyboardInterrupt the main loop')
 

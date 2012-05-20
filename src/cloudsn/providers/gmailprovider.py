@@ -8,7 +8,7 @@ from cloudsn.core import config
 from cloudsn import logger
 from xml.sax.handler import ContentHandler
 from xml import sax
-import gtk
+from gi.repository import Gtk, GdkPixbuf
 import urllib2
 
 class GMailProvider(Provider):
@@ -19,7 +19,7 @@ class GMailProvider(Provider):
         if GMailProvider.__default:
            raise GMailProvider.__default
         Provider.__init__(self, "GMail")
-        self.icon = gtk.gdk.pixbuf_new_from_file(config.add_data_prefix('gmail.png'))
+        self.icon = GdkPixbuf.Pixbuf.new_from_file(config.add_data_prefix('gmail.png'))
 
     @staticmethod
     def get_instance():
@@ -90,7 +90,7 @@ class GMailProvider(Provider):
         return labels_string[:len(labels_string)-1]
 
     def get_account_data_widget (self, account=None):
-        self.builder=gtk.Builder()
+        self.builder=Gtk.Builder()
         self.builder.set_translation_domain("cloudsn")
         self.builder.add_from_file(config.add_data_prefix("gmail-account.ui"))
         box = self.builder.get_object("container")

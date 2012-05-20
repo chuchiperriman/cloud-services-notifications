@@ -1,0 +1,18 @@
+#Modificar versión
+vi src/cloudsn/const.py
+
+#commit cerrando versión
+
+#tag de la nueva versión
+
+#Modificar changelog
+vi debian/changelog
+
+#Construir binario
+debuild
+
+#Construir para subir 
+debuild -S
+
+#Subir paquete al PPA
+dput cloudsn-ppa ../cloudsn_x.y.z_source.changes

@@ -54,7 +54,7 @@ class IndicatorApplet (Indicator):
 
     def update_error(self, acc):
         if not acc.is_error_icon:
-            acc.indicator.set_property_icon("icon", acc.get_icon())
+            #TODO acc.indicator.set_property_icon("icon", acc.get_icon())
             acc.is_error_icon = True
         acc.indicator.set_property("count", "0")
         

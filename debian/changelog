@@ -1,4 +1,14 @@
-cloudsn (0.10.0) oneiric; urgency=low
+cloudsn (0.10.2) precise; urgency=low
+
+  * Migrated to gtk3 and gobject introspection
+  * Using gsettings instead of gconf
+  * Better gnome shell support
+  * Indicator selection is smart looking the current desktop
+
+
+ -- Jesús Barbero Rodríguez <chuchiperriman@gmail.com>  Wed, 22 may 2012 23:30:00 +0200
+
+cloudsn (0.10.0) precise; urgency=low
 
   * Migrated to gtk3 and gobject introspection
   * Using gsettings instead of gconf

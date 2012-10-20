@@ -57,6 +57,9 @@ def get_account_error_pixbuf (acc):
     error.composite(original, 10, 10, 22, 22, 10, 10, 1.0, 1.0, GdkPixbuf.InterpType.HYPER, 220)
     return original
 
+def get_account_error_gicon (acc):
+    return Gio.FileIcon.new(Gio.File.new_for_path(config.add_data_prefix('error.png')))
+
 def download_image_to_tmp(url):
     filename = url.replace('http://', '0_')
     filename = filename.replace('/', '_')

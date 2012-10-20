@@ -119,6 +119,12 @@ class Account:
             return utils.get_account_error_pixbuf(self)
         else:
             return self.get_provider().get_icon()
+            
+    def get_gicon (self):
+        if self.error_notified:
+            return utils.get_account_error_gicon(self)
+        else:
+            return self.get_provider().get_gicon()
 
 class AccountCacheMails (Account):
 

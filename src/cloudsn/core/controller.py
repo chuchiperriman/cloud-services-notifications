@@ -26,6 +26,7 @@ class Controller (GObject.Object):
            raise Controller.__default
 
         #Prevent various instances
+        GObject.Object.__init__(self)
         import os, fcntl, sys, tempfile, getpass
         self.lockfile = os.path.normpath(tempfile.gettempdir() + '/cloudsn-'+getpass.getuser()+'.lock')
         self.fp = open(self.lockfile, 'w')
@@ -34,10 +35,9 @@ class Controller (GObject.Object):
         except IOError:
             message = _("Another instance is already running, close it first.")
             logger.warn (message)
-            print message
-            sys.exit(-1)
+            print message.encode('utf-8')
+            raise Exception (message)
 
-        GObject.Object.__init__(self)
         self.started = False
         self.config = config.SettingsController.get_instance()
         self.config.connect("value-changed", self._settings_changed)
@@ -221,9 +221,9 @@ class Controller (GObject.Object):
             self.set_active (True)
             self.update_accounts()
             self.started = True
-            if len(self.am.get_accounts()) == 0:
-                win = window.MainWindow.get_instance()
-                win.run()
+            #if len(self.am.get_accounts()) == 0:
+            win = window.MainWindow.get_instance()
+            win.run()
         except Exception, e:
             logger.exception ("Error starting the application: %s", e)
             try:
@@ -236,7 +236,6 @@ class Controller (GObject.Object):
         return False
 
     def start(self):
-        logger.debug("aaasss")
         GObject.threads_init()
         GObject.idle_add(self._start_idle)
         try:

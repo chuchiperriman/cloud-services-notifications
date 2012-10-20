@@ -34,10 +34,8 @@ def start ():
         logger.exception("Error loading the internationalitation: %s", e)
     
     try:
-        logger.debug("aaaww")
         cr = Controller.get_instance()
         cr.start()
-        logger.debug("aaaasdas")
     except Exception, e:
         logger.exception("Error starting cloudsn: %s", e)
         #We not traduce this notification because the problem can be gettext

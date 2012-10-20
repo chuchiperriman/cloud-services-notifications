@@ -6,6 +6,7 @@ class Provider:
     def __init__ (self, name):
         self.name = name
         self.icon = None
+        self.gicon = None
 
     def load_account(self, props):
         return Account(props, self)
@@ -22,6 +23,8 @@ class Provider:
         return self.name
     def get_icon (self):
         return self.icon
+    def get_gicon(self):
+        return self.gicon
     def get_account_data_widget (self, account=None):
         """
             If account == None is a new account if not then editing

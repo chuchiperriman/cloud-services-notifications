@@ -1,25 +1,24 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 
+from cloudsn import logger
 from cloudsn.core.account import AccountCacheMails, AccountManager, Notification
 from cloudsn.core.keyring import Credentials
-from cloudsn.core.provider import Provider
 from cloudsn.core import utils
 from cloudsn.core import config
-from cloudsn import logger
+from cloudsn.providers.providersbase import ProviderBase
 from xml.sax.handler import ContentHandler
 from xml import sax
 from gi.repository import Gtk, GdkPixbuf
 import urllib2
 
-class GMailProvider(Provider):
+class GMailProvider(ProviderBase):
 
     __default = None
 
     def __init__(self):
         if GMailProvider.__default:
            raise GMailProvider.__default
-        Provider.__init__(self, "GMail")
-        self.icon = GdkPixbuf.Pixbuf.new_from_file(config.add_data_prefix('gmail.png'))
+        ProviderBase.__init__(self, "GMail")
 
     @staticmethod
     def get_instance():

@@ -27,7 +27,6 @@ class FeedsProvider(ProviderUtilsBuilder):
         if FeedsProvider.__default:
            raise FeedsProvider.__default
         ProviderUtilsBuilder.__init__(self, _("RSS news"), 'rss')
-        self.icon = GdkPixbuf.Pixbuf.new_from_file(config.add_data_prefix('rss.png'))
 
     @staticmethod
     def get_instance():

@@ -23,7 +23,6 @@ class ImapProvider(ProviderBase):
         if ImapProvider.__default:
            raise ImapProvider.__default
         ProviderBase.__init__(self, "Imap")
-        self.icon = GdkPixbuf.Pixbuf.new_from_file(config.add_data_prefix('imap.png'))
 
     @staticmethod
     def get_instance():

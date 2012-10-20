@@ -15,16 +15,14 @@ class GnomeKeyring(Keyring):
         self._key = gk.ItemType.NETWORK_PASSWORD
         if not gk.is_available():
             raise KeyringException("The Gnome keyring is not available")
-        logger.debug("default keyring ok")
+        logger.debug("GnomeKeyring is available")
         self.loaded = False
         self.lock = threading.RLock()
         
-    def __check_keyring (self):
         if not self.loaded:
-            try:
-                gk.list_item_ids_sync(self._KEYRING_NAME)
-            except Exception, e:
-                logger.exception("Error getting the gnome keyring. We'll try to create it: %s",e)
+            (result, keyring_names) = gk.list_keyring_names_sync()
+            if self._KEYRING_NAME not in keyring_names:
+                logger.error("Error getting the gnome keyring. We'll try to create it: %s")
                 logger.debug("Creating keyring " + self._KEYRING_NAME)
                 gk.create_sync(self._KEYRING_NAME, None)
             self.loaded = True
@@ -75,7 +73,6 @@ class GnomeKeyring(Keyring):
         self.lock.acquire()
         try:
             logger.debug("Storing credentials with gnome keyring for account %s" % (acc.get_name()))
-            self.__check_keyring()
             #Remove the old info and create a new item with the new info
             self.remove_credentials(acc)
 
@@ -85,6 +82,8 @@ class GnomeKeyring(Keyring):
             
             (result, id) = gk.item_create_sync(self._KEYRING_NAME, \
                  gk.ItemType.NETWORK_PASSWORD, acc.get_name(), attrs, credentials.password, True)
+            if result != gk.Result.OK:
+                raise Exception("Gnome Keyring return the error code: %i" % result)
             logger.debug("credentials stored with id: %i" % (id))
         finally:
             self.lock.release()

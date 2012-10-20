@@ -1,6 +1,7 @@
 # -*- mode: python; tab-width: 4; indent-tabs-mode: nil -*-
 from cloudsn.core.provider import Provider, ProviderManager
 from cloudsn.core import account, config, networkmanager, notification, utils, indicator
+from cloudsn.ui import window
 from cloudsn import logger
 from cloudsn.ui.authwarning import check_auth_configuration
 from time import time
@@ -215,14 +216,14 @@ class Controller (GObject.Object):
 
     def _start_idle(self):
         try:
-            logger.debug("aaa")
             check_auth_configuration()
-            logger.debug("aaab")
             self.nm.set_statechange_callback(self.on_nm_state_changed)
-            logger.debug("aaac")
             self.set_active (True)
             self.update_accounts()
             self.started = True
+            if len(self.am.get_accounts()) == 0:
+                win = window.MainWindow.get_instance()
+                win.run()
         except Exception, e:
             logger.exception ("Error starting the application: %s", e)
             try:

@@ -57,8 +57,12 @@ class IndicatorManager():
                                     utils.get_error_pixbuf())
         if not self.indicator:
             if "DESKTOP_SESSION" in os.environ\
-                    and os.environ["DESKTOP_SESSION"] == 'ubuntu'\
-                    and indiapplet:
+                    and os.environ["DESKTOP_SESSION"] == 'ubuntu':
+                if not indiapplet:
+                    notification.notify (_("Indicator error"),
+                                        _("The indicator for ubuntu cannot be loaded "),
+                                        utils.get_error_pixbuf())
+                    raise Error(_("The indicator for ubuntu cannot be loaded "))
                 self.indicator = indiapplet
             else:
                 self.indicator = statusindi

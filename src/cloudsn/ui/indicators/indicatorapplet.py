@@ -37,6 +37,7 @@ class IndicatorApplet (Indicator):
         acc.indicator = indicator
         indicator.account = acc
         acc.is_error_icon = False
+        logger.debug("Indicator created")
 
     def update_account(self, acc):
         #We had a previous error but now the update works.

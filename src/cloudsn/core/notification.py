@@ -43,6 +43,10 @@ def notify_process ():
 #        else:
 #            return
     
+    if not Notify.is_initted():
+        logger.warn('The notification library has not been initialized yet')
+        return
+    
     while len(notifications) > 0:
         n = notifications.pop(0)
         #n.connect("closed", notify_closed_cb)

@@ -31,7 +31,7 @@ class StatusIconIndicator (Indicator):
 
     def create_main_menu(self):
         indmenu = Gtk.Menu()
-        indmenuItem = Gtk.MenuItem("")
+        indmenuItem = Gtk.MenuItem("---")
         indmenuItem.get_child().set_markup("<b>%s</b>" % (APP_LONG_NAME))
         indmenuItem.connect('activate', self.preferences_cb, self.statusIcon)
         #indmenuItem.set_sensitive(False)
@@ -42,7 +42,7 @@ class StatusIconIndicator (Indicator):
     def create_pref_menu(self):
         menu = Gtk.Menu()
         menuItem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_REFRESH, None)
-        menuItem.get_child().set_text(_("Update accounts"))
+        menuItem.set_label(_("Update accounts"))
         menuItem.connect('activate', self.update_accounts_cb, self.statusIcon)
         menu.append(menuItem)
         menuItem = Gtk.ImageMenuItem.new_from_stock(Gtk.STOCK_PREFERENCES, None)
